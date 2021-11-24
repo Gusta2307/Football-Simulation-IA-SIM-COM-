@@ -54,15 +54,12 @@ def simulacion_pase_porteria(t1, t2):
 
     while True:
         d = random.randint(0, 1)
-        if d == 0: #el jugador del equipo que posee el balon realiza un pase
-            pos_jugador2 = random.randint(0, len(equipo) - 2) #jugador q debe recibir el pase
-            jugador2 = equipo[pos_jugador2]
-            
-            if jugador1.nombre == jugador2.nombre: #si es el propio jugador, significa q esta conduciendo el balon
-                continue
 
-            result, jugador_pase_inter = realiza_un_pase(jugador1, jugador2, t2 if pos_balon == 1 else t1) #jugador1 le pasa el balon al jugador2
-
+        if jugador1.posicion == 'GK':
+            print("PORTERO")
+            #pos_jugador2 = random.randint(0, len(equipo) - 2) #jugador q debe recibir el pase
+            jugador2 = seleccionar_jugador_pase(jugador1, t1 if pos_balon == 1 else t2)
+            result, jugador_pase_inter = realiza_un_pase(jugador1, jugador2, t2 if pos_balon == 1 else t1)
             if result == "RECIBIDO": #si jugador2 recibio, entonces ahora el es el que tiene la opcion de pasar el balon o tirar a porteria
                 jugador1 = jugador2
                 jugador2 = None
@@ -72,17 +69,39 @@ def simulacion_pase_porteria(t1, t2):
                 break
 
             elif result == "INTERCEPTADO": #pasa el balon al equipo contrario
-                pos_balon = 1 if pos_balon == 0 else 0
+                pos_balon = 1 if pos_balon == 2 else 2
                 jugador1 = jugador_pase_inter
                 equipo = t1 if pos_balon == 1 else t2
-        
-        else: #el jugador del equipo que posee el balon tira a porteria
-            portero = t2[-1] if pos_balon == 1 else t1[-1]
-            result = tiro_a_porteria(jugador1, portero)
-            print(result)
-            
-            if result == 'O':
-                pos_balon, jugador1, equipo = cambiar_equipo(pos_balon, t1, t2)
+        else:
+            if d == 0: #el jugador del equipo que posee el balon realiza un pase
+                # pos_jugador2 = random.randint(0, len(equipo) - 2) #jugador q debe recibir el pase
+                # jugador2 = equipo[pos_jugador2]
+                jugador2 = seleccionar_jugador_pase(jugador1, t1 if pos_balon == 1 else t2)
+                if jugador1.nombre == jugador2.nombre: #si es el propio jugador, significa q esta conduciendo el balon
+                    continue
+
+                result, jugador_pase_inter = realiza_un_pase(jugador1, jugador2, t2 if pos_balon == 1 else t1) #jugador1 le pasa el balon al jugador2
+
+                if result == "RECIBIDO": #si jugador2 recibio, entonces ahora el es el que tiene la opcion de pasar el balon o tirar a porteria
+                    jugador1 = jugador2
+                    jugador2 = None
+                    continue
+
+                elif result == "LARGO": 
+                    break
+
+                elif result == "INTERCEPTADO": #pasa el balon al equipo contrario
+                    pos_balon = 1 if pos_balon == 2 else 2
+                    jugador1 = jugador_pase_inter
+                    equipo = t1 if pos_balon == 1 else t2
+
+            else: #el jugador del equipo que posee el balon tira a porteria
+                portero = t2[-1] if pos_balon == 1 else t1[-1]
+                result = tiro_a_porteria(jugador1, portero)
+                #print(result)
+
+                if result == 'O':
+                    pos_balon, jugador1, equipo = cambiar_equipo(pos_balon, t1, t2)
 
 
 def realiza_un_pase(lanzador, receptor, t):
@@ -111,12 +130,25 @@ def realiza_un_pase(lanzador, receptor, t):
         print(f"{lanzador.nombre} le paso el balon a {receptor.nombre}, pero fue interceptado por {jugador_inter.nombre}")
         return "INTERCEPTADO", jugador_inter 
 
-posicion      = ['DEL', 'MC', 'DEF', 'GK']
-# pase_DEL = [0.2,   0.5,   0.8,  0.4]
-# pase_MC  = [0.4,   0.7,   0.4,  0.2]
-# pase_DEF = [0.8,   0.6,   0.3,  0.2]
-# pase_GK  = [0.75,  0.6,   0.4,  0.1]
+posicion = ['DEL', 'MC', 'DEF', 'GK']
 
+def seleccionar_jugador_pase(jugador1, t):
+    index = -1
+    if jugador1.posicion == 'DEL':
+        index = numpy.random.choice(numpy.arange(0, 4), p=[0.45,   0.3,   0.2,  0.05])
+    elif jugador1.posicion == 'MC':
+        index = numpy.random.choice(numpy.arange(0, 4), p=[0.3,   0.3,   0.3,  0.1])
+    elif jugador1.posicion == 'DEF':
+        index = numpy.random.choice(numpy.arange(0, 4), p=[0.1,   0.3,   0.3,  0.3])
+    elif jugador1.posicion == 'GK':
+        index = numpy.random.choice(numpy.arange(0, 3), p=[0.3,   0.3,   0.4])
+
+    temp_list = []
+    for item in t:
+        if item.posicion == posicion[index]:
+            temp_list.append(item)
+
+    return temp_list[random.randint(0, len(temp_list) - 1)]
 
 def interceptar_pase(pos):
     index = -1
