@@ -42,6 +42,7 @@ def tiro_a_porteria(lanzador, portero):
         return 'X'
 
 def simulacion_pase_porteria(t1, t2):
+    largo = False
     pos_balon = random.randint(1, 2)
     
     equipo = t1
@@ -49,35 +50,44 @@ def simulacion_pase_porteria(t1, t2):
     if pos_balon == 2:
         equipo = t2
     
+    iter = 20
     pos_jugador1 = random.randint(0, len(equipo) - 2) #jugador q posee el balon al iniciar el partido
     jugador1 = equipo[pos_jugador1]
 
-    while True:
-        d = random.randint(0, 1)
+    while iter >= 0:
+        if not largo:
+            d = random.randint(0, 1)
+        else:
+            d = 0
 
         if jugador1.posicion == 'GK':
-            print("PORTERO")
             #pos_jugador2 = random.randint(0, len(equipo) - 2) #jugador q debe recibir el pase
+            largo = False
             jugador2 = seleccionar_jugador_pase(jugador1, t1 if pos_balon == 1 else t2)
             result, jugador_pase_inter = realiza_un_pase(jugador1, jugador2, t2 if pos_balon == 1 else t1)
+            
             if result == "RECIBIDO": #si jugador2 recibio, entonces ahora el es el que tiene la opcion de pasar el balon o tirar a porteria
                 jugador1 = jugador2
                 jugador2 = None
                 continue
 
             elif result == "LARGO": 
-                break
+                pos_balon, equipo = cambiar_equipo(pos_balon, t1, t2)
+                jugador1 = jugador_pase_inter
+                largo = True
 
             elif result == "INTERCEPTADO": #pasa el balon al equipo contrario
                 pos_balon = 1 if pos_balon == 2 else 2
                 jugador1 = jugador_pase_inter
                 equipo = t1 if pos_balon == 1 else t2
         else:
+            largo = False
             if d == 0: #el jugador del equipo que posee el balon realiza un pase
                 # pos_jugador2 = random.randint(0, len(equipo) - 2) #jugador q debe recibir el pase
                 # jugador2 = equipo[pos_jugador2]
                 jugador2 = seleccionar_jugador_pase(jugador1, t1 if pos_balon == 1 else t2)
                 if jugador1.nombre == jugador2.nombre: #si es el propio jugador, significa q esta conduciendo el balon
+                    print(f"{jugador1.nombre} se mantiene con el balon")
                     continue
 
                 result, jugador_pase_inter = realiza_un_pase(jugador1, jugador2, t2 if pos_balon == 1 else t1) #jugador1 le pasa el balon al jugador2
@@ -87,8 +97,10 @@ def simulacion_pase_porteria(t1, t2):
                     jugador2 = None
                     continue
 
-                elif result == "LARGO": 
-                    break
+                elif result == "LARGO":
+                    pos_balon, equipo = cambiar_equipo(pos_balon, t1, t2)
+                    jugador1 = jugador_pase_inter
+                    largo = True
 
                 elif result == "INTERCEPTADO": #pasa el balon al equipo contrario
                     pos_balon = 1 if pos_balon == 2 else 2
@@ -98,11 +110,12 @@ def simulacion_pase_porteria(t1, t2):
             else: #el jugador del equipo que posee el balon tira a porteria
                 portero = t2[-1] if pos_balon == 1 else t1[-1]
                 result = tiro_a_porteria(jugador1, portero)
-                #print(result)
 
                 if result == 'O':
-                    pos_balon, jugador1, equipo = cambiar_equipo(pos_balon, t1, t2)
-
+                    pos_balon, equipo = cambiar_equipo(pos_balon, t1, t2)
+                    pos_jugador1 = random.randint(0, len(equipo) - 2) #jugador q intercepto el balon
+                    jugador1 = equipo[pos_jugador1]
+        iter -= 1
 
 def realiza_un_pase(lanzador, receptor, t):
     pase_efect = numpy.random.choice(numpy.arange(0, 2), p=[1 - lanzador.pase_efectivo_p, lanzador.pase_efectivo_p])
@@ -117,16 +130,12 @@ def realiza_un_pase(lanzador, receptor, t):
             return "RECIBIDO", jugador_inter
         else: 
             print(f"{lanzador.nombre} le paso el balon a {receptor.nombre}, pero se fue de largo")
+            jugador_inter = sacar_de_banda(t)
+            print(f"{jugador_inter.nombre} va a sacar desde la banda")
             return "LARGO", jugador_inter
     else:
         #Aqui va lo de definir que jugador tiene mas probabilidad de interceptar el pase
-        pos_jugador = interceptar_pase(lanzador.posicion)
-        temp_list = []
-        for item in t:
-            if item.posicion == pos_jugador:
-                temp_list.append(item)
-            
-        jugador_inter = temp_list[int(random.randint(0, len(temp_list)-1))]
+        jugador_inter = interceptar_pase(lanzador.posicion, t)
         print(f"{lanzador.nombre} le paso el balon a {receptor.nombre}, pero fue interceptado por {jugador_inter.nombre}")
         return "INTERCEPTADO", jugador_inter 
 
@@ -143,14 +152,9 @@ def seleccionar_jugador_pase(jugador1, t):
     elif jugador1.posicion == 'GK':
         index = numpy.random.choice(numpy.arange(0, 3), p=[0.3,   0.3,   0.4])
 
-    temp_list = []
-    for item in t:
-        if item.posicion == posicion[index]:
-            temp_list.append(item)
+    return obtener_jugador(posicion[index], t)
 
-    return temp_list[random.randint(0, len(temp_list) - 1)]
-
-def interceptar_pase(pos):
+def interceptar_pase(pos, t):
     index = -1
     if pos == 'DEL':
         index = numpy.random.choice(numpy.arange(0, 4), p=[0.1,   0.3,   0.4,  0.2])
@@ -162,7 +166,12 @@ def interceptar_pase(pos):
         index = numpy.random.choice(numpy.arange(0, 4), p=[0.4,   0.3,   0.2,  0.1])
     else:
         print("POSICION NO REGISTRADA")
-    return posicion[index]
+
+    return obtener_jugador(posicion[index], t)
+
+def sacar_de_banda(t):
+    index = numpy.random.choice(numpy.arange(0, 4), p=[0.1,   0.35,   0.5,  0.05])
+    return obtener_jugador(posicion[index], t)
 
 def cambiar_equipo(pos_balon, t1, t2):
     if pos_balon == 1: #si el balon lo tiene t1, entonces pasa a t2
@@ -171,9 +180,18 @@ def cambiar_equipo(pos_balon, t1, t2):
     else:
         equipo = t1
         pos_balon = 1
-    pos_jugador1 = random.randint(0, len(equipo) - 2) #jugador q intercepto el balon
-    jugador1 = equipo[pos_jugador1]
-    return pos_balon, jugador1, equipo
+    
+    return pos_balon, equipo
+
+def obtener_jugador(pos_jugador, t):
+    temp_list = []
+    for item in t:
+        if item.posicion == pos_jugador:
+            temp_list.append(item)
+        
+    jugador_inter = temp_list[int(random.randint(0, len(temp_list)- 1))]
+    return jugador_inter
+
 
 def print_sol(result):
     l1 = []
