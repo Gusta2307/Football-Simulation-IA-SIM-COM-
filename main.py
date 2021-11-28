@@ -1,7 +1,7 @@
 import random
 import numpy
 import time
-from arbitro import arbitro
+from classes.arbitro import arbitro
 from classes.player import Player
 
 marcador = [0, 0]
@@ -23,9 +23,6 @@ def simulacion_penales(t1, t2):
     return win
 
 def tiro_a_porteria_en_penales(lanzador, portero):
-    #j = random.random()
-    #p = random.random()
-
     j = numpy.random.choice(numpy.arange(0, 2), p=[1 - lanzador.gol_p, lanzador.gol_p])
     p = numpy.random.choice(numpy.arange(0, 2), p=[1 - portero.atajar_p, portero.atajar_p])
 
@@ -45,21 +42,21 @@ def tiro_a_porteria_en_penales(lanzador, portero):
         return 'X'
 
 
-def simulacion_pase(t1, t2, arbitros):
-    iter = 20
+def simulacion_partido(t1, t2, arbitros):
+    iter = 10
     largo = False
-    equipo = t1
     pos_balon = random.randint(1, 2)
 
-    if pos_balon == 2: 
-        equipo = t2
+    equipo = t1 if pos_balon == 1 else t2
 
-    pos_jugador1 = random.randint(0, len(equipo) - 2) #jugador q posee el balon al iniciar el partido
-    jugador1 = equipo[pos_jugador1]
+    # if pos_balon == 2: 
+    #     equipo = t2
 
-    while True:
-        d = numpy.random.choice(numpy.arange(0, 2), p=[0.8, 0.2]) if not largo else 0 
+    #pos_jugador1 = random.randint(0, len(equipo) - 2) #jugador q posee el balon al iniciar el partido
+    jugador1 = iniciar_partido(equipo)
 
+    while iter:
+        d = numpy.random.choice(numpy.arange(0, 2), p=[0.85, 0.15]) if not largo else 0 
         if jugador1.posicion == 'GK':
             largo = False
             jugador2 = seleccionar_jugador_pase(jugador1, t1 if pos_balon == 1 else t2)
@@ -85,7 +82,6 @@ def simulacion_pase(t1, t2, arbitros):
                 jugador1 = elegir_jugador_para_sacar(equipo)
                 print(f"{jugador1.nombre} saca luego de la falta")
                 largo = True
-
         else:
             largo = False
             if d == 0: #el jugador del equipo que posee el balon realiza un pase
@@ -127,12 +123,41 @@ def simulacion_pase(t1, t2, arbitros):
                     else: marcador[1] += 1
                     
                     print(f"Marcado: equipo1: {marcador[0]} equipo2: {marcador[1]}")
-                    sec = random.uniform(1, 5)
-                    time.sleep(sec) #espera sec tiempo para el nuev saque
-                    pos_balon, equipo = cambiar_equipo(pos_balon, t1, t2)
-                    jugador1 = elegir_jugador_para_sacar(equipo)
-                    print(f"{jugador1.nombre} saca luego del gol")
+                    # sec = random.uniform(1, 3)
+                    # time.sleep(sec) #espera sec tiempo para el nuev saque
+                    # pos_balon, equipo = cambiar_equipo(pos_balon, t1, t2)
+                    # jugador1 = elegir_jugador_para_sacar(equipo)
+                    # print(f"{jugador1.nombre} saca luego del gol")
+                    pos_balon, equipo, jugador1 = reanudar_partido_pos_gol(pos_balon, t1, t2)
         iter -= 1
+
+def iniciar_partido(t):
+    temp_player_list = []
+    for player in t:
+        if player.posicion == 'DEL':
+            temp_player_list.append(player)
+    j1 = temp_player_list[random.randint(0, len(temp_player_list) - 1)]
+    j2 = seleccionar_jugador_pase(j1, t)
+    print('Inicia el partido...')
+    print(f"{j1.nombre} le paso el balon a {j2.nombre}")
+    return j2
+
+def reanudar_partido_pos_gol(pos_balon, t1, t2):
+    sec = random.uniform(1, 3)
+    time.sleep(sec) #espera sec tiempo para reanuadar el partido
+    pos_balon, equipo = cambiar_equipo(pos_balon, t1, t2)
+    temp_player_list = []
+    for player in equipo:
+        if player.posicion == 'DEL':
+            temp_player_list.append(player)
+    j1 = temp_player_list[random.randint(0, len(temp_player_list) - 1)]
+    j2 = seleccionar_jugador_pase(j1, equipo)
+    print(f"{j1.nombre} saca luego del gol y le pasa el balon a {j2.nombre}")
+    return pos_balon, equipo, j2
+
+
+
+
 
 def realiza_un_pase(lanzador, receptor, arbitros, t):
     pase_efect = numpy.random.choice(numpy.arange(0, 2), p=[1 - lanzador.pase_efectivo_p, lanzador.pase_efectivo_p])
@@ -184,11 +209,11 @@ def tiro_a_porteria_en_partido(lanzador, portero):
 def seleccionar_jugador_pase(jugador1, t):
     index = -1
     if jugador1.posicion == 'DEL':
-        index = numpy.random.choice(numpy.arange(0, 4), p=[0.45,   0.3,   0.2,  0.05])
+        index = numpy.random.choice(numpy.arange(0, 4), p=[0.5,   0.35,   0.1,  0.05])
     elif jugador1.posicion == 'MC':
-        index = numpy.random.choice(numpy.arange(0, 4), p=[0.3,   0.3,   0.3,  0.1])
+        index = numpy.random.choice(numpy.arange(0, 4), p=[0.4,   0.3,   0.2,  0.1])
     elif jugador1.posicion == 'DEF':
-        index = numpy.random.choice(numpy.arange(0, 4), p=[0.1,   0.3,   0.3,  0.3])
+        index = numpy.random.choice(numpy.arange(0, 4), p=[0.05,   0.4,   0.25,  0.3])
     elif jugador1.posicion == 'GK':
         index = numpy.random.choice(numpy.arange(0, 3), p=[0.3,   0.3,   0.4])
 
@@ -256,7 +281,6 @@ def obtener_jugador(pos_jugador, t):
     for item in t:
         if item.posicion == pos_jugador:
             temp_list.append(item)
-        
     jugador_inter = temp_list[int(random.randint(0, len(temp_list)- 1))]
     return jugador_inter
 
@@ -269,9 +293,9 @@ def print_sol(result):
     print(l1)
     print(l2)
 
-
 def main():
     arbitros = [arbitro('Arbitro Oscar', None, 0.2, 0.6, 0.15, 0.05)]
+
     t1_name = ['messi', 'fati', 'depay', 'de jong', 'neymar', 'ter stegen']
     t1_pos = [posiciones[0], posiciones[0], posiciones[0], posiciones[1], posiciones[2], posiciones[3]]
     t1_prob = [(0.75, 0.1, 0.8, 0.1, 0.1, 0.1, 0.6), (0.6, 0.1, 0.7, 0.1, 0.2, 0.1, 0.7), (0.7, 0.1, 0.75, 0.2, 0.05, 0.1, 0.7), (0.58, 0.1, 0.7, 0.2, 0.1, 0.1, 0.7), (0.73, 0.1, 0.81, 0.1, 0.09, 0.1, 7), (0.1, 0.6, 0.8, 0.1, 0.1, 0.01, 0.6)]
@@ -287,24 +311,7 @@ def main():
         t1.append(Player(t1_name[i], t1_pos[i], t1_prob[i][0], t1_prob[i][1], t1_prob[i][2], t1_prob[i][3], t1_prob[i][4], t1_prob[i][5], t1_prob[i][6], 0.69, 0.2, 0.1, 0.01, i))
         t2.append(Player(t2_name[i], t2_pos[i], t2_prob[i][0], t2_prob[i][1], t2_prob[i][2], t2_prob[i][3], t2_prob[i][4], t2_prob[i][5], t2_prob[i][6], 0.69, 0.2, 0.1, 0.01, i))
 
-    marcador = [0, 0]
-    simulacion_pase(t1, t2, arbitros) #pasar balon
-    # n = 10000
-    # win_t1, win_t2, empate = 0, 0, 0
-    # while n != 0:
-    #     r = simulacion_penales(t1, t2)
-    #     if r == 0:
-    #         empate += 1
-    #     elif r > 0:
-    #         win_t1 += 1
-    #     else:
-    #         win_t2 += 1
-
-    #     n -= 1
-
-    # print("Victorias t1", win_t1)
-    # print("Victorias t2", win_t2)
-    # print("Empates", empate)
+    simulacion_partido(t1, t2, arbitros)
 
 
 if '__main__' == __name__:
