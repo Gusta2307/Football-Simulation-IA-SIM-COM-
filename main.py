@@ -8,7 +8,7 @@ from acciones import *
 # posiciones = ['DEL', 'MC', 'DEF', 'GK']
 
 def simulacion_partido(t1, t2, arbitros):
-    iter = 100
+    iter = 10
     largo = False
     pos_balon = random.randint(1, 2)
     equipo = t1 if pos_balon == 1 else t2

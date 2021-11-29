@@ -160,7 +160,7 @@ def seleccionar_jugador_pase(jugador1, t, reanudar_juego=False):
 
     jugador2 = obtener_jugador(posiciones[index], t)
     if jugador2 == jugador1 and reanudar_juego:
-        seleccionar_jugador_pase(jugador1, t, reanudar_juego)
+        return seleccionar_jugador_pase(jugador1, t, reanudar_juego)
     
     return jugador2      
 
