@@ -22,3 +22,13 @@ class Player:
         self.cantidad_tarjetas = 0
         #self.pos_array = pos_array
         self.fuera_del_partido = False
+
+        #solo para el portero
+        if len(list_prob) > 11:
+            self.rebote = list_prob[11]
+            self.rebote_banda = list_prob[12]
+            self.rebote_linea_final = list_prob[13]
+            self.rebote_jugador = list_prob[14]
+    
+    def __eq__(self, jugador) -> bool:
+        return (self.nombre == jugador.nombre and self.posicion == jugador.posicion)
