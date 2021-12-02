@@ -1,14 +1,16 @@
 import random
 import numpy
+from classes.equipo import Equipo
 from classes.arbitro import arbitro
 from classes.player import Player
+from classes.partido import Partido
 from acciones import *
 
 # marcador = [0, 0]
 # posiciones = ['DEL', 'MC', 'DEF', 'GK']
 
 def simulacion_partido(t1, t2, arbitros):
-    iter = 10
+    iter = 20
     largo = False
     pos_balon = random.randint(1, 2)
     equipo = t1 if pos_balon == 1 else t2
@@ -70,7 +72,14 @@ def main():
         t1.append(Player(t1_name[i], t1_pos[i], t1_prob[i]))
         t2.append(Player(t2_name[i], t2_pos[i], t2_prob[i]))
 
-    simulacion_partido(t1, t2, arbitros)
+    eq1 = Equipo("Barca", "PEPE1", t1)
+    eq2 = Equipo("Madrid", "PEPE2", t2)
+
+    p1 = Partido(eq1,eq2, arbitros)
+
+    p1.simular()
+
+    #simulacion_partido(t1, t2, arbitros)
 
 
 if '__main__' == __name__:
