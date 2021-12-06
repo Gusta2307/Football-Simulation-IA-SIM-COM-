@@ -1,6 +1,5 @@
 import numpy
 from act.accion import Accion
-from classes.partido import Partido
 from config import Config
 
 config = Config()
@@ -10,6 +9,7 @@ class Sacar_tarjeta(Accion):
         self.agente = agente
         self.tipo = config.ACT_SACAR_TARJETA
         self.estado = config.CANTA_FALTA
+        self.falta_jugador = None
         self.sub_estado = None
         self.__descripcion = f"El arbitro {self.agente.nombre} "
     
@@ -21,6 +21,7 @@ class Sacar_tarjeta(Accion):
 
     def ejecutar(self, partido):
         color = numpy.random.choice(numpy.arange(0, 2), p=[self.agente.sacar_tarjeta_amarilla, 1 - self.agente.sacar_tarjeta_amarilla])
+        self.falta_jugador = partido.ultima_accion.agente
         #definir como hacer las probabilidades teniendo en cuenta el tipo de falta que se realizo
         if color:
             self.sub_estado = config.MUESTRA_ROJA
@@ -28,10 +29,11 @@ class Sacar_tarjeta(Accion):
         else:
             self.sub_estado = config.MUESTRA_AMARILLA
             if partido.ultima_accion.agente.cantidad_tarjetas == 1:
-                print(self.descripcion() + self.estado + self.sub_estado + " y " + config.MUESTRA_ROJA + f' a {partido.ultima_accion.agente.nombre}')
-        
+                print(self.descripcion() + self.estado + ' y le ' + self.sub_estado + " y " + config.MUESTRA_ROJA + f' a {partido.ultima_accion.agente.nombre}')
+            else:
+                print(self.descripcion() + self.estado + ' y le ' + self.sub_estado + f' a {partido.ultima_accion.agente.nombre}')
         self.poscondicion(partido)
-       
+
 
     def poscondicion(self, partido):
         if self.sub_estado == config.MUESTRA_ROJA or partido.ultima_accion.agente.cantidad_tarjetas == 1:
@@ -41,5 +43,6 @@ class Sacar_tarjeta(Accion):
         elif self.sub_estado ==  config.MUESTRA_AMARILLA:
             partido.ultima_accion.agente.cantidad_tarjetas = 1
 
+        partido.pos_balon = None
         partido.estado = config.DETENIDO
         partido.ultima_accion = self

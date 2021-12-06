@@ -1,4 +1,3 @@
-from numpy import concatenate
 from act.act_jugador.pase import Pase
 from config import Config
 config = Config()
@@ -14,10 +13,9 @@ class Saque_falta(Pase):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return (partido.ultima_accion.tipo == config.ACT_CANTAR_FALTA or partido.ultima_accion.tipo == config.ACT_SACAR_TARJETA) and partido.ultima_accion.estado == config.CANTA_FALTA and partido.ultima_accion.estado == config.DETENIDO
+        return (partido.ultima_accion.tipo == config.ACT_CANTAR_FALTA or partido.ultima_accion.tipo == config.ACT_SACAR_TARJETA) and partido.ultima_accion.estado == config.CANTA_FALTA and partido.estado == config.DETENIDO and partido.ultima_accion.falta_jugador.equipo != self.agente.equipo
 
     def poscondicion(self, partido):
         partido.estado = config.EN_JUEGO
         partido.pos_balon = None
         partido.ultima_accion = self
-

@@ -11,6 +11,7 @@ class Cantar_falta(Accion):
         self.agente = agente
         self.tipo = config.ACT_CANTAR_FALTA
         self.estado = None
+        self.falta_jugador = None
         self.__descripcion = f"El arbitro {self.agente.nombre} "
     
     def descripcion(self):
@@ -27,10 +28,10 @@ class Cantar_falta(Accion):
             print(self.descripcion() + self.estado)
         else:
             self.estado = config.CANTA_FALTA
+            self.falta_jugador = partido.ultima_accion.agente
             tarjeta = numpy.random.choice(numpy.arange(0, 2), p=[1 - self.agente.sacar_tarjeta, self.agente.sacar_tarjeta])
             if tarjeta: #decide mostrar tarjeta
                 return self.agente.acciones['SACAR_TARJETA'][0].ejecutar(partido)
-
             print(self.descripcion() + self.estado)
 
         self.poscondicion(partido)

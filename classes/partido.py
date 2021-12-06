@@ -48,7 +48,7 @@ class Partido:
         act.ejecutar(self)
         while iter:
             acciones_actual = []
-            for j in self.eq1.jugadores + self.eq2.jugadores + self.arbitros:
+            for j in self.arbitros + self.eq1.jugadores + self.eq2.jugadores:
                 accion = j.escoger_accion(self)
                 acciones_actual.append(accion)
             acciones_actual = analisis_acciones_list(acciones_actual, self.ultima_accion, self.estado)

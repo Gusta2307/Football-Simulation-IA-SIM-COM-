@@ -16,7 +16,7 @@ class Pase(Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return self.agente == partido.pos_balon if not (partido.pos_balon is None) else False
+        return self.agente == partido.pos_balon and partido.estado != config.DETENIDO if not (partido.pos_balon is None) else False
 
     def ejecutar(self, partido):
         self.dest_jugador = self.agente.seleccionar_jugador_pase(partido)
