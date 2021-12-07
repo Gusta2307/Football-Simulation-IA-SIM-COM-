@@ -2,7 +2,9 @@
 Proyecto de IA-SIM-COM
 
 # Definición del proyecto
+
 Con este proyecto se intenta hacer una simulación de un partido de fútbol lo más real posible con el objetivo de obtener estadísticas de los resultados del partido en una especie de reporte. Los aspectos que tendrá este reporte son: 
+
 - *Duelos ganados
 - *Remates
 - *Remates a portería
@@ -19,8 +21,10 @@ Con este proyecto se intenta hacer una simulación de un partido de fútbol lo m
 **Nota**: Los marcados con (*) son los aspectos de los que podemos obtener los resultados con la implementacion existente hasta el día de este reporte
 
 ## Definición de partido
+
 Partido será el ambiente con el que los agentes como son: jugadores, arbitros, manager, etc interactuarán. Esta interación entre agente y partido será de la siguiente manera: dado un estado del partido el agente en cuestión decidirá que acción realizará. 
 Se entiende por estado de un partido por:
+
 - Equipos que se enfrentan
 - Árbitros
 - Marcador
@@ -31,16 +35,21 @@ Se entiende por estado de un partido por:
     - JUEGO DETENIDO
 - Jugador que posee el balón
 - Última acción que se ha realizado hasta dicho momento
-# Reporte del día 6-12-2021
-## Estructura de la simulación
+
+# Estructura de la simulación
+
 ### Definicion de los agentes
+
 Para definir los agentes se tiene una clase abstracta **Agente** de la cual todos los agentes va a heredar, pues todos deben tener:
+
 - Un método `acciones_dict` donde van a estar definidas todas las acciones que va a tener el agente.
+
 - Un método `escoger_accion` que es el encargado de, dado un estado el partido escoger que acción va ha realizar el agente. Hasta este momento esto se tiene implementado para elegir las acciones que cumplan la precondición de manera aleatoria que va a realizar teniendo en cuenta la probabilidad de que realice cada acción, aunque hay casos donde solo puede ejecutar una acción determinada por las politicas propias de un partido de fútbol. Pero, para la versión final del proyecto en este método sería uno de los lugares donde aplicaríamos los conocimientos de Inteligencia Artificial. 
 
 Importante destacar que todos los agentes tendrán un diccionario de acciones donde estaran guardadas una instancia y la probabilidad de que realice por cada acción que pueda realizar. 
 
 ### Definición de las Acciones
+
 Para definir las acciones se tiene implementado una clase abstracta **Accion**. Se tomó como plantilla la forma de definir las acciones que se vio en las clases de IA por tanto los métodos que tiene esta clase son:
 
 - Descripción
@@ -49,18 +58,36 @@ Para definir las acciones se tiene implementado una clase abstracta **Accion**. 
 - Poscondición
 
 #### Acciones por cada agente
-    JUGADOR
-    - Pase
-    - Tira Porteria 
-    - Interceptar balón
-    - Hacer Falta
-    - Recibir balón
-    - Saque banda
-    - Saque esquina
-    - Saque falta
 
+##### JUGADOR
+
+- Pase
+- Tira Porteria
+- Interceptar balón
+- Hacer Falta
+- Recibir balón
+- Saque banda
+- Saque esquina
+- Saque falta
+
+##### PORTERO
+
+Ademas de las mismas que tiene JUGADOR tiene otras dos.
+
+- Atajar
+- Saque porteria
+
+##### ARBITRO
+
+- Sacar tarjeta
+- Cantar falta
 
 Luego teniendo en cuenta esta estructura se propuso una serie de tareas a implementar.
+
+# Reporte del dia 6 - dic - 2021
+
+Definimos una estructura mas elaborada para la parte de la simulación del proyecto. Para ver los detalles de esta nueva estructura dirigirse al encabezado `Estructura de la simulación` que se encuenttra al principio del documento. 
+
 ## Tareas hechas hasta el momento
 
 1. ✅ Al iniciar/reanudar el partido lo primero que se debe hacer es dar un pase.
@@ -72,7 +99,7 @@ Luego teniendo en cuenta esta estructura se propuso una serie de tareas a implem
     3.1. ✅ Leves: se canta falta y nada más,  también el árbitro puede dejar seguir jugando sin cantar falta
 
     3.2 ✅ Moderadas: se canta falta y el árbitro puede mostrar la tarjeta amarilla
-     
+
     3.3 ✅ Graves: se canta falta y el árbitro puede mostrar tarjeta amarilla o roja
     
     3.4 ✅ Exitosa: es cuando un jugador le roba el balon a otro, sin hacerle falta
@@ -106,3 +133,8 @@ Luego teniendo en cuenta esta estructura se propuso una serie de tareas a implem
     2.3 Lo equivalente a un pase
 
     2.4 Cambio de la posesión del balón
+
+3. Modificar el equipo con el objetivo de separar el once inicial y los que se quedan en la banca para el partido.
+
+4. Implementar el Manager con sus acciones. 
+
