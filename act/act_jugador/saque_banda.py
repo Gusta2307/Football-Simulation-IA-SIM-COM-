@@ -13,9 +13,9 @@ class Saque_banda(Pase):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return  partido.ultima_accion.tipo == config.ACT_RECIBIR_BALON and \
-                partido.ultima_accion.estado == config.NO_RECIBE_BALON and \
-                partido.ultima_accion.sub_estado == config.BANDA and \
+        return  partido.estado == config.DETENIDO and \
+                ((partido.ultima_accion.tipo == config.ACT_RECIBIR_BALON and partido.ultima_accion.estado == config.NO_RECIBE_BALON and partido.ultima_accion.sub_estado == config.BANDA) or \
+                (partido.ultima_accion.tipo == config.ACT_DESPEJAR_BALON and partido.ultima_accion.estado == config.DESPEJE_BANDA)) and \
                 self.agente.equipo != partido.ultima_accion.agente.equipo
 
     def poscondicion(self, partido):

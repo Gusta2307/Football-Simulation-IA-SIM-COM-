@@ -16,8 +16,10 @@ class Recibir_balon(Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return ((partido.ultima_accion.tipo == config.ACT_PASE or partido.ultima_accion.tipo == config.ACT_SAQUE_PORTERIA  or partido.ultima_accion.tipo == config.ACT_SAQUE_BANDA) and partido.ultima_accion.dest_jugador == self.agente)  or \
-                (partido.ultima_accion.tipo == config.ACT_ATAJAR and partido.ultima_accion.estado == config.REBOTE_JUGADOR)
+        return ((partido.ultima_accion.tipo == config.ACT_PASE or partido.ultima_accion.tipo == config.ACT_SAQUE_PORTERIA  or\
+                partido.ultima_accion.tipo == config.ACT_SAQUE_BANDA) and partido.ultima_accion.dest_jugador == self.agente)  or \
+                partido.ultima_accion.tipo == config.ACT_ATAJAR and partido.ultima_accion.estado == config.REBOTE_JUGADOR or \
+                partido.ultima_accion.tipo == config.ACT_DESPEJAR_BALON and partido.ultima_accion.estado == config.DESPEJE_JUGADOR
                 
 
     def ejecutar(self, partido):

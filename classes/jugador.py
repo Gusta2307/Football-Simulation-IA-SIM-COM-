@@ -9,6 +9,7 @@ from act.act_jugador.recibir_balon import Recibir_balon
 from act.act_jugador.saque_banda import Saque_banda
 from act.act_jugador.saque_esquina import Saque_esquina
 from act.act_jugador.saque_falta import Saque_falta
+from act.act_jugador.despejar_balon import Despejar_balon
 from classes.agente import Agente
 from config import Config
 config = Config()
@@ -28,6 +29,7 @@ class Jugador(Agente):
         self.recibir_balon = list_prob[3]
         self.saque_banda = list_prob[4]
         self.saque_esquina = list_prob[5]
+        self.despejar_balon = list_prob[6]
         
         #Las probabilidades con prefijo act son las prob de que se realice una accion 
         self.act_tiro_porteria = list_act_prob[0] 
@@ -36,7 +38,8 @@ class Jugador(Agente):
         self.act_recibir_balon = list_act_prob[3]
         self.act_saque_banda = list_act_prob[4]
         self.act_saque_esquina = list_act_prob[5]
-        self.act_hacer_falta = list_act_prob[6]
+        self.act_despejar_balon = list_act_prob[6]
+        self.act_hacer_falta = list_act_prob[7]
       
         self.falta_leve = list_prob[8]
         self.falta_moderada = list_prob[9]
@@ -57,7 +60,10 @@ class Jugador(Agente):
             'RECIBIR_BALON' : (Recibir_balon(self), self.act_recibir_balon),
             'SAQUE_BANDA': (Saque_banda(self), self.act_saque_banda),
             'SAQUE_ESQUINA': (Saque_esquina(self), self.act_saque_esquina),
-            'SAQUE_FALTA': (Saque_falta(self), 0.5) #NO SE SI SE DEBERIA PONER INA PROB DE SACAR FALTA
+            'SAQUE_FALTA': (Saque_falta(self), 0.5),  #NO SE SI SE DEBERIA PONER UNA PROB DE SACAR FALTA
+            
+            
+            'DESPEJAR_BALON': (Despejar_balon(self), self.act_despejar_balon)
         }
 
     def escoger_accion(self, partido):

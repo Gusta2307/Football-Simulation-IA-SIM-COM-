@@ -2,6 +2,9 @@ import numpy
 from act.accion import Accion
 from config import Config
 
+from colorama import Fore
+from colorama import Style
+
 config = Config()
 
 class Atajar(Accion):
@@ -15,15 +18,16 @@ class Atajar(Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        if partido.ultima_accion.tipo == config.ACT_TIRO_PORTERIA:
-            return partido.ultima_accion.estado == config.A_PORTERIA and partido.ultima_accion.agente.equipo != self.agente.equipo  
-        return False
+        # if partido.ultima_accion.tipo == config.ACT_TIRO_PORTERIA:
+        return ((partido.ultima_accion.tipo == config.ACT_TIRO_PORTERIA and partido.ultima_accion.estado == config.A_PORTERIA) or partido.ultima_accion.tipo == config.ACT_SAQUE_ESQUINA)  and partido.ultima_accion.agente.equipo != self.agente.equipo  
+        # return False
 
     def ejecutar(self, partido):
         atajar = numpy.random.choice(numpy.arange(0, 2), p=[1 - self.agente.atajar_balon , self.agente.atajar_balon])
 
         if atajar:
             rebote = numpy.random.choice(numpy.arange(0, 4), p=[self.agente.sin_rebote, self.agente.rebote_banda, self.agente.rebote_linea_final, self.agente.rebote_jugador])
+            
             if rebote == 0:
                 self.estado = config.SIN_REBOTE
             elif rebote == 1:
@@ -34,7 +38,7 @@ class Atajar(Accion):
                 self.estado = config.REBOTE_JUGADOR
             self.poscondicion(partido, atajar, rebote)
 
-            print(self.descripcion() + self.estado)
+            print(f"{self.descripcion()} {Fore.RED}{self.estado} {Style.RESET_ALL}")
         else:
             print(f"El jugador {partido.ultima_accion.agente} marco GOOOOOL")
             self.estado = config.NO_ATAJO

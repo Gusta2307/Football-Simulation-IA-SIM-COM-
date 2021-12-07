@@ -19,6 +19,7 @@ class Portero(Jugador):
         self.saque_porteria = list_prob[5]
 
         self.acciones.pop('SAQUE_BANDA')
+        self.acciones.pop('DESPEJAR_BALON')
 
         self.acciones['ATAJAR'] = (Atajar(self), self.atajar_balon)
         self.acciones['SAQUE_PORTERIA'] = (Saque_porteria(self), self.saque_porteria)

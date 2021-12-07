@@ -13,7 +13,10 @@ class Saque_esquina(Pase):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return partido.ultima_accion.tipo == config.ACT_ATAJAR and partido.ultima_accion.estado == config.REBOTE_LINEA_FINAL
+        return  partido.estado == config.DETENIDO and \
+                ((partido.ultima_accion.tipo == config.ACT_ATAJAR and partido.ultima_accion.estado == config.REBOTE_LINEA_FINAL) or \
+                (partido.ultima_accion.tipo == config.ACT_DESPEJAR_BALON and partido.ultima_accion.estado == config.DESPEJE_LINEA_FINAL)) and \
+                partido.ultima_accion.agente.equipo != self.agente.equipo
        
     def poscondicion(self, partido):
         partido.pos_balon = None

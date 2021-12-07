@@ -14,11 +14,13 @@ class Tiro_Porteria (Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return self.agente == partido.pos_balon if not (partido.pos_balon is None) else False
+        return self.agente == partido.pos_balon if not (partido.pos_balon is None) else \
+                partido.ultima_accion.tipo == config.ACT_SAQUE_ESQUINA and partido.ultima_accion.agente.equipo == self.agente.equipo and \
+                partido.ultima_accion.agente != self.agente #esta condicion se podria dar pero es muy pocoooooo probable
 
     def ejecutar(self, partido):
         tiro = numpy.random.choice(numpy.arange(0, 2), p=[1 - self.agente.tiro_porteria , self.agente.tiro_porteria])
-       
+        
         self.estado = config.A_PORTERIA if tiro else config.POR_FUERA
 
         self.poscondicion(partido)
