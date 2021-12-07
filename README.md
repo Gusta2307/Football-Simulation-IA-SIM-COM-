@@ -90,51 +90,51 @@ Definimos una estructura mas elaborada para la parte de la simulación del proye
 
 ## Tareas hechas hasta el momento
 
-1. [x] Al iniciar/reanudar el partido lo primero que se debe hacer es dar un pase.
+- [x] 1. Al iniciar/reanudar el partido lo primero que se debe hacer es dar un pase.
 
-2. [x] Bajar la probabilidad de disparo/gol y AUMENTAR LA DE PASES
+- [x] 2. Bajar la probabilidad de disparo/gol y AUMENTAR LA DE PASES
 
-3. [x] Implementar las ENTRADAS(es cuando un jugador intenta robarle la pelota a otro jugardor), estas pueden ser: 
+- [x] 3. Implementar las ENTRADAS(es cuando un jugador intenta robarle la pelota a otro jugardor), estas pueden ser: 
 
-    3.1. [x] Leves: se canta falta y nada más,  también el árbitro puede dejar seguir jugando sin cantar falta
+    - [x] 3.1 Leves: se canta falta y nada más,  también el árbitro puede dejar seguir jugando sin cantar falta
 
-    3.2 [x] Moderadas: se canta falta y el árbitro puede mostrar la tarjeta amarilla
+    - [x] 3.2 Moderadas: se canta falta y el árbitro puede mostrar la tarjeta amarilla
 
-    3.3 [x] Graves: se canta falta y el árbitro puede mostrar tarjeta amarilla o roja
+    - [x] 3.3 Graves: se canta falta y el árbitro puede mostrar tarjeta amarilla o roja
     
-    3.4 [x] Exitosa: es cuando un jugador le roba el balon a otro, sin hacerle falta
+    - [x] 3.4 Exitosa: es cuando un jugador le roba el balon a otro, sin hacerle falta
     
-4. [x] Implementar las paradas de los porteros, esta pueden ser:
+- [x] 4. Implementar las paradas de los porteros, esta pueden ser:
 
-    4.1 [x] Atajada: es cuando se produce un disparo y el portero se queda con el balón sin dar rebotes. Luego el portero tiene la posesión del balón y realiza un pase
+    - [x] 4.1 Atajada: es cuando se produce un disparo y el portero se queda con el balón sin dar rebotes. Luego el portero tiene la posesión del balón y realiza un pase
   
-    4.2 [x] Atajada con rebote: se produce un disparo y el portero da rebote. Aqui hay que elegir quien coge ese rebote, puede ser el mismo portero, o CUALQUIER JUGADOR, PROBABILIDAD DE GOL ALTAAAAAA
+    - [x] 4.2 Atajada con rebote: se produce un disparo y el portero da rebote. Aqui hay que elegir quien coge ese rebote, puede ser el mismo portero, o CUALQUIER JUGADOR, PROBABILIDAD DE GOL ALTAAAAAA
     
-    4.3 [x] Atajada y el balón sale por la banda: luego de esto se produce un saque de banda
+    - [x] 4.3 Atajada y el balón sale por la banda: luego de esto se produce un saque de banda
 
-    4.4 [x] Atajada y el balón sale por linea final: luego de esto se produce un saque de esquina
+    - [x] 4.4 Atajada y el balón sale por linea final: luego de esto se produce un saque de esquina
  
 ## Tareas propuestas
 
-1. [x] Implementar los saques de esquina. Aqui casi siempre hay un jugador que realiza los saques de esquina del equipo. En el saque de esquina se pueden pasar varias cosas:
+- [x] 1. Implementar los saques de esquina. Aqui casi siempre hay un jugador que realiza los saques de esquina del equipo. En el saque de esquina se pueden pasar varias cosas:
 
-    1.1 [x] Rechace o Despeje: es cuando un jugador del equipo contrario del jugador q saca el saque de esquina despeja el balon(PUEDE SER EL PORTERO). Este rechace tiene BAJA PROBABILIDAD que el balón lo mantenga el equipo que rechazó el balón
+    - [x] 1.1  Rechace o Despeje: es cuando un jugador del equipo contrario del jugador q saca el saque de esquina despeja el balon(PUEDE SER EL PORTERO). Este rechace tiene BAJA PROBABILIDAD que el balón lo mantenga el equipo que rechazó el balón
     
-    1.2 [x] Marcar Gol: Se marca gol
+    - [x] 1.2 Marcar Gol: Se marca gol
     
-    1.3 [x] El portero se queda con el balon y autoseguido viene un pase
+    - [x] 1.3 El portero se queda con el balon y autoseguido viene un pase
 
-2. [x] Implementar los rechaces/despejes, es cuando un jugar despeja el balón, esto puede terminar en: 
+- [x] 2. Implementar los rechaces/despejes, es cuando un jugar despeja el balón, esto puede terminar en: 
 
-    2.1 [x] Saque de banda
+    - [x] 2.1 Saque de banda
 
-    2.2 [x] Saque de esquina
+    - [x] 2.2 Saque de esquina
 
-    2.3 [x] Lo equivalente a un pase
+    - [x] 2.3 Lo equivalente a un pase
 
-    2.4 [x] Cambio de la posesión del balón
+    - [x] 2.4 Cambio de la posesión del balón
 
-3. [ ] Modificar el equipo con el objetivo de separar el once inicial y los que se quedan en la banca para el partido.
+- [ ] 3. Modificar el equipo con el objetivo de separar el once inicial y los que se quedan en la banca para el partido.
 
-4. [ ] Implementar el Manager con sus acciones. 
+- [ ] 4. Implementar el Manager con sus acciones. 
 
