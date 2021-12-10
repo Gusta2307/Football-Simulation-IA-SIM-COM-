@@ -36,7 +36,7 @@ class Partido:
         temp_jugador_list = []
 
         #este for seria por el once inicial y no por todos los del equipo
-        for jugador in eq.jugadores: 
+        for jugador in eq.jugadores_en_campo: 
             if jugador.posicion == 'DEL':
                 temp_jugador_list.append(jugador)
         self.pos_balon = temp_jugador_list[random.randint(0, len(temp_jugador_list) - 1)]
@@ -46,7 +46,7 @@ class Partido:
     def __reanudar_partido_pos_gol(self):
         eq = self.eq1 if self.ultima_accion.agente.equipo == self.eq2 else self.eq2
         temp_jugador_list = []
-        for jugador in eq.jugadores:
+        for jugador in eq.jugadores_en_campo:
             if jugador.posicion == 'DEL':
                 temp_jugador_list.append(jugador)
 
@@ -60,7 +60,7 @@ class Partido:
         act.ejecutar(self)
         while int(self.__tiempo) < 45:
             acciones_actual = []
-            for j in self.arbitros + self.eq1.jugadores + self.eq2.jugadores:
+            for j in self.arbitros + self.eq1.jugadores_en_campo + self.eq2.jugadores_en_campo:
                 accion = j.escoger_accion(self)
                 acciones_actual.append(accion)
             acciones_actual = analisis_acciones_list(acciones_actual, self.ultima_accion, self.estado)

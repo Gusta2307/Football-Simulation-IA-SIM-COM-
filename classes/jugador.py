@@ -98,7 +98,7 @@ class Jugador(Agente):
             index = numpy.random.choice(numpy.arange(0, 3), p=[0.3,   0.3,   0.4])
 
         temp_list = []
-        for item in self.equipo.jugadores:
+        for item in self.equipo.jugadores_en_campo:
             if item.posicion == config.POSICIONES[index]:
                 temp_list.append(item)
         jugador2 = temp_list[int(random.randint(0, len(temp_list)- 1))]

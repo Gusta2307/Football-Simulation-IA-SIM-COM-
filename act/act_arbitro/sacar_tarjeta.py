@@ -38,7 +38,7 @@ class Sacar_tarjeta(Accion):
     def poscondicion(self, partido):
         if self.sub_estado == config.MUESTRA_ROJA or partido.ultima_accion.agente.cantidad_tarjetas == 1:
             eq = partido.eq1 if partido.ultima_accion.agente.equipo == partido.eq1 else partido.eq2
-            eq.jugadores.remove(partido.ultima_accion.agente)
+            eq.jugadores_en_campo.remove(partido.ultima_accion.agente)
             print(f"El jugador {partido.ultima_accion.agente.nombre} es expulsado del partido")
         elif self.sub_estado ==  config.MUESTRA_AMARILLA:
             partido.ultima_accion.agente.cantidad_tarjetas = 1
