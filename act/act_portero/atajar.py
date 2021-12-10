@@ -12,6 +12,7 @@ class Atajar(Accion):
         self.agente = agente
         self.__descripcion = f"El portero {self.agente.nombre} "
         self.estado = None
+        self.tiempo = 0.13
         self.tipo = config.ACT_ATAJAR
     
     def descripcion(self):
@@ -38,9 +39,10 @@ class Atajar(Accion):
                 self.estado = config.REBOTE_JUGADOR
             self.poscondicion(partido, atajar, rebote)
 
-            print(f"{self.descripcion()} {Fore.RED}{self.estado} {Style.RESET_ALL}")
+            print(f"{partido.obtener_tiempo()} {self.descripcion()} {Fore.RED}{self.estado} {Style.RESET_ALL}")
         else:
-            print(f"El jugador {partido.ultima_accion.agente} marco GOOOOOL")
+            print(f"{partido.obtener_tiempo()} El jugador {partido.ultima_accion.agente} marco GOOOOOL")
+            self.tiempo = 0.8
             self.estado = config.NO_ATAJO
             self.poscondicion(partido, atajar, -1)
 

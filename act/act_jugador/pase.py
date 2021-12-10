@@ -6,6 +6,7 @@ config = Config()
 class Pase(Accion):
     def __init__(self, agente) -> None:
         self.agente = agente
+        self.tiempo = 0.1
         self.__descripcion = f"El jugador {self.agente.nombre} le pasa al balon a "
         self.dest_jugador = None #Jugador que va a recibir el pase
         self.tipo = config.ACT_PASE 
@@ -21,7 +22,7 @@ class Pase(Accion):
     def ejecutar(self, partido):
         self.dest_jugador = self.agente.seleccionar_jugador_pase(partido)
         self.poscondicion(partido)
-        print(self.descripcion() + self.dest_jugador.nombre)
+        print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.dest_jugador.nombre}')
 
     def poscondicion(self, partido):
         if partido.estado == config.INICIAR_PARTIDO or partido.estado == config.REANUDAR_PARTIDO:

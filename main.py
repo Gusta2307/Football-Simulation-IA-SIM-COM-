@@ -7,7 +7,7 @@ from config import Config
 config = Config()
 
 def main():
-    arbitros = [arbitro('Oscar', None, (0.7, 0.6, 0.7, 0.05))]
+    arbitros = [arbitro('Oscar', None, (0.7, 0.0001, 0.3, 0.005))]
 
     t1_name = ['messi', 'fati', 'depay', 'de jong', 'neymar', 'ter stegen']
     t1_pos = [config.POSICIONES[0], config.POSICIONES[0], config.POSICIONES[0], config.POSICIONES[1], config.POSICIONES[2], config.POSICIONES[3]]
@@ -37,11 +37,11 @@ def main():
     eq2 = Equipo("Madrid", "PEPE2", t2)
 
 
-    n = 20
-    while n:
-        p1 = Partido(eq1,eq2, arbitros)
-        p1.simular()
-        n -= 1
+    p1 = Partido(eq1,eq2, arbitros)
+    p1.simular()
+    # n = 20
+    # while n:
+    #     n -= 1
 
 
 if '__main__' == __name__:

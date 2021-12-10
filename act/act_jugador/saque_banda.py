@@ -8,6 +8,7 @@ class Saque_banda(Pase):
         super().__init__(agente)
         self.__descripcion = f"El jugador {self.agente.nombre} saca de banda a "
         self.tipo = config.ACT_SAQUE_BANDA
+        self.tiempo = 0.2
     
     def descripcion(self):
         return self.__descripcion

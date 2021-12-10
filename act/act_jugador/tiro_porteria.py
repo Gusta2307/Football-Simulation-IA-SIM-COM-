@@ -7,6 +7,7 @@ class Tiro_Porteria (Accion):
     def __init__(self, agente) -> None:
         self.agente = agente
         self.estado = None
+        self.tiempo = 0.15
         self.tipo = config.ACT_TIRO_PORTERIA
         self.__descripcion = f"El jugador {self.agente.nombre} tira "
 
@@ -25,7 +26,7 @@ class Tiro_Porteria (Accion):
 
         self.poscondicion(partido)
         
-        print(self.descripcion() + self.estado)
+        print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado}')
 
     def poscondicion(self, partido):
         partido.pos_balon = None

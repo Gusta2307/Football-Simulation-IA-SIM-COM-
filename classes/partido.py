@@ -1,4 +1,7 @@
 import random
+import time
+
+from numpy.random.mtrand import pareto
 
 from utiles import analisis_acciones_list, elimina_tipo
 from config import Config
@@ -12,13 +15,22 @@ class Partido:
         self.arbitros = arbitros
         self.marcador = [0,0]
 
+        self.__tiempo = None
+
         self.estado = config.INICIAR_PARTIDO
         self.ultima_accion = None #ultima accion q realizo el jugador que tenia el balon
 
         self.pos_balon = None #jugador con la posecion de balon
 
+    def __empezar_tiempo(self):
+        self.__tiempo = float(0)
+
+    def obtener_tiempo(self):
+        return f'{int(self.__tiempo)} \''
+
     def __iniciar_partido(self):
         print('Inicia el partido...')
+        self.__empezar_tiempo()
         equipo = random.randint(1, 2)
         eq = self.eq1 if equipo == 1 else self.eq2
         temp_jugador_list = []
@@ -46,7 +58,7 @@ class Partido:
         iter = 20
         act = self.__iniciar_partido()
         act.ejecutar(self)
-        while iter:
+        while int(self.__tiempo) < 45:
             acciones_actual = []
             for j in self.arbitros + self.eq1.jugadores + self.eq2.jugadores:
                 accion = j.escoger_accion(self)
@@ -59,12 +71,15 @@ class Partido:
             for item in acciones_actual:
                 if item.precondicion(self):
                     item.ejecutar(self)
+                    self.__tiempo += item.tiempo
 
             if self.estado == config.REANUDAR_PARTIDO:
                 self.__reanudar_partido_pos_gol()
              
             if len(acciones_actual) != 0:
                 iter -= 1
+
+            # print(self.ultima_accion, self.pos_balon)
 
 
     def eq_dic(self, eq1, eq2):

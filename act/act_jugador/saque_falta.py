@@ -7,6 +7,7 @@ class Saque_falta(Pase):
         self.agente = agente
         self.tipo = config.ACT_SAQUE_FALTA
         self.estado = None
+        self.tiempo = 0.7
         self.__descripcion = f"El jugador {self.agente.nombre} saca falta "
     
     def descripcion(self):

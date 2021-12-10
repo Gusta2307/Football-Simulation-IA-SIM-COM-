@@ -8,6 +8,7 @@ class Saque_esquina(Pase):
         super().__init__(agente)
         self.__descripcion = f"El jugador {self.agente.nombre} saca de esquina a "
         self.tipo = config.ACT_SAQUE_ESQUINA
+        self.tiempo = 0.4
     
     def descripcion(self):
         return self.__descripcion

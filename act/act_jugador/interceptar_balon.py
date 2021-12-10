@@ -10,6 +10,7 @@ class Interceptar_balon(Accion):
         self.agente = agente
         self.tipo = config.ACT_INTERCEPTAR_BALON
         self.estado = None
+        self.tiempo = 0.1
         self.__descripcion = f"El jugador {self.agente.nombre} intercepto el balon "
     
     def descripcion(self):
@@ -24,7 +25,7 @@ class Interceptar_balon(Accion):
         if nivel == 0: # si no cometio falta
             self.estado = config.SIN_FALTA
             self.poscondicion(partido)
-            print(self.descripcion() + self.estado)
+            print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado}')
         else:
             self.estado = config.CON_FALTA
             act = Hacer_Falta(self.agente, nivel=nivel, descripcion=self.descripcion() + self.estado + " ")

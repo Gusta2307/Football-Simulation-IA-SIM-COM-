@@ -9,6 +9,7 @@ config = Config()
 class Despejar_balon(Accion):
     def __init__(self, agente, **args) -> None:
         self.agente = agente
+        self.tiempo = 0.1
         self.tipo = config.ACT_DESPEJAR_BALON
         self.estado = None
         self.__descripcion = f"El jugador {self.agente.nombre} "
@@ -33,7 +34,7 @@ class Despejar_balon(Accion):
         else:
             self.estado = config.DESPEJE_JUGADOR
 
-        print(f'{self.descripcion()}{Fore.GREEN}{self.estado}{Style.RESET_ALL}')
+        print(f'{partido.obtener_tiempo()} {self.descripcion()}{Fore.GREEN}{self.estado}{Style.RESET_ALL}')
 
         self.poscondicion(partido)
 

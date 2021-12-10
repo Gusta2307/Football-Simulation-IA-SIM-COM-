@@ -9,6 +9,7 @@ class Saque_porteria(Pase):
         super().__init__(agente)
         self.__descripcion = f"El portero {self.agente.nombre} saca de porteria a "
         self.tipo = config.ACT_SAQUE_PORTERIA
+        self.tiempo = 0.17
     
     def descripcion(self):
         return self.__descripcion

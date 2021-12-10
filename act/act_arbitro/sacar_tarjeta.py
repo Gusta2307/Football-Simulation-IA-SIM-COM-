@@ -25,13 +25,13 @@ class Sacar_tarjeta(Accion):
         #definir como hacer las probabilidades teniendo en cuenta el tipo de falta que se realizo
         if color:
             self.sub_estado = config.MUESTRA_ROJA
-            print(self.descripcion() + self.estado + " y " + self.sub_estado)
+            print(f"{partido.obtener_tiempo()} {self.descripcion()} {self.estado} y {self.sub_estado}")
         else:
             self.sub_estado = config.MUESTRA_AMARILLA
             if partido.ultima_accion.agente.cantidad_tarjetas == 1:
-                print(self.descripcion() + self.estado + ' y le ' + self.sub_estado + " y " + config.MUESTRA_ROJA + f' a {partido.ultima_accion.agente.nombre}')
+                print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado} y le {self.sub_estado} y {config.MUESTRA_ROJA} a {partido.ultima_accion.agente.nombre}')
             else:
-                print(self.descripcion() + self.estado + ' y le ' + self.sub_estado + f' a {partido.ultima_accion.agente.nombre}')
+                print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado} y le {self.sub_estado} a {partido.ultima_accion.agente.nombre}')
         self.poscondicion(partido)
 
 
