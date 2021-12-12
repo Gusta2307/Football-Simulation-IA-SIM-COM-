@@ -1,7 +1,6 @@
 import random
 import time
 
-from numpy.random.mtrand import pareto
 
 from utiles import analisis_acciones_list, elimina_tipo
 from config import Config
@@ -15,6 +14,16 @@ class Partido:
         self.arbitros = arbitros
         self.marcador = [0,0]
 
+        self.cambios_por_equipo = {
+            eq1.nombre: [config.VENTANAS_DE_CAMBIOS, config.TOTAL_DE_CAMBIOS],
+            eq2.nombre: [config.VENTANAS_DE_CAMBIOS, config.TOTAL_DE_CAMBIOS]
+        }
+
+        self.cambios_pendiente = {
+            eq1.nombre: [],
+            eq2.nombre: []
+        }
+
         self.__tiempo = None
 
         self.estado = config.INICIAR_PARTIDO
@@ -26,9 +35,12 @@ class Partido:
         self.__tiempo = float(0)
 
     def obtener_tiempo(self):
-        return f'{int(self.__tiempo)} \''
+        return f'{int(self.__tiempo)}\''
 
     def __iniciar_partido(self):
+        self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+        self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+
         print('Inicia el partido...')
         self.__empezar_tiempo()
         equipo = random.randint(1, 2)
@@ -60,7 +72,7 @@ class Partido:
         act.ejecutar(self)
         while int(self.__tiempo) < 45:
             acciones_actual = []
-            for j in self.arbitros + self.eq1.jugadores_en_campo + self.eq2.jugadores_en_campo:
+            for j in self.arbitros + self.eq1.jugadores_en_campo + self.eq2.jugadores_en_campo + [self.eq1.manager, self.eq2.manager]:
                 accion = j.escoger_accion(self)
                 acciones_actual.append(accion)
             acciones_actual = analisis_acciones_list(acciones_actual, self.ultima_accion, self.estado)
@@ -75,7 +87,14 @@ class Partido:
 
             if self.estado == config.REANUDAR_PARTIDO:
                 self.__reanudar_partido_pos_gol()
-             
+
+            if self.estado == config.DETENIDO:
+                index = 0
+                eq = [self.eq1.nombre, self.eq2.nombre]
+                for e in eq:
+                    while self.cambios_pendiente[e]:
+                        self.cambios_pendiente[e].pop().poscondicion(self)
+                        
             if len(acciones_actual) != 0:
                 iter -= 1
 
