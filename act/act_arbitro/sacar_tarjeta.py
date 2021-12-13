@@ -2,6 +2,9 @@ import numpy
 from act.accion import Accion
 from config import Config
 
+from colorama import Fore
+from colorama import Style
+
 config = Config()
 
 class Sacar_tarjeta(Accion):
@@ -25,13 +28,13 @@ class Sacar_tarjeta(Accion):
         #definir como hacer las probabilidades teniendo en cuenta el tipo de falta que se realizo
         if color:
             self.sub_estado = config.MUESTRA_ROJA
-            print(f"{partido.obtener_tiempo()} {self.descripcion()} {self.estado} y {self.sub_estado}")
+            print(f"{partido.obtener_tiempo()} {self.descripcion()} {Fore.RED} {self.estado} {Style.RESET_ALL} y {self.sub_estado}")
         else:
             self.sub_estado = config.MUESTRA_AMARILLA
             if partido.ultima_accion.agente.cantidad_tarjetas == 1:
-                print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado} y le {self.sub_estado} y {config.MUESTRA_ROJA} a {partido.ultima_accion.agente.nombre}')
+                print(f'{partido.obtener_tiempo()} {self.descripcion()} {Fore.YELLOW} {self.estado} {Style.RESET_ALL} y le {self.sub_estado} y {config.MUESTRA_ROJA} a {partido.ultima_accion.agente.nombre}')
             else:
-                print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado} y le {self.sub_estado} a {partido.ultima_accion.agente.nombre}')
+                print(f'{partido.obtener_tiempo()} {self.descripcion()} {Fore.YELLOW} {self.estado} {Style.RESET_ALL} y le {self.sub_estado} a {partido.ultima_accion.agente.nombre}')
         self.poscondicion(partido)
 
 
@@ -39,9 +42,11 @@ class Sacar_tarjeta(Accion):
         if self.sub_estado == config.MUESTRA_ROJA or partido.ultima_accion.agente.cantidad_tarjetas == 1:
             eq = partido.eq1 if partido.ultima_accion.agente.equipo == partido.eq1 else partido.eq2
             eq.jugadores_en_campo.remove(partido.ultima_accion.agente)
+            partido.ultima_accion.agente.equipo.estadisticas['TARJETAS ROJAS'] += 1
             print(f"El jugador {partido.ultima_accion.agente.nombre} es expulsado del partido")
         elif self.sub_estado ==  config.MUESTRA_AMARILLA:
             partido.ultima_accion.agente.cantidad_tarjetas = 1
+            partido.ultima_accion.agente.equipo.estadisticas['TARJETAS AMARILLAS'] += 1
 
         partido.pos_balon = None
         partido.estado = config.DETENIDO

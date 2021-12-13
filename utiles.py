@@ -29,8 +29,6 @@ def analisis_acciones_list(acciones_actual, ultima_accion,estado):
 
     return acciones_actual
     
-
-    
 def escoge_una(acciones_actual, tipo):
     conjunto, acciones_actual = filter(lambda x: x.tipo == tipo, iterable=acciones_actual)
     if len(conjunto) >= 1:
@@ -39,7 +37,6 @@ def escoge_una(acciones_actual, tipo):
     
     return acciones_actual
 
-
 def elimina_tipo (acciones_actual, tipo):
     result = []
     for i in acciones_actual:
@@ -47,3 +44,26 @@ def elimina_tipo (acciones_actual, tipo):
             result.append(i)
 
     return result
+
+
+def clasificar_jugadores(jugadores) -> dict:
+    clasificacion = {}
+    clasificacion['DEL'] = []
+    clasificacion['MC'] = []
+    clasificacion['DEF'] = []
+    clasificacion['GK'] = []
+
+    for jugador in jugadores:
+        clasificacion[jugador.posicion].append(jugador)
+
+    return clasificacion
+
+def print_alineacion(esquema:list, jugadores):
+    esquema.pop(len(esquema) - 1)
+    esquema.reverse()
+    result = f'Esquema de Juego: {esquema[0]}-{esquema[1]}-{esquema[2]} \n'
+
+    for j in jugadores:
+        result += f'{j.nombre}\n'
+    
+    print(result)

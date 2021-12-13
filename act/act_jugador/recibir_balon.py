@@ -42,10 +42,12 @@ class Recibir_balon(Accion):
 
     def poscondicion(self, partido):
         if self.estado == config.RECIBIR_BALON:
+            self.agente.equipo.estadisticas['PASES'] += 1
             partido.pos_balon = self.agente
             partido.ultima_accion = self
         else:
             if partido.ultima_accion.tipo == config.ACT_PASE:
+                self.agente.equipo.estadisticas['BALONES PERDIDOS'] += 1
                 partido.estado = config.DETENIDO
                 partido.pos_balon = None
                 partido.ultima_accion = self

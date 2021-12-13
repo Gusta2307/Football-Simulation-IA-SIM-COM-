@@ -1,6 +1,7 @@
 from classes.equipo import Equipo
 from classes.arbitro import arbitro
 from classes.jugador import Jugador
+from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
 from config import Config
@@ -9,6 +10,9 @@ config = Config()
 
 
 def main():
+    manager = [Manager('Xavi', 'Espana', 0.7, 43), Manager('Zidane', 'Francia', 0.8, 46)]
+
+
     arbitros = [arbitro('Oscar', None, (0.7, 0.0001, 0.3, 0.005))]
 
     t1_name = ['messi', 'fati', 'depay', 'de jong', 'neymar', 'ansu fati', 'gavi', 'pedri', 'dembele', 'dani alves', 'eric garcia', 'ter stegen']
@@ -35,8 +39,8 @@ def main():
     t2.append(Portero(t2_name[length - 1], t2_pos[length - 1], t2_prob[length - 1], t2_act_prob[length - 1], t2_portero_prob))
 
 
-    eq1 = Equipo("Barca", "PEPE1", t1)
-    eq2 = Equipo("Madrid", "PEPE2", t2)
+    eq1 = Equipo("Barca", manager[0], t1)
+    eq2 = Equipo("Madrid", manager[1], t2)
 
 
     p1 = Partido(eq1,eq2, arbitros)

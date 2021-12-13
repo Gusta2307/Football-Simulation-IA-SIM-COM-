@@ -20,6 +20,7 @@ class Saque_esquina(Pase):
                 partido.ultima_accion.agente.equipo != self.agente.equipo
        
     def poscondicion(self, partido):
+        self.agente.equipo.estadisticas['TIROS DE ESQUINA'] += 1
         partido.pos_balon = None
         partido.estado = config.EN_JUEGO
         partido.ultima_accion = self

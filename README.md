@@ -134,9 +134,9 @@ Definimos una estructura mas elaborada para la parte de la simulación del proye
 
     - [x] 2.4 Cambio de la posesión del balón
 
-- [ ] 3. Modificar el equipo con el objetivo de separar el once inicial y los que se quedan en la banca para el partido.
+- [x] 3. Modificar el equipo con el objetivo de separar el once inicial y los que se quedan en la banca para el partido.
 
-- [ ] 4. Implementar el Manager con sus acciones. 
+- [x] 4. Implementar el Manager con sus acciones. 
 
 - [x] 5. Agregar tiempo y medio tiempo
 
