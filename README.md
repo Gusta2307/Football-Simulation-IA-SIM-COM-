@@ -140,5 +140,5 @@ Definimos una estructura mas elaborada para la parte de la simulación del proye
 
 - [x] 5. Agregar tiempo y medio tiempo
 
-- [ ] 6. Implementar reporte (estadisticas del partido)
+- [x] 6. Implementar reporte (estadisticas del partido)
 
