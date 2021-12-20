@@ -42,7 +42,7 @@ class Atajar(Accion):
             print(f"{partido.obtener_tiempo()} {self.descripcion()} {Fore.RED}{self.estado} {Style.RESET_ALL}")
         else:
             print(f"{partido.obtener_tiempo()} El jugador {partido.ultima_accion.agente} {Fore.CYAN} marco GOOOOOL {Style.RESET_ALL}")
-            partido.ultima_accion.agente.equipo.estadisticas['GOLES'] += 1
+            # partido.ultima_accion.agente.equipo.estadisticas['GOLES'] += 1
             self.tiempo = 0.8
             self.estado = config.NO_ATAJO
             self.poscondicion(partido, atajar, -1)
@@ -50,7 +50,8 @@ class Atajar(Accion):
 
     def poscondicion(self, partido, atajar, rebote):
         if atajar:
-            self.agente.equipo.estadisticas['PARADAS PORTERO'] += 1
+            # self.agente.equipo.estadisticas['PARADAS PORTERO'] += 1
+            partido.reporte.annadir_parada_portero(self.agente.equipo.nombre)
             if rebote == 0:
                 partido.pos_balon = self.agente
             elif rebote == 1 or rebote == 2:
@@ -61,4 +62,5 @@ class Atajar(Accion):
         else:
             partido.pos_balon = None
             partido.estado = config.REANUDAR_PARTIDO
+            partido.reporte.annadir_gol(partido.ultima_accion.agente.equipo.nombre)
         

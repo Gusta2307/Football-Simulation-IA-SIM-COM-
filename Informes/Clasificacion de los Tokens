@@ -1,0 +1,28 @@
+Keywords:
+-player
+-team
+-game
+-manager
+-referee
+-for
+-in
+-if
+-else
+-filter
+-by
+-function
+-const
+-TEAM
+
+Symbols:
+1.Assignment: "<-"
+2.Underscore: "_"
+3.DoblePoint: ":"
+4.Separators: ";", ",", ":"
+5.Brackets: "(", ")", "{", "}", "[", "]", 
+6.Operators:
+(Comparative) >, <, >=, <=, ==, !=
+(Logical) OR, AND, NOT
+
+
+Tambien tenemos los siguientes tipos: Identifier, Number y Unknown (desconocido)

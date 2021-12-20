@@ -1,7 +1,7 @@
 import random
 import time
 
-
+from classes.reporte import Reporte
 from utiles import analisis_acciones_list, elimina_tipo
 from config import Config
 config = Config()
@@ -13,6 +13,8 @@ class Partido:
         self.eq2 = eq2
         self.arbitros = arbitros
         self.marcador = [0,0]
+
+        self.reporte = Reporte(self.eq1.nombre, self.eq2.nombre)
 
         self.cambios_por_equipo = {
             eq1.nombre: [config.VENTANAS_DE_CAMBIOS, config.TOTAL_DE_CAMBIOS],
@@ -89,7 +91,6 @@ class Partido:
                 self.__reanudar_partido_pos_gol()
 
             if self.estado == config.DETENIDO:
-                index = 0
                 eq = [self.eq1.nombre, self.eq2.nombre]
                 for e in eq:
                     while self.cambios_pendiente[e]:
@@ -98,37 +99,7 @@ class Partido:
             if len(acciones_actual) != 0:
                 iter -= 1
 
-            # print(self.ultima_accion, self.pos_balon)
-        self.print_estadisticas()
-
-
-    def print_estadisticas(self):
-        print("")
-        print("___________________________________")
-        print("      Estadisticas del Partido  ")
-        print("___________________________________")
-        print(f"  {self.eq1.nombre}       {self.eq1.estadisticas['GOLES']} - {self.eq2.estadisticas['GOLES']}       {self.eq2.nombre}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['REMATES']}        Remates        {self.eq2.estadisticas['REMATES']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['TIROS DE ESQUINA']}    Tiros de Esquina    {self.eq2.estadisticas['TIROS DE ESQUINA']}")
-        print("___________________________________")
-        print(f"           Fuera de rango")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['PASES']}         Pases         {self.eq2.estadisticas['PASES']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['BALONES PERDIDOS']}    Balones Perdidos    {self.eq2.estadisticas['BALONES PERDIDOS']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['BALONES RECUPERADOS']}   Balones Recuperados  {self.eq2.estadisticas['BALONES RECUPERADOS']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['PARADAS PORTERO']}   Paradas Porteros    {self.eq2.estadisticas['PARADAS PORTERO']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['FALTAS']}    Faltas Cometidas    {self.eq2.estadisticas['FALTAS']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['TARJETAS AMARILLAS']}   Tarjetas Amarillas    {self.eq2.estadisticas['TARJETAS AMARILLAS']}")
-        print("___________________________________")
-        print(f"   {self.eq1.estadisticas['TARJETAS ROJAS']}    Tarjetas Rojas      {self.eq2.estadisticas['TARJETAS ROJAS']}")
-        print("___________________________________")
+        print(self.reporte)
 
     def eq_dic(self, eq1, eq2):
         return {1:eq1, 2: eq2}

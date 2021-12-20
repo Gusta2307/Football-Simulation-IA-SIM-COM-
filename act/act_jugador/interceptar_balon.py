@@ -32,8 +32,10 @@ class Interceptar_balon(Accion):
             act.ejecutar(partido)
 
     def poscondicion(self, partido):
-        self.agente.equipo.estadisticas['BALONES RECUPERADOS'] += 1
-        partido.ultima_accion.agente.equipo.estadisticas['BALONES PERDIDOS'] += 1
+        # self.agente.equipo.estadisticas['BALONES RECUPERADOS'] += 1
+        partido.reporte.annadir_balon_recuperado(self.agente.equipo.nombre)
+        # partido.ultima_accion.agente.equipo.estadisticas['BALONES PERDIDOS'] += 1
+        partido.reporte.annadir_balon_perdido(partido.ultima_accion.agente.equipo.nombre)
         partido.pos_balon = self.agente
         partido.ultima_accion = self
         

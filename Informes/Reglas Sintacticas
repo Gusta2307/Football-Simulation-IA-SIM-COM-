@@ -1,0 +1,59 @@
+Validacion de las Reglas Sintacticas
+
+  <program> := <stat-list>
+<stat-list> := <stat> ";"
+	     | <stat> ";" <stat-list>
+     <stat> := <player-var>
+     	     | <team-var>
+     	     | <game-var>
+     	     | <manager-var>
+     	     | <referee-var>
+   	     | <assign-var>
+   	     | <const-var>
+     	     | <for-cycle>
+     	     | <if-cond>
+     	     | <function-func>
+     	     | <def-array>
+     	     | <array-index>
+<player-var>:= "player" ID "("<arg-list>")"
+  <team-var>:= "team" ID "("<arg-list>")"
+  <game-var>:= "game" ID "("<arg-list>")"
+<manager-var>:= "manager" ID "("<arg-list>")"
+<referee-var>:= "referee" ID "("<arg-list>")"
+<assign-var> := ID "<-" ID
+	      | <type> ID "<-" ID
+ <const-var>:= "const" <type> ID
+ <for-cycle>:= "for" ID "in" ID ":" "{"<stat>"}"
+             | "for" ID "in" ID"."ID" ":" "{"<stat>"}"
+   <if-cond>:= "if" <expr> ":" "{"<stat>"}"
+             | "if" <expr> ":" "{"<stat>"}" "else" "{"<stat>"}"
+<function-func> := "function" <type> ID "("<arg-list>")" "{"<stat>"}"
+  <def-array>:= <type> ID "["<ID-list>"]"
+<array-index>:= ID "["NUMBER"]"
+  <arg-list>:= ID
+             | ID "=" <atom>
+             | ID "=" <atom> "," <arg-list>
+   <ID-list>:= ID
+             | ID "," <ID-list>
+      <type>:= player
+             | team
+             | game
+             | manager
+             | referee
+      <expr>:= <expr> "OR" <expr>
+             | <expr> "AND" <expr>
+             | "NOT" <expr>
+             | <term>
+      <term>:= <term> ">" <term>
+             | <term> ">=" <term>
+             | <term> "<" <term>
+             | <term> "<=" <term>
+             | <term> "==" <term>
+             | <term> "!=" <term>
+             | <atom>
+      <atom>:= ID
+             | NUMBER
+             | <func-call>
+ <func-call>:= ID "("<expr-list>")"
+ <expr-list>:= <expr>
+             | <expr> "," <expr-list>

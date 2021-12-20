@@ -45,7 +45,6 @@ def elimina_tipo (acciones_actual, tipo):
 
     return result
 
-
 def clasificar_jugadores(jugadores) -> dict:
     clasificacion = {}
     clasificacion['DEL'] = []
