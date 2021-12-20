@@ -29,7 +29,8 @@ class Tiro_Porteria (Accion):
         print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado}')
 
     def poscondicion(self, partido):
-        self.agente.equipo.estadisticas['REMATES'] += 1
+        # self.agente.equipo.estadisticas['REMATES'] += 1
+        partido.reporte.annadir_remate(self.agente.equipo.nombre)
         partido.pos_balon = None
         partido.ultima_accion = self
         if self.estado == config.POR_FUERA:

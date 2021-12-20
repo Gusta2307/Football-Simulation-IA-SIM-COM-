@@ -43,7 +43,8 @@ class Cantar_falta(Accion):
         if self.estado == config.NO_CANTA_FALTA:
            partido.estado = config.EN_JUEGO
         elif self.estado == config.CANTA_FALTA:
-            partido.ultima_accion.agente.equipo.estadisticas['FALTAS'] += 1
+            # partido.ultima_accion.agente.equipo.estadisticas['FALTAS'] += 1
+            partido.reporte.annadir_falta(partido.ultima_accion.agente.equipo.nombre)
             partido.estado = config.DETENIDO
             partido.pos_balon = None
             partido.ultima_accion = self

@@ -10,8 +10,6 @@ class Equipo:
         self._jugadores_en_campo = None
         self._jugadores_en_banca = None
 
-        self.estadisticas = defaultdict(int)
-
         for j in jugadores:
             j.equipo = self
 

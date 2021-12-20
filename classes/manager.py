@@ -4,6 +4,8 @@ from act.act_manager.hacer_cambio import Hacer_cambio
 from act.default import Default
 import numpy
 
+from config import Config
+config = Config()
 class Manager(Agente):
     def __init__(self, nombre, pais, experiencia, edad) -> None:
         self.nombre = nombre
