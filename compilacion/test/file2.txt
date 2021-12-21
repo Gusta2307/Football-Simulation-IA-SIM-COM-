@@ -1,0 +1,11 @@
+a <- 100;
+b<-"Ronaldo";
+c <-(50)
+if (x==1 and x == 2)
+if (x>=1 and x >= 4)
+if (x >= "Kilos" and x >="Kilos")
+
+if (x!=1 and x != 2)
+if (x<=1 and x <= 4)
+if (x <=(Kilos" and x <="Kilos")
+

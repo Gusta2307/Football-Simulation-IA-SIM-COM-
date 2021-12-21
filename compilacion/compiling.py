@@ -1,5 +1,4 @@
-from Compiling.token import TokenValue
-from Compiling.analisisLexico import AnalisisLexico
+from compilacion.analisisLexico import *
 
 
 class Compiling:
@@ -22,6 +21,12 @@ class Compiling:
         self.__lexical.registerKeyword("function", TokenValue.Function)
         self.__lexical.registerKeyword("const", TokenValue.Const)
         self.__lexical.registerKeyword("TEAM", TokenValue.TEAM)
+        self.__lexical.registerKeyword("AND", TokenValue.And)
+        self.__lexical.registerKeyword("OR", TokenValue.Or)
+        self.__lexical.registerKeyword("NOT", TokenValue.Not)
+        self.__lexical.registerKeyword("and", TokenValue.And)
+        self.__lexical.registerKeyword("or", TokenValue.Or)
+        self.__lexical.registerKeyword("not", TokenValue.Not)
 
         self.__lexical.registerSymbol("<", TokenValue.Less)
         self.__lexical.registerSymbol("<=", TokenValue.LessOrEquals)
@@ -29,19 +34,21 @@ class Compiling:
         self.__lexical.registerSymbol(">=", TokenValue.GreaterOrEquals)
         self.__lexical.registerSymbol("==", TokenValue.Equals)
         self.__lexical.registerSymbol("!=", TokenValue.NotEquals)
-        self.__lexical.registerSymbol("AND", TokenValue.And)
-        self.__lexical.registerSymbol("OR", TokenValue.Or)
-        self.__lexical.registerSymbol("NOT", TokenValue.Not)
         self.__lexical.registerSymbol("<-", TokenValue.Assign)
         self.__lexical.registerSymbol("_", TokenValue.Underscore)
-        self.__lexical.registerSymbol(".", TokenValue.PointSeparator)
-        self.__lexical.registerSymbol(":", TokenValue.DoblePointSeparator)
-        self.__lexical.registerSymbol(",", TokenValue.ValueSeparator)
-        self.__lexical.registerSymbol(";", TokenValue.StatementSeparator)
         self.__lexical.registerSymbol("(", TokenValue.OpenBracket)
         self.__lexical.registerSymbol(")", TokenValue.ClosedBracket)
         self.__lexical.registerSymbol("{", TokenValue.OpenCurlyBraces)
         self.__lexical.registerSymbol("}", TokenValue.ClosedCurlyBraces)
         self.__lexical.registerSymbol("[", TokenValue.OpenSquareBracket)
         self.__lexical.registerSymbol("[", TokenValue.ClosedSquareBracket)
+        self.__lexical.registerSymbol('"', TokenValue.QuotationMarks)
+        self.__lexical.registerSymbol("=", TokenValue.Equal)
+        self.__lexical.registerSymbol("!", TokenValue.PuntuactionMark)
+        self.__lexical.registerSymbol("-", TokenValue.Hypen)
+
+        self.__lexical.registerSeparator(".", TokenValue.PointSeparator)
+        self.__lexical.registerSeparator(":", TokenValue.DoblePointSeparator)
+        self.__lexical.registerSeparator(",", TokenValue.ValueSeparator)
+        self.__lexical.registerSeparator(";", TokenValue.StatementSeparator)
         return self.__lexical

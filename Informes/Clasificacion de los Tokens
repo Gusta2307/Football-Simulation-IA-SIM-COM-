@@ -13,16 +13,16 @@ Keywords:
 -function
 -const
 -TEAM
+-Logical operators: OR, AND, NOT
 
 Symbols:
 1.Assignment: "<-"
 2.Underscore: "_"
 3.DoblePoint: ":"
-4.Separators: ";", ",", ":"
-5.Brackets: "(", ")", "{", "}", "[", "]", 
-6.Operators:
-(Comparative) >, <, >=, <=, ==, !=
-(Logical) OR, AND, NOT
+4.Brackets: "(", ")", "{", "}", "[", "]", "
+5.Operators: >, <, >=, <=, ==, !=
+
+Separators: ";", ",", ":"
 
 
-Tambien tenemos los siguientes tipos: Identifier, Number y Unknown (desconocido)
+Tambien tenemos los siguientes tipos: Identifier, Number y Text (todo lo que esta dentro de las "")

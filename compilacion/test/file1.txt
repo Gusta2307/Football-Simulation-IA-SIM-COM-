@@ -1,0 +1,5 @@
+player p1(name="Messi");
+player p2 (name = "Neymar1293—iee", posicion="DEL");
+if(x>10 and x < 11):{}
+c <- "Roberto"; # x = 100:
+k <- "Cristian";# x = 100:

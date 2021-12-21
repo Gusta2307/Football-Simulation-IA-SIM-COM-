@@ -5,11 +5,27 @@ from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
 from config import Config
+from compilacion.compiling import Compiling
+import os
 
 config = Config()
 
 
+def read_script(name):
+    cwd = os.getcwd()
+    direction = os.path.join(cwd, "compilacion", "test",  name)
+    file = open(direction, "r")
+    line = file.read()
+    file.close()
+    return line
+
 def main():
+    file_name = input()
+    code = read_script(file_name).splitlines()
+    compiler = Compiling()
+    for token in compiler.Lexical.tokenize(code):
+        print(token)
+
     manager = [Manager('Xavi', 'Espana', 0.7, 43), Manager('Zidane', 'Francia', 0.8, 46)]
 
 
