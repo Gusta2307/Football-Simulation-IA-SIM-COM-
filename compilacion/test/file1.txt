@@ -1,5 +1,5 @@
-player p1(name="Messi");
-player p2 (name = "Neymar1293—iee", posicion="DEL");
-if(x>10 and x < 11):{}
 c <- "Roberto"; # x = 100:
+team >hola <- 90;
+if(x>10 and x < 11):{}
 k <- "Cristian";# x = 100:
+filter players by (_.age>20);

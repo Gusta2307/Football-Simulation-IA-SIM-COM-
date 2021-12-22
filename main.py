@@ -25,9 +25,8 @@ def main():
     compiler = Compiling()
     for token in compiler.Lexical.tokenize(code):
         print(token)
-
+    
     manager = [Manager('Xavi', 'Espana', 0.7, 43), Manager('Zidane', 'Francia', 0.8, 46)]
-
 
     arbitros = [arbitro('Oscar', None, (0.7, 0.0001, 0.3, 0.005))]
 
@@ -60,7 +59,7 @@ def main():
 
 
     p1 = Partido(eq1,eq2, arbitros)
-    p1.simular()
+    # p1.simular()
     # n = 20
     # while n:
     #     n -= 1

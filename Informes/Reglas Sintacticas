@@ -20,8 +20,8 @@ Validacion de las Reglas Sintacticas
   <game-var>:= "game" ID "("<arg-list>")"
 <manager-var>:= "manager" ID "("<arg-list>")"
 <referee-var>:= "referee" ID "("<arg-list>")"
-<assign-var> := ID "<-" ID
-	      | <type> ID "<-" ID
+<assign-var> := ID "<-" <atom>
+	      | <type> ID "<-" <atom>
  <const-var>:= "const" <type> ID
  <for-cycle>:= "for" ID "in" ID ":" "{"<stat>"}"
              | "for" ID "in" ID"."ID" ":" "{"<stat>"}"
@@ -53,6 +53,7 @@ Validacion de las Reglas Sintacticas
              | <atom>
       <atom>:= ID
              | NUMBER
+             | Text
              | <func-call>
  <func-call>:= ID "("<expr-list>")"
  <expr-list>:= <expr>

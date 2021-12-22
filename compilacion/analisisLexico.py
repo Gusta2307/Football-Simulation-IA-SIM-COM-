@@ -6,6 +6,8 @@ class AnalisisLexico:
         self.keywords = {}
         self.symbols = {}
         self.separators = {}
+        self.quotes = {}
+        self.brackets = {}
         self.errors = []  # guarda los errores durante la tokenizacion
     
     def registerKeyword(self, text, value):
@@ -15,184 +17,121 @@ class AnalisisLexico:
         self.symbols[text] = value
 
     def registerSeparator(self, text, value):
-        self.separators[text] = value    
+        self.separators[text] = value  
+    
+    def registerQuote(self, text, value):
+        self.quotes[text] = value
+    
+    def registerBracket(self, text, value):
+        self.brackets[text] = value
 
     def tokenize(self, code):
-        # listTokens = []
-        
         for i in range(len(code)):
             j = 0
             state = 0
             column = 1
             curr_token = ""
 
-            while j <= len(code[i]) - 1:
-                c = code[i][j]  # tomo el caracter actual
-
-                # if c == '\n': j += 1
+            while j <= len(code[i]):
+                
+                if j < len(code[i]):
+                    c = code[i][j]
 
                 if state == 0:
-                    if c.isspace() or (j < len(code[i]) - 1): j += 1
+                    if c.isspace(): 
+                        j += 1
+                        continue
+
                     curr_token += c
-                    state = 11 if self.isseparator(c) else 3 if self.issymbol(c) else 2 if c.isdigit() else 1  # si no es ni un symbol o un digit, es un char cualquiera
+                    state = 0 if c.isspace() else 4 if self.isseparator(c) else 3 if self.issymbol(c) else 2 if c.isdigit() else 5 if self.isquote(c) else 6 if self.isbracket(c) else 1  # si no es ni un symbol o un digit, es un char cualquiera
+                    j += 1
                     
-                elif state == 1:
-                    if c.isspace() or self.issymbol(c) or self.isseparator(c): #si es un espacio en blanco o viene un symbol, el token llega hasta donde esta
+                elif state == 1: # keyword/id
+                    if c.isspace() or (self.issymbol(c) and c != '_') or self.isseparator(c) or self.isquote(c) or self.isbracket(c) or (j == len(code[i])):
                         if self.iskeywords(curr_token):
                             yield Token(curr_token, self.keywords[curr_token], TokenType.Keyword, i + 1, column)
-                        elif not self.issymbol(curr_token):  # es un identificador
-                            if self.check_identifier(curr_token, i, column):
+                        elif self.check_identifier(curr_token, i, column):
                                 yield Token(curr_token, curr_token, TokenType.Identifier, i + 1, column)
 
                         state = 0
                         curr_token = ""
                         column += 1
-                        if c.isspace() or j == len(code[i]) - 1: j += 1
 
                     else:
                         curr_token += c
                         j += 1
 
-                elif state == 2:
-                    if c.isspace() or self.issymbol(c) or self.isseparator(c):
+                elif state == 2: # number ojo: no se tiene en cuenta los float ni negativos
+                    if c.isspace() or self.issymbol(c) or self.isseparator(c) or self.isquote(c) or self.isbracket(c) or (j == len(code[i])):
                         if self.check_number(curr_token, i, column):
                             yield Token(curr_token, curr_token, TokenType.Number, i + 1, column)
                         state = 0
                         curr_token = ""
                         column += 1
-                        if c.isspace() or j == len(code[i]) - 1: j += 1
                     else:
                         curr_token += c
                         j += 1
                        # if c.isalpha(): #este tipo de string no es valido ej: 1hola = "kiko"
 
-                elif state == 3:
+                elif state == 3: # symbols: <, >, <=, >=, ==, !=, <-, _, #
                     if curr_token == '#': 
                         break
 
-                    if self.issymbol(curr_token) and (curr_token == '>' or curr_token == '<' or curr_token == '=' or curr_token == '!'):
-                        state = 4 if curr_token == '>' else 5 if curr_token == '<' else 6 #if curr_token == '=' else 7
-                        continue
+                    if curr_token in ['>', '<', '=', '!'] and self.issymbol(c):
+                        curr_token += c
+                        j += 1
 
-                    # elif c.isspace() or c.isdigit() or self.isseparator(c) or (c.isalpha() and not self.issymbol(c)):
                     if self.issymbol(curr_token):
                         yield Token(curr_token, self.symbols[curr_token], TokenType.Symbol, i + 1, column)
-
                     else:
-                        self.errors.append(f"{curr_token} token desconocido ia {i} posicion {column}")
+                        self.errors.append(f"{curr_token} token desconocido linea {i} posicion {column}")
                     
-                    state = 10 if curr_token == '"' else 0
-                    curr_token = ""
-                    column += 1
-                    if c.isspace() or j == len(code[i]) - 1: j += 1
-
-                elif state == 4:
-                    if self.issymbol(c) and c == '=':
-                        curr_token += c
-                        j += 1
-                        state = 6
-                    else:
-                        if self.issymbol(curr_token):
-                            yield Token(curr_token, self.symbols[curr_token], TokenType.Symbol, i + 1, column)
-
-                            state = 0
-                            curr_token = ""
-                            column += 1
-                            if c.isspace() or j == len(code[i]) - 1: j += 1
-                        else:
-                            self.errors.append("Error")
-
-                elif state == 5:
-                    if c == '=' or c == '-':
-                        state = 8 if c == '=' else 9
-                        curr_token += c
-                        j += 1
-
-                    else:
-                        if not self.issymbol(c):
-                            if self.issymbol(curr_token):
-                                yield Token(curr_token, self.symbols[curr_token], TokenType.Symbol, i + 1, column)
-                            else:
-                                self.errors.append("Error")
-                        else:
-                            self.errors.append("Error")
-                        
-                        state = 0
-                        curr_token = ""
-                        column += 1
-                        if c.isspace() or j == len(code[i]) - 1: j += 1
-
-                elif state == 6: #vino un = depsues de un =
-                    if c == '=':
-                        curr_token += c
-                        j += 1
-                    elif curr_token == "=" and c == '"':
-                        state = 10
-                        continue
-                    else:
-                        self.errors.append("Error")
-
                     state = 0
                     curr_token = ""
                     column += 1
-                    if c.isspace() or j == len(code[i]) - 1: j += 1
 
-                elif state == 8:
-                    if not self.issymbol(c):
-                        if self.issymbol(curr_token):
-                            yield Token(curr_token, self.symbols[curr_token], TokenType.Symbol, i + 1, column)
-                        else:
-                            self.errors.append("Error")
-                    else:
-                        self.errors.append("Error")
-
-                    state = 0
-                    curr_token = ""
-                    column += 1
-                    if c.isspace() or j == len(code[i]) - 1: j += 1
-
-                elif state == 9:
-                    if not self.issymbol(c) or c == '"':
-                        if self.issymbol(curr_token):
-                            yield Token(curr_token, self.symbols[curr_token], TokenType.Symbol, i + 1, column)
-                        else:
-                            self.errors.append("Error")
-                    else:
-                        self.errors.append("Error")
-
-                    state = 10 if c == '"' else 0
-                    curr_token = ""
-                    column += 1
-                    if c.isspace() or j == len(code[i]) - 1: j += 1
-                
-                elif state == 10:
-                    if c == '"':
-                        if self.issymbol(curr_token):
-                            yield Token(curr_token, self.symbols[curr_token], TokenType.Symbol, i + 1, column)
-                        else:
-                            yield Token(curr_token, curr_token, TokenType.Text, i, column)
-
-                        state = 0
-                        curr_token = ""
-                        column += 1
-
-                    else:
-                        if not self.issymbol(c) and not self.isseparator(c):
-                            curr_token += c
-                            j += 1                        
-                        else:
-                            state = 0
-                            j += 1
-                
-                elif state == 11:
+                elif state == 4: # separators: ; , : .
                     if self.isseparator(curr_token):
                         yield Token(curr_token, self.separators[curr_token], TokenType.Separator, i + 1, column)
                     
                     state = 0
                     curr_token = ""
                     column += 1
-                    if c.isspace() or j == len(code[i]) - 1: j += 1
 
+                elif state == 5: # quotes: "
+                    if self.isquote(curr_token):
+                        yield Token(curr_token, self.quotes[curr_token], TokenType.Quote, i + 1, column)
+                    else:
+                        self.errors.append("Token desconocido")
+                    
+                    state = 7
+                    curr_token = ""
+                    column += 1
+
+                elif state == 6: # brackets: (, ), {, }, [, ]
+                    if self.isbracket(curr_token):
+                        yield Token(curr_token, self.brackets[curr_token], TokenType.Bracket, i + 1, column)
+                    else:
+                        self.errors.append("Token desconocido")
+                    
+                    state = 0
+                    curr_token = ""
+                    column += 1 
+
+                elif state == 7: # Text: son los strings
+                    if self.isquote(c):
+                        yield Token(curr_token, curr_token, TokenType.Text, i, column)
+                        yield Token(c, self.quotes[c], TokenType.Quote, i, column)
+                        
+                        state = 0
+                        curr_token = ""
+                        column += 1
+                        j += 1
+                    else:
+                        curr_token += c
+                        j += 1
+                
+                if c.isspace() and state != 7: j += 1
 
     def iskeywords(self, c):
         return self.keywords.__contains__(c)
@@ -203,17 +142,23 @@ class AnalisisLexico:
     def isseparator(self, c):
         return self.separators.__contains__(c)
 
+    def isquote(self, c):
+        return self.quotes.__contains__(c)
+
+    def isbracket(self, c):
+        return self.brackets.__contains__(c)
+
     def check_identifier(self, text, i, column):
         for i in range(len(text)):
             if not self.isCharValid(text[i], True if i==0 else False):
-                self.errors.append(f"El identificador {text} de la ia {i} en la posicion {column} es invalido")
+                self.errors.append(f"El identificador {text} de la linea {i} en la posicion {column} es invalido")
                 return False
         return True
     
     def check_number(self, text, i, column):
         for c in text:
             if not c.isdigit():
-                self.errors.append(f"El numero o identificador {text} de la ia {i} en la posicion {column} es invalido")
+                self.errors.append(f"El numero o identificador {text} de la linea {i} en la posicion {column} es invalido")
                 return False
         return True
 

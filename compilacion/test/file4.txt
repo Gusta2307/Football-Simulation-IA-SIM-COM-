@@ -1,0 +1,6 @@
+player p1(name="Messi", posicion="DEL",equipo="Barcelona"); #messi es argentino
+team t1 (name="Barcelona", players=players);
+get_players<- filter t1.players by (_.age>=20)
+get <-100;
+p<-get;
+p<- get

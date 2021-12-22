@@ -14,7 +14,6 @@ class Token:
     def __eq__(self, token: object) -> bool:
         return self.tokenValue == token.tokenValue
 
-
 class TokenType(Enum):
     Keyword = auto(),
     Identifier = auto(),
@@ -22,7 +21,8 @@ class TokenType(Enum):
     Symbol = auto(),
     Text = auto(),
     Separator = auto(),
-
+    Quote = auto(),
+    Bracket = auto(),
 
 class TokenValue(Enum):
     #Keywords
@@ -41,8 +41,11 @@ class TokenValue(Enum):
     Function = auto(),
     Const = auto(),
     TEAM = auto(),
+    And = auto(),
+    Or = auto(),
+    Not = auto(),
 
-    #Operators
+    #Symbols
     Less = auto(),            # <
     LessOrEquals = auto(),    # <=
     Greater = auto(),         # >
@@ -51,24 +54,24 @@ class TokenValue(Enum):
     NotEquals = auto(),       # !=
     Equal = auto(),           # =
     PuntuactionMark = auto(), # !
-
-    # CREO Q ESTO TAMBIEN SERIA KEYWORD
-    And = auto(),
-    Or = auto(),
-    Not = auto(),
-
-    #Symbols
+    Hashtag = auto(),
     Assign = auto(),               # <-
     Underscore = auto(),           # _
     Hypen = auto()                 # -
+    
+    #Separators
     DoblePointSeparator = auto(),  # :
     ValueSeparator = auto(),       # ,
     StatementSeparator = auto(),   # ;
+    PointSeparator = auto(),       # .
+
+    #Brackets
     OpenBracket = auto(),          # (
     ClosedBracket = auto(),        # )
     OpenCurlyBraces = auto(),      # {
     ClosedCurlyBraces = auto(),    # }
     OpenSquareBracket = auto(),    # [
     ClosedSquareBracket = auto(),  # ]
-    PointSeparator = auto(),       # .
+    
+    #Quotes
     QuotationMarks = auto(),       # "
