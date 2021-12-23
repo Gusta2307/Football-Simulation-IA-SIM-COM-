@@ -1,1 +1,1 @@
-player p1(name="Messi", age=90, equipo="Barcelona" , prob= 1);
+a.equipo = as6as/3;

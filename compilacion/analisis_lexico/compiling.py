@@ -1,12 +1,13 @@
-from compilacion.analisisLexico import *
+from compilacion.analisis_lexico.lexicalAnalizer import *
 
 
 class Compiling:
     def __init__(self) -> None:
-        self.__lexical = AnalisisLexico()
+        self.__lexical = LexicalAnalizer()
 
     @property
-    def Lexical(self) -> AnalisisLexico:
+    def Lexical(self) -> LexicalAnalizer:
+        #KEYWORDS
         self.__lexical.registerKeyword("player", TokenValue.Player)
         self.__lexical.registerKeyword("team", TokenValue.Team)
         self.__lexical.registerKeyword("game", TokenValue.Game)
@@ -28,19 +29,26 @@ class Compiling:
         self.__lexical.registerKeyword("or", TokenValue.Or)
         self.__lexical.registerKeyword("not", TokenValue.Not)
 
+        #SYMBOLS
         self.__lexical.registerSymbol("<", TokenValue.Less)
         self.__lexical.registerSymbol("<=", TokenValue.LessOrEquals)
         self.__lexical.registerSymbol(">", TokenValue.Greater)
         self.__lexical.registerSymbol(">=", TokenValue.GreaterOrEquals)
         self.__lexical.registerSymbol("==", TokenValue.Equals)
         self.__lexical.registerSymbol("!=", TokenValue.NotEquals)
-        self.__lexical.registerSymbol("<-", TokenValue.Assign)
         self.__lexical.registerSymbol("_", TokenValue.Underscore)
-        self.__lexical.registerSymbol("=", TokenValue.Equal)
+        self.__lexical.registerSymbol("=", TokenValue.Assign)
         self.__lexical.registerSymbol("!", TokenValue.PuntuactionMark)
-        self.__lexical.registerSymbol("-", TokenValue.Hypen)
-        self.__lexical.registerSymbol("#", TokenValue.Hypen)
+        self.__lexical.registerSymbol("#", TokenValue.Hashtag)
 
+        #OPERATORS
+        self.__lexical.registerOperator("+", TokenValue.Add) 
+        self.__lexical.registerOperator("-", TokenValue.Subtract)
+        self.__lexical.registerOperator("*", TokenValue.Multiply)
+        self.__lexical.registerOperator("/", TokenValue.Divide)
+        self.__lexical.registerOperator("%", TokenValue.Modulus)
+        
+        #BRACKET
         self.__lexical.registerBracket("(", TokenValue.OpenBracket)
         self.__lexical.registerBracket(")", TokenValue.ClosedBracket)
         self.__lexical.registerBracket("{", TokenValue.OpenCurlyBraces)
@@ -48,6 +56,7 @@ class Compiling:
         self.__lexical.registerBracket("[", TokenValue.OpenSquareBracket)
         self.__lexical.registerBracket("]", TokenValue.ClosedSquareBracket)
 
+        #SEPARATOR
         self.__lexical.registerSeparator(".", TokenValue.PointSeparator)
         self.__lexical.registerSeparator(":", TokenValue.DoblePointSeparator)
         self.__lexical.registerSeparator(",", TokenValue.ValueSeparator)

@@ -5,7 +5,7 @@ from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
 from config import Config
-from compilacion.compiling import Compiling
+from compilacion.analisis_lexico.compiling import Compiling
 import os
 
 config = Config()
@@ -26,6 +26,8 @@ def main():
     for token in compiler.Lexical.tokenize(code):
         print(token)
     
+    return
+
     manager = [Manager('Xavi', 'Espana', 0.7, 43), Manager('Zidane', 'Francia', 0.8, 46)]
 
     arbitros = [arbitro('Oscar', None, (0.7, 0.0001, 0.3, 0.005))]
