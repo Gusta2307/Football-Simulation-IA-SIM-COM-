@@ -20,7 +20,7 @@ def read_script(name):
     return line
 
 def main():
-    file_name = input()
+    file_name = 'file0.txt'#input()
     code = read_script(file_name).splitlines()
     compiler = Compiling()
     for token in compiler.Lexical.tokenize(code):

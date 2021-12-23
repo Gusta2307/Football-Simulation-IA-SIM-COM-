@@ -133,6 +133,46 @@ class LexicalAnalizer:
                     else:
                         curr_token += c
                         j += 1
+
+                # elif state == 5: # quotes: "
+                #     if self.isquote(curr_token):
+                #         yield Token(curr_token, self.quotes[curr_token], TokenType.Quote, i + 1, column)
+                #     else:
+                #         self.errors.append("Token desconocido")
+                    
+                #     state = 7
+                #     curr_token = ""
+                #     column += 1
+
+                # elif state == 6: # brackets: (, ), {, }, [, ]
+                #     if self.isbracket(curr_token):
+                #         yield Token(curr_token, self.brackets[curr_token], TokenType.Bracket, i + 1, column)
+                #     else:
+                #         self.errors.append("Token desconocido")
+                    
+                #     state = 0
+                #     curr_token = ""
+                #     column += 1 
+
+
+                # elif state == 4: # separators: ; , : .
+                #     if self.isseparator(curr_token):
+                #         yield Token(curr_token, self.separators[curr_token], TokenType.Separator, i + 1, column)
+                #     else:
+                #         self.errors.append(f"{curr_token} token desconocido linea {i} posicion {column}")
+                #     state = 0
+                #     curr_token = ""
+                #     column += 1
+
+                # elif state == 8: # Operator
+                #     if self.isoperator(curr_token):
+                #         yield Token(curr_token, self.operators[curr_token], TokenType.Operator, i + 1, column)                
+                #     else:
+                #         self.errors.append(f"{curr_token} token desconocido linea {i} posicion {column}")
+                    
+                #     state = 0
+                #     curr_token = ""
+                #     column += 1
                 
                 if c.isspace() and state != 7: j += 1
 
