@@ -23,6 +23,7 @@ class TokenType(Enum):
     Separator = auto(),
     Quote = auto(),
     Bracket = auto(),
+    Operator = auto(),
 
 class TokenValue(Enum):
     #Keywords
@@ -52,13 +53,20 @@ class TokenValue(Enum):
     GreaterOrEquals = auto(), # >=
     Equals = auto(),          # ==
     NotEquals = auto(),       # !=
-    Equal = auto(),           # =
+    Assign = auto(),           # =
     PuntuactionMark = auto(), # !
     Hashtag = auto(),
-    Assign = auto(),               # <-
     Underscore = auto(),           # _
-    Hypen = auto()                 # -
+    # Assign = auto(),               # <-
+    # Hypen = auto()                 # -
     
+    #Operators
+    Add = auto()        # +
+    Subtract = auto()   # -
+    Multiply = auto()   # *
+    Divide = auto()     # /
+    Modulus = auto()    # %
+
     #Separators
     DoblePointSeparator = auto(),  # :
     ValueSeparator = auto(),       # ,

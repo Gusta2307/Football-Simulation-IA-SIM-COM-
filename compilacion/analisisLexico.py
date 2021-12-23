@@ -8,6 +8,7 @@ class AnalisisLexico:
         self.separators = {}
         self.quotes = {}
         self.brackets = {}
+        self.operators = {}
         self.errors = []  # guarda los errores durante la tokenizacion
     
     def registerKeyword(self, text, value):
@@ -25,6 +26,9 @@ class AnalisisLexico:
     def registerBracket(self, text, value):
         self.brackets[text] = value
 
+    def registerOperator(self, text, value):
+        self.operators[text] = value
+
     def tokenize(self, code):
         for i in range(len(code)):
             j = 0
@@ -37,21 +41,21 @@ class AnalisisLexico:
                 if j < len(code[i]):
                     c = code[i][j]
 
-                if state == 0:
+                if state == 0: # Inicial
                     if c.isspace(): 
                         j += 1
                         continue
 
                     curr_token += c
-                    state = 0 if c.isspace() else 4 if self.isseparator(c) else 3 if self.issymbol(c) else 2 if c.isdigit() else 5 if self.isquote(c) else 6 if self.isbracket(c) else 1  # si no es ni un symbol o un digit, es un char cualquiera
+                    state = 0 if c.isspace() else 8 if self.isoperator(c) else 4 if self.isseparator(c) else 3 if self.issymbol(c) else 2 if c.isdigit() else 5 if self.isquote(c) else 6 if self.isbracket(c) else 1  # si no es ni un symbol o un digit, es un char cualquiera
                     j += 1
                     
                 elif state == 1: # keyword/id
-                    if c.isspace() or (self.issymbol(c) and c != '_') or self.isseparator(c) or self.isquote(c) or self.isbracket(c) or (j == len(code[i])):
+                    if c.isspace() or self.isoperator(c) or (self.issymbol(c) and c != '_') or self.isseparator(c) or self.isquote(c) or self.isbracket(c) or (j == len(code[i])):
                         if self.iskeywords(curr_token):
                             yield Token(curr_token, self.keywords[curr_token], TokenType.Keyword, i + 1, column)
                         elif self.check_identifier(curr_token, i, column):
-                                yield Token(curr_token, curr_token, TokenType.Identifier, i + 1, column)
+                            yield Token(curr_token, curr_token, TokenType.Identifier, i + 1, column)
 
                         state = 0
                         curr_token = ""
@@ -62,7 +66,7 @@ class AnalisisLexico:
                         j += 1
 
                 elif state == 2: # number ojo: no se tiene en cuenta los float ni negativos
-                    if c.isspace() or self.issymbol(c) or self.isseparator(c) or self.isquote(c) or self.isbracket(c) or (j == len(code[i])):
+                    if c.isspace() or self.isoperator(c) or self.issymbol(c) or self.isseparator(c) or self.isquote(c) or self.isbracket(c) or (j == len(code[i])):
                         if self.check_number(curr_token, i, column):
                             yield Token(curr_token, curr_token, TokenType.Number, i + 1, column)
                         state = 0
@@ -71,7 +75,6 @@ class AnalisisLexico:
                     else:
                         curr_token += c
                         j += 1
-                       # if c.isalpha(): #este tipo de string no es valido ej: 1hola = "kiko"
 
                 elif state == 3: # symbols: <, >, <=, >=, ==, !=, <-, _, #
                     if curr_token == '#': 
@@ -90,33 +93,33 @@ class AnalisisLexico:
                     curr_token = ""
                     column += 1
 
-                elif state == 4: # separators: ; , : .
-                    if self.isseparator(curr_token):
-                        yield Token(curr_token, self.separators[curr_token], TokenType.Separator, i + 1, column)
-                    
+                elif state == 4 or state == 8: #state 4 : separator, state 8: operator
+                    if self.isseparator(curr_token) or self.isoperator(curr_token):
+                        yield Token(curr_token, 
+                                    self.separators[curr_token] if state == 4 else self.operators[curr_token], 
+                                    TokenType.Separator if state == 4 else TokenType.Operator, 
+                                    i + 1, 
+                                    column)
+                    else:
+                        self.errors.append(f"{curr_token} token desconocido linea {i} posicion {column}")
+
                     state = 0
                     curr_token = ""
                     column += 1
 
-                elif state == 5: # quotes: "
-                    if self.isquote(curr_token):
-                        yield Token(curr_token, self.quotes[curr_token], TokenType.Quote, i + 1, column)
+                elif state == 5 or state == 6: # quotes: ", brackets: (, ), {, }, [, ]
+                    if self.isquote(curr_token) or self.isbracket(curr_token):
+                        yield Token(curr_token,
+                                    self.quotes[curr_token] if state == 5 else self.brackets[curr_token],
+                                    TokenType.Quote if state == 5 else TokenType.Bracket,
+                                    i + 1,
+                                    column)         
                     else:
                         self.errors.append("Token desconocido")
                     
-                    state = 7
+                    state = 7 if state == 5 else 0
                     curr_token = ""
                     column += 1
-
-                elif state == 6: # brackets: (, ), {, }, [, ]
-                    if self.isbracket(curr_token):
-                        yield Token(curr_token, self.brackets[curr_token], TokenType.Bracket, i + 1, column)
-                    else:
-                        self.errors.append("Token desconocido")
-                    
-                    state = 0
-                    curr_token = ""
-                    column += 1 
 
                 elif state == 7: # Text: son los strings
                     if self.isquote(c):
@@ -130,6 +133,46 @@ class AnalisisLexico:
                     else:
                         curr_token += c
                         j += 1
+
+                # elif state == 5: # quotes: "
+                #     if self.isquote(curr_token):
+                #         yield Token(curr_token, self.quotes[curr_token], TokenType.Quote, i + 1, column)
+                #     else:
+                #         self.errors.append("Token desconocido")
+                    
+                #     state = 7
+                #     curr_token = ""
+                #     column += 1
+
+                # elif state == 6: # brackets: (, ), {, }, [, ]
+                #     if self.isbracket(curr_token):
+                #         yield Token(curr_token, self.brackets[curr_token], TokenType.Bracket, i + 1, column)
+                #     else:
+                #         self.errors.append("Token desconocido")
+                    
+                #     state = 0
+                #     curr_token = ""
+                #     column += 1 
+
+
+                # elif state == 4: # separators: ; , : .
+                #     if self.isseparator(curr_token):
+                #         yield Token(curr_token, self.separators[curr_token], TokenType.Separator, i + 1, column)
+                #     else:
+                #         self.errors.append(f"{curr_token} token desconocido linea {i} posicion {column}")
+                #     state = 0
+                #     curr_token = ""
+                #     column += 1
+
+                # elif state == 8: # Operator
+                #     if self.isoperator(curr_token):
+                #         yield Token(curr_token, self.operators[curr_token], TokenType.Operator, i + 1, column)                
+                #     else:
+                #         self.errors.append(f"{curr_token} token desconocido linea {i} posicion {column}")
+                    
+                #     state = 0
+                #     curr_token = ""
+                #     column += 1
                 
                 if c.isspace() and state != 7: j += 1
 
@@ -147,6 +190,9 @@ class AnalisisLexico:
 
     def isbracket(self, c):
         return self.brackets.__contains__(c)
+    
+    def isoperator(self, c):
+        return self.operators.__contains__(c)
 
     def check_identifier(self, text, i, column):
         for i in range(len(text)):
@@ -162,6 +208,7 @@ class AnalisisLexico:
                 return False
         return True
 
-    def isCharValid(self, c, start):
-        valid = c.isalpha() if start else (c.isalpha() or c.isdigit())
+    def isCharValid(self, c, start): #Arreglar, se puede comenzar con _ (underscore)
+        valid = c.isalpha() if start else c.isalnum() #(c.isalpha() or c.isdigit())
         return c == '_' or valid
+    
