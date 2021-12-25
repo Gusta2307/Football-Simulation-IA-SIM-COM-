@@ -5,5 +5,5 @@ from compilacion.Ast.AstNode import AstNode
 
 class Instruction(AstNode):
     @abc.abstractclassmethod
-    def execute():
+    def execute(self, scope: Scope):
         pass

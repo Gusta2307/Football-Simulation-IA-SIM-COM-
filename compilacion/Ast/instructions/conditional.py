@@ -24,7 +24,17 @@ class Conditional(Instruction):
                     return False 
         return True
 
-    def execute():
-        pass
+    def execute(self, scope: Scope):
+        eval_cond = self.condition.evaluate(scope)
+        if eval_cond:
+            self.execute_instructions(scope, self.ifBody)
+        else:
+            if self.elseBody is not None:
+                self.execute_instructions(scope, self.elseBody)
+    
+    def execute_instructions(scope, instructions):
+        for inst in instructions:
+                inst.execute(scope)
+
         
         

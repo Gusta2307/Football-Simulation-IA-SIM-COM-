@@ -10,4 +10,6 @@ class IdNode(AtomExpression):
         return scope.check_var(self.identifier)
     
     def evaluate(self, scope: Scope):
-        pass
+        if scope.check_var(self.identifier):
+            return scope.defineVar[self.identifier]
+        return None

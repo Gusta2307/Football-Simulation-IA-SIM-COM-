@@ -10,6 +10,3 @@ class AssignNode(VariableNode):
     
     def checkSemantic(self, scope: Scope) -> bool:
         return self.value.checkSemantic(scope) and scope.define_variables(self.identifier)
-
-    def execute():
-        pass

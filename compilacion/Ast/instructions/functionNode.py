@@ -21,5 +21,5 @@ class FunctionNode(Instruction):
                 
         return scope.defineFun(self.identifier, self.args)
 
-    def execute():
+    def execute(self, scope: Scope):
         pass

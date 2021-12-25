@@ -9,5 +9,4 @@ class ModNode(BinaryOperator):
 
         if operand2 == 0:
             return None # div entre 0 no valida
-
         return operand1 % operand2

@@ -14,6 +14,3 @@ class Declaration(VariableNode):
             if arg.value is not AtomExpression or not arg.checkSemantic(scope):
                 return False
         return scope.define_variables(self.identifier)
-
-    def execute():
-        pass

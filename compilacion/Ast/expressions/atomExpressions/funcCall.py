@@ -16,4 +16,18 @@ class FuncCall(AtomExpression):
         return scope.check_fun(self.identifier, len(self.args))
     
     def evaluate(self, scope: Scope):
-        pass
+        if scope.check_fun(self.identifier, len(self.args)):
+            values = []
+            for expr in self.args:
+                value = expr.evaluate(scope)
+                if value is None:
+                    return None
+                else:
+                    values.append(value)
+
+            function = scope.defineFun[(self.identifier, len(self.args))][1]
+
+            for inst in function.body:
+                pass
+
+        return None        

@@ -13,5 +13,5 @@ class ForNode(Instruction):
         #Duda: como item cambia constantemente no se como tratarlo
         pass
 
-    def execute():
+    def execute(self, scope: Scope):
         pass
