@@ -11,6 +11,6 @@ class Declaration(VariableNode):
     
     def checkSemantic(self, scope: Scope) -> bool:
         for arg in self.args:
-            if arg.value is not AtomExpression or not arg.checkSemantic(scope):
+            if type(arg.value) != AtomExpression or not arg.checkSemantic(scope):
                 return False
         return scope.define_variables(self.identifier)
