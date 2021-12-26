@@ -1,8 +1,9 @@
+from typing import List
 from compilacion.Ast.expression import Expression
 from compilacion.Ast.scope import Scope
 
 class PrintNode(Expression):
-    def __init__(self, args: list[Expression]) -> None:
+    def __init__(self, args: List[Expression]) -> None:
         self.args = args
     
     def checkSemantic(self, scope: Scope) -> bool:

@@ -1,11 +1,12 @@
 from typing import List
 from compilacion.Ast.expressions.atomExpression import AtomExpression
 from compilacion.Ast.instructions.variableNode import VariableNode
+from compilacion.Ast.instructions.variables.assignNode import AssignNode
 from compilacion.Ast.scope import Scope
 
 
 class Declaration(VariableNode):
-    def __init__(self, identifier: str, args: List[str]) -> None:
+    def __init__(self, identifier: str, args: List[AssignNode]) -> None:
         super().__init__(identifier)
         self.args = args
     

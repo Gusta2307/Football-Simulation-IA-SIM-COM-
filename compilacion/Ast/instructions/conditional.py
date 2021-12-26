@@ -1,10 +1,11 @@
+from typing import List, Tuple
 from compilacion.Ast.instruction import Instruction
 from compilacion.Ast.scope import Scope
 from compilacion.Ast.expression import Expression
 
 
 class Conditional(Instruction):
-    def __init__(self, condition: Expression, ifBody: list[Instruction], elIf: list[tuple[Expression, list[Instruction]]] = None, elseBody: list[Instruction] = None) -> None:
+    def __init__(self, condition: Expression, ifBody: List[Instruction], elIf: List[Tuple[Expression, List[Instruction]]] = None, elseBody: List[Instruction] = None) -> None:
         self.condition = condition
         self.ifBody = ifBody
         self.elIf = elIf
