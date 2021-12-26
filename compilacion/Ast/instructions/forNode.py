@@ -1,17 +1,38 @@
-from typing import List
 from compilacion.Ast.instruction import Instruction
+from compilacion.Ast.instructions.breakNode import BreakNode
+from compilacion.Ast.instructions.continueNode import ContinueNode
 from compilacion.Ast.scope import Scope
 
 
 class ForNode(Instruction):
-    def __init__(self, item: str, list_items: list, body: List[Instruction]) -> None:
+    def __init__(self, item: str, list_items: list, body: list[Instruction]) -> None:
         self.item = item
         self.list_items = list_items
         self.body = body
     
     def checkSemantic(self, scope: Scope) -> bool:
-        #Duda: como item cambia constantemente no se como tratarlo
-        pass
+        if scope.define_variables(self.item):
+            for elem in self.lists_item:
+                if not elem.checkSemantic(scope):
+                    return False 
+            for ins in self.body:
+                if not ins.checkSemantic(scope):
+                    return False
+            return True
+        return False
 
     def execute(self, scope: Scope):
-        pass
+        if_break = 0
+        for items in self.list_items:
+            scope.defineVar[self.item] = items
+            for item_body in self.body:
+                if type(item_body) == ContinueNode:
+                    break
+                elif type(item_body) == BreakNode:
+                    if_break = 1
+                    break
+                else:
+                    item_body.execute(scope)
+            if if_break:
+                break
+        scope.defineVar.pop(self.item)
