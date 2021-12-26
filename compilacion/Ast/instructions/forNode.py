@@ -10,8 +10,19 @@ class ForNode(Instruction):
         self.body = body
     
     def checkSemantic(self, scope: Scope) -> bool:
-        #Duda: como item cambia constantemente no se como tratarlo
-        pass
+        if scope.define_variables(self.item):
+            for elem in self.lists_item:
+                if not elem.checkSemantic(scope):
+                    return False 
+            for ins in self.body:
+                if not ins.checkSemantic(scope):
+                    return False
+            return True
+        return False
 
     def execute(self, scope: Scope):
-        pass
+        for items in self.list_items:
+            scope.defineVar[self.item] = items
+            for item_body in self.body:
+                item_body.execute(scope)
+        scope.defineVar.pop(self.item)
