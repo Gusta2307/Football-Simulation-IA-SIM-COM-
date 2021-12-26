@@ -1,10 +1,11 @@
-from typing import List
 from compilacion.Ast.instruction import Instruction
+from compilacion.Ast.instructions.breakNode import BreakNode
+from compilacion.Ast.instructions.continueNode import ContinueNode
 from compilacion.Ast.scope import Scope
 
 
 class ForNode(Instruction):
-    def __init__(self, item: str, list_items: list, body: List[Instruction]) -> None:
+    def __init__(self, item: str, list_items: list, body: list[Instruction]) -> None:
         self.item = item
         self.list_items = list_items
         self.body = body
@@ -21,8 +22,17 @@ class ForNode(Instruction):
         return False
 
     def execute(self, scope: Scope):
+        if_break = 0
         for items in self.list_items:
             scope.defineVar[self.item] = items
             for item_body in self.body:
-                item_body.execute(scope)
+                if type(item_body) == ContinueNode:
+                    break
+                elif type(item_body) == BreakNode:
+                    if_break = 1
+                    break
+                else:
+                    item_body.execute(scope)
+            if if_break:
+                break
         scope.defineVar.pop(self.item)

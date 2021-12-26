@@ -1,11 +1,10 @@
-from typing import List
 from compilacion.Ast.expressions.atomExpression import AtomExpression
 from compilacion.Ast.expression import Expression
 from compilacion.Ast.scope import Scope
 
 
 class FuncCall(AtomExpression):
-    def __init__(self, identifier: str, args: List[Expression]) -> None:
+    def __init__(self, identifier: str, args: list[Expression]) -> None:
         self.identifier = identifier
         self.args = args
 
