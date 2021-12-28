@@ -1,11 +1,10 @@
-from typing import List
 from compilacion.Ast.expression import Expression
 from compilacion.Ast.instructions.variableNode import VariableNode
 from compilacion.Ast.scope import Scope
 
 
 class ArrayDeclaration(VariableNode):
-    def __init__(self, identifier: str, items: List[Expression]) -> None:
+    def __init__(self, identifier: str, items: list[Expression]) -> None:
         super().__init__(identifier)
         self.items = items
     

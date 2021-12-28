@@ -5,12 +5,16 @@ from compilacion.Ast.scope import Scope
 
 
 class ForNode(Instruction):
-    def __init__(self, item: str, list_items: list, body: list[Instruction]) -> None:
+    def __init__(self, item: str, iterable:str, list_items: list, body: list[Instruction]) -> None:
         self.item = item
+        self.iter = iterable
         self.list_items = list_items
         self.body = body
     
     def checkSemantic(self, scope: Scope) -> bool:
+        if not scope.check_var(self.iter):
+            return False
+
         if scope.define_variables(self.item):
             for elem in self.lists_item:
                 if not elem.checkSemantic(scope):
