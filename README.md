@@ -36,6 +36,7 @@ Se entiende por estado de un partido por:
 - Jugador que posee el balón
 - Última acción que se ha realizado hasta dicho momento
 
+---
 # Estructura de la simulación
 
 ### Definicion de los agentes
@@ -104,6 +105,7 @@ Además de las mismas que tiene JUGADOR tiene otras dos.
 
 Estas propiedades se van a ir actualizando en el transcurso del partido, para ello la clase reporte tiene un método por cada propiedad que se encarga de actualizarlas. 
 
+---
 # Estructura de Compilación
 ## Keywords
 - player
@@ -135,7 +137,7 @@ Estas propiedades se van a ir actualizando en el transcurso del partido, para el
 - ,
 - :
 
-
+---
 ## Definición de tipos 
 
 ### PLAYER
@@ -235,7 +237,7 @@ referee = {
 ```
 ### Acceso a propiedades 
 ```
-player.name # se accede a la propiedad name de player
+    player.name # se accede a la propiedad name de player
 ```
 ### For
 ```
@@ -262,7 +264,7 @@ player.name # se accede a la propiedad name de player
     function type id (args) { }
     #En caso de ser void se representa el type con _
 ```
-
+---
 # Reporte hasta el dia 6 - dic - 2021
 
 Definimos una estructura mas elaborada para la parte de la simulación del proyecto. Para ver los detalles de esta nueva estructura dirigirse al encabezado `Estructura de la simulación` que se encuenttra al principio del documento. 
@@ -321,16 +323,17 @@ Definimos una estructura mas elaborada para la parte de la simulación del proye
 
 - [x] 6. Implementar reporte (estadísticas del partido)
 
+---
 # REPORTE DEL DIA 29 - DIC - 2021
 
 Completamos todas las tareas que se quedaron propuestas de la semana pasada; por lo que ya tenemos implementado el agente Manager y el reporte, que es donde se van a guardar las estadísticas del juego. Para ambas clases se puede ver al principio del documento como están estructuradas. 
 
 Con estas tareas terminadas se podría decir que ya esta bastante completa la parte de simulación del proyecto, solo quedaría agregar los conocimientos de IA, que se hara más adelante. 
 
-Teniendo en cuenta lo anterior, empezamos a trabajar en la parte de compilacion del proyecto. 
+Teniendo en cuenta lo anterior, empezamos a trabajar en la parte de compilación del proyecto. 
 ___
 
-Lo primero que se hizo fue definir las reglas sintácticas y semánticas, además de la clasifición de tokens, este último se puede ver en la sesión de la estrutura de compilación.
+Lo primero que se hizo fue definir las reglas sintácticas y semánticas, además de la clasifición de tokens, este último se puede ver en la sesión de la estructura de compilación.
 
 ## Validación reglas sintácticas
 
@@ -394,8 +397,9 @@ Lo primero que se hizo fue definir las reglas sintácticas y semánticas, ademá
              | <expr> "," <expr-list>
 
 ```
+---
 
-## Reglas semanticas
+## Reglas semánticas
 
 - Una variable solo puede ser definida una vez en todo el programa.
 - Los nombres de variables y funciones no comparten el mismo ámbito (pueden existir una variable y una función llamadas igual).
