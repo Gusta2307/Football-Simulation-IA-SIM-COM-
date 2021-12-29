@@ -1,11 +1,10 @@
-from typing import List
 from compilacion.Ast import AstNode
 from compilacion.Ast.instruction import Instruction
 from compilacion.Ast.scope import Scope
 
 
 class ProgramNode(AstNode):
-    def __init__(self, statement: List[Instruction]) -> None:
+    def __init__(self, statement: list[Instruction]) -> None:
         self.statement = statement
 
     

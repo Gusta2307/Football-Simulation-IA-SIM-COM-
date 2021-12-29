@@ -2,7 +2,6 @@ from compilacion.Ast.instruction import Instruction
 from compilacion.Ast.expression import Expression
 from compilacion.Ast.scope import Scope
 
-
 class ReturnNode(Instruction):
     def __init__(self, iterable:str, list_item: list, condition: Expression) -> None:
         self.iter = iterable
