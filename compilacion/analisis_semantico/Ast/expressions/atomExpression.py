@@ -1,4 +1,4 @@
-from compilacion.analisis_semantico.Ast.expressions import Expression
+from compilacion.analisis_semantico.Ast.expression import Expression
 
 
 class AtomExpression(Expression):

@@ -11,7 +11,7 @@ from act.act_jugador.saque_esquina import Saque_esquina
 from act.act_jugador.saque_falta import Saque_falta
 from act.act_jugador.despejar_balon import Despejar_balon
 from classes.agente import Agente
-from compilacion.Ast.instructions.variables.declaration import Declaration
+from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 from config import Config
 config = Config()
 

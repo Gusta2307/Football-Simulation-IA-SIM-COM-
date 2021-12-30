@@ -3,7 +3,7 @@ from act.act_manager.escoger_alineacion import Escoger_alineacion
 from act.act_manager.hacer_cambio import Hacer_cambio
 from act.default import Default
 import numpy
-from compilacion.Ast.instructions.variables.declaration import Declaration
+from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
 from config import Config
 config = Config()

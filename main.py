@@ -1,3 +1,4 @@
+from compilacion.analisis_semantico import *
 from classes.equipo import Equipo
 from classes.arbitro import arbitro
 from classes.jugador import Jugador

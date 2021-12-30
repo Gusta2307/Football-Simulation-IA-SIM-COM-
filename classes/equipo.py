@@ -1,5 +1,5 @@
 from collections import defaultdict
-from compilacion.Ast.instructions.variables.declaration import Declaration
+from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
 
 class Equipo(Declaration):

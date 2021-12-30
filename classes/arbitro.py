@@ -2,7 +2,7 @@ from classes.agente import Agente
 from act.act_arbitro.sacar_tarjeta import Sacar_tarjeta
 from act.act_arbitro.cantar_falta import Cantar_falta
 from act.default import Default
-from compilacion.Ast.instructions.variables.declaration import Declaration
+from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 from config import Config
 config = Config()
 

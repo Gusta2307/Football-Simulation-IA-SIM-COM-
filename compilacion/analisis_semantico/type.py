@@ -1,8 +1,5 @@
-from _typeshed import Self
 from typing import List
-from compilacion.analisis_semantico import Attribute
-from compilacion.analisis_semantico import Method
-
+from compilacion.analisis_semantico.method import *
 
 
 class MyType:
@@ -23,14 +20,14 @@ class MyType:
                 return method
         return None
     
-    def define_attribute(self, name: str, attr_type: Self) -> bool:
+    def define_attribute(self, name: str, attr_type) -> bool:
         if not self.contains_attribute(name):
             attr = Attribute(name, attr_type)
             self.attributes.append(attr)
             return True
         return False
 
-    def define_method(self, name: str, return_type: Self, args: List[str], arg_types: List[Self]) -> bool:
+    def define_method(self, name: str, return_type, args: List[Attribute]) -> bool:
         if not self.contains_method(name):
             method = Method(name, return_type, args)
             self.methods.append(method)
