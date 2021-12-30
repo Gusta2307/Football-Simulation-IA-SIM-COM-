@@ -2,10 +2,11 @@ from classes.agente import Agente
 from act.act_arbitro.sacar_tarjeta import Sacar_tarjeta
 from act.act_arbitro.cantar_falta import Cantar_falta
 from act.default import Default
+from compilacion.Ast.instructions.variables.declaration import Declaration
 from config import Config
 config = Config()
 
-class arbitro(Agente):
+class arbitro(Agente, Declaration):
     def __init__(self, nombre, experiencia, list_prob):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
         self.nombre = nombre
         self.experiencia = experiencia

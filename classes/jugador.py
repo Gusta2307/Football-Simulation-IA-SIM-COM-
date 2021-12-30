@@ -11,11 +11,12 @@ from act.act_jugador.saque_esquina import Saque_esquina
 from act.act_jugador.saque_falta import Saque_falta
 from act.act_jugador.despejar_balon import Despejar_balon
 from classes.agente import Agente
+from compilacion.Ast.instructions.variables.declaration import Declaration
 from config import Config
 config = Config()
 
 
-class Jugador(Agente):
+class Jugador(Agente, Declaration):
     def __init__(self, nombre, pos, list_prob, list_act_prob):#  gol_p, atajar_p, pase_efectivo_p, pase_largo_p, pase_intercep_p, gol_partido, atajar_partido, no_falta, falta_leve, falta_amarilla, falta_roja, pos_array) -> None:
         self.nombre = nombre
         self.posicion = pos

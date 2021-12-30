@@ -1,7 +1,8 @@
 from collections import defaultdict
+from compilacion.Ast.instructions.variables.declaration import Declaration
 
 
-class Equipo:
+class Equipo(Declaration):
     def __init__(self, nombre, manager, jugadores) -> None:
         self.nombre = nombre
         self.manager = manager
