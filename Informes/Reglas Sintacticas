@@ -1,0 +1,70 @@
+Validacion de las Reglas Sintacticas
+
+  <program> := <stat-list>
+<stat-list> := <stat> ";"
+	     | <stat> ";" <stat-list>
+     <stat> :=  <def-var>
+   	     | <assign-var>
+   	     | <const-var>
+     	     | <for-cycle>
+     	     | <if-cond>
+     	     | <function-func>
+     	     | <def-array>
+   <def-var>:= <type-def> id "("<arg-list>")"
+<assign-var>:= <type> ID "=" <expr>
+             | <type> ID "=" <expr-boolean>
+ <for-cycle>:= "for" ID "in" ID ":" "{"<stat>"}"
+             | "for" ID "in" ID"."ID" ":" "{"<stat>"}"
+   <if-cond>:= "if" <expr-boolean> ":" "{"<stat>"}"
+             | "if" <expr-boolean> ":" "{"<stat>"}" "else" "{"<stat>"}"
+<function-func> := "function" <type> ID "("<arg-list>")" "{"<stat>"}"
+  <def-array>:= <type> ID "["<ID-list>"]"
+  <type-def>:= player
+             | team
+             | game
+             | manager
+             | referee
+  <arg-list>:= ID
+             | ID "=" <atom>
+             | ID "=" <atom> "," <arg-list>
+   <ID-list>:= ID
+             | ID "," <ID-list>
+      <type>:= <type-def>
+             | int
+             | str
+             | bool
+             | float
+      <expr>:= <term> + <expr>
+             | <term> - <expr>
+             | <term>
+      <term>:= <factor> * <term>
+             | <factor> / <term>
+             | <factor>
+    <factor>:= "("<expr>")"
+             | <atom-arithm>
+<expr-boolean>:= <term-boolean> "OR" <expr-boolean>
+               | <term-boolean> "AND" <expr-boolean>
+               | "NOT" <expr-boolean>
+               | <term-boolean>
+<term-boolean>:= <fact-boolean> ">" <term-boolean>
+               | <fact-boolean> ">=" <term-boolean>
+               | <fact-boolean> "<" <term-boolean>
+               | <fact-boolean> "<=" <term-boolean>
+               | <fact-boolean> "==" <term-boolean>
+               | <fact-boolean> "!=" <term-boolean>
+               | <fact-boolean>
+ <fact-boolean>:= "("<expr-boolean>")"
+		| <atom-arithm>
+ <atom-arithm>:= ID
+               | NUMBER
+               | <func-call>
+               | <array-index>
+      <atom>:= <atom-arithm>
+             | Text
+ <func-call>:= ID "("")"
+             | ID "("<expr-list>")"
+<array-index>:= ID "["NUMBER"]"
+ <expr-list>:= <expr>
+             | <expr-boolean>
+             | <expr> "," <expr-list>
+             | <expr-boolean> "," <expr-list>

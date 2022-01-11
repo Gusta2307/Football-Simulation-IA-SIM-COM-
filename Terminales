@@ -1,0 +1,28 @@
+Terminales del lenguaje
+
+Keywords:
+-player
+-team
+-game
+-manager
+-referee
+-for
+-in
+-if
+-else
+-filter
+-by
+-function
+-TEAM
+-Logical operators: OR, AND, NOT
+
+Assignment: "="
+Underscore: "_"
+DoblePoint: ":"
+Brackets: "(", ")", "{", "}", "[", "]", "
+Operators: >, <, >=, <=, ==, !=
+Separators: ";", ",", ":"
+
+<id> : Identifier
+<num>: Number
+<text>: Text (todo lo que esta dentro de las "")
