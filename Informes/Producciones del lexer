@@ -1,0 +1,33 @@
+Producciones del lexer
+
+S -> SL
+SL -> ; ST SL | €  #(SL -> ; ST Z   Z -> ; ST Z | €)
+ST -> D | AS | FR | IF | FUN | ARD
+D  -> TYD id ( ARG )
+AS -> TY id = E | TY id = EB
+FR -> for id in id : { ST } | for id in id . id : { ST }
+IF -> if EB : { ST } | if EB : { ST } else { ST }
+FUN -> function TY id ( ARG )
+ARD -> TY id IDL [ IDL ]
+TYD -> player | team | game | manager | referee
+ARG -> id | id = AT | id = AT , ARG
+TY -> TYD | int | str | bool | float
+IDL -> id | id , IDL
+AT -> ATH | " text "
+ATH -> id | num | FUNC | id . id | _ . id | ARI
+FUNC -> id ( ) | id ( EL )
+EL -> E | EB | E , EL | EB , EL
+ARI -> id [ num ]
+E -> T X
+X -> + T X | - T X | €
+T -> F Y
+Y -> * F Y | / F Y | % F Y | €
+F -> ( E ) | ATH
+EB -> TB XB | NOT EB
+XB -> OR TB XB | AND TB XB | €
+TB -> FB YB
+YB -> > FB YB | < FB YB | >= FB YB | <= FB YB | == FB YB | != FB YB | €
+FB -> ( EB ) | ATH
+
+Leyenda
+€ : epsilon

@@ -10,6 +10,7 @@ regex = {}
 regex['spaces'] = "[ \t\r\f\v\n]*"
 regex[TokenType.Identifier] = '([_]|[a-zA-Z])([_]|[a-zA-Z0-9])*'
 regex[TokenType.Number] = '[1-9][0-9]*(.[0-9]+)?'
+regex[TokenType.Text] = '"[[:print:]-["]]*"' # Buscar bien la def del regex de un string
 regex[TokenType.OpenBracket] = '[(]'
 regex[TokenType.ClosedBracket] = '[)]'
 regex[TokenType.OpenCurlyBraces] = '[{]'

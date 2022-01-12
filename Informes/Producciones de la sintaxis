@@ -1,7 +1,7 @@
 Producciones del lexer
 
 S -> SL
-SL -> ST; | ST ; ST
+SL -> ; ST SL | €  #(SL -> ; ST Z   Z -> ; ST Z | €)
 ST -> D | AS | FR | IF | FUN | ARD
 D  -> TYD id ( ARG )
 AS -> TY id = E | TY id = EB

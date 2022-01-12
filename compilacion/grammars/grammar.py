@@ -2,6 +2,7 @@
  Class Grammar: representa una gramatica de la forma G = <S, N, T, P>
 """
 
+from compilacion.grammars.epsilon import Epsilon
 from compilacion.grammars.production import Production
 from compilacion.grammars.terminal import Terminal
 from compilacion.grammars.noTerminal import NoTerminal
@@ -13,6 +14,7 @@ class Grammar:
         self.noTerminals = []
         self.terminals = []
         self.productions = []
+        self.epsilon = Epsilon()
         self.EOF = Terminal('$')
     
     def define_noTerminal(self, name):
