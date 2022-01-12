@@ -1,0 +1,8 @@
+player        p1            (  name    =     "Messi "  ) ;
+  g < 9;
+a <- 100;
+a <-100;
+
+b<-"Ronaldo";
+d <- "Hilo";
+c <-(50)

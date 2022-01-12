@@ -9,16 +9,23 @@ class Token:
         self.column = column
     
     def __str__(self) -> str:
-        return self.text + " " + f"[{self.tokenValue}]"
+        return self.text + " " + str(self.tokenType.name) + f"[{self.tokenValue}]"
 
     def __eq__(self, token: object) -> bool:
         return self.tokenValue == token.tokenValue
 
 class TokenType(Enum):
+    Keyword = auto(),
     Identifier = auto(),
     Number = auto(),
+    Symbol = auto(),
     Text = auto(),
+    Separator = auto(),
+    Quote = auto(),
+    Bracket = auto(),
+    Operator = auto(),
 
+class TokenValue(Enum):
     #Keywords
     Player = auto(),
     Team = auto(),

@@ -1,0 +1,4 @@
+c <- (50)
+b<-("Ronaldo");
+b<-    ( "Ronaldo");
+player p2 (name = "Fati",posicion= "DEL", equipo=get_team(x), manager= create_manager(x));
