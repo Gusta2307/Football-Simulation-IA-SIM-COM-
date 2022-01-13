@@ -62,7 +62,7 @@ def calculate_sentence_firsts(sentence : Sentence, firsts, epsilon):
             break
 
 
-def calculate_follows(G: Grammar, firsts):
+def calculate_follows(G: Grammar):
     follows = {}
 
     for noTerm in G.noTerminals:
@@ -70,13 +70,13 @@ def calculate_follows(G: Grammar, firsts):
             follows[noTerm.name] = []
             follows[noTerm.name].append(G.EOF)
 
-        calculate_noTerminal_follows(noTerm, G, firsts, follows)
+        calculate_noTerminal_follows(noTerm, G, follows)
     
     return follows
 
 
-def calculate_noTerminal_follows(noTerm : Terminal, G: Grammar, firsts, follows):
-    if not follows.__contains__(noTerm.name):
+def calculate_noTerminal_follows(noTerm : Terminal, G: Grammar, follows):
+    if not follows.__contains__(str(noTerm)):
         follows[noTerm.name] = []
 
     for p in G.productions: # nos movermos por todas las producciones de la gramatica y vemos en que producciones aparece noTerm
@@ -84,57 +84,24 @@ def calculate_noTerminal_follows(noTerm : Terminal, G: Grammar, firsts, follows)
             if noTerm in sentence.symbols:
                 i = sentence.getIndex(noTerm)
                 sent = Sentence(*sentence.symbols[i + 1:])
-                
+
                 if len(sent.symbols) > 0:
-                    z_first = [x for x in firsts[str(sent)] if type(x) != Epsilon]
+                    firsts = { str(sent) : [] }
+                    calculate_sentence_firsts(sent, firsts, G.epsilon) # calculo el first de la forma oracion
+                    z_first = [x for x in firsts[str(sent)] if type(x) != Epsilon] # tomo todos los elementos expcepto €
+
                     if z_first != []:
                         for f in z_first: # caso: First(Z) - € sub Follow(A)
                             if not f in follows[noTerm.name]:
                                 follows[noTerm.name].append(f)
                         
-                        if len(z_first) != len(firsts[str(sent)]): # € esta en First(Z), { First(Z) - € sub Follow(A) } union Follow(Z)
-                            for f in follows[str(sent)]:
-                                if not f in follows[noTerm.name]:
-                                    follows[noTerm.name].append(f)
-                    else:
-                        calculate_noTerminal_follows(p.left, G, firsts, follows)
-                        for f in follows[str(p.left)]:
-                            if not f in follows[noTerm.name]:
-                                follows[noTerm.name].append(f)
-                else: 
-                    for f in follows[str(p.left)]:
+                        if len(z_first) == len(firsts[str(sent)]): # € esta en First(Z), { First(Z) - € sub Follow(A) } union Follow(Z)
+                            continue
+                     
+                if p.left.name != noTerm.name:
+                    if not follows.__contains__(p.left.name):
+                        nt = p.left if p.left.name == str(p.left.name) else sent.symbols[0]
+                        calculate_noTerminal_follows(nt, G, follows)
+                    for f in follows[p.left.name]: # Follow(X) sub Follow(A)
                         if not f in follows[noTerm.name]:
                             follows[noTerm.name].append(f)
-
-
-
-#!!!!ANTERIOR!!!!
-# def calculate_noTerminal_follows(no_term, G, firsts, follows):
-#     for p in G.productions: 
-#         for sentence in p.right: 
-#             if no_term not in sentence.symbols: continue # si el termino no esta en la forma oracional, continuo buscando
-#             i = sentence.getIndex(no_term) # tomo la posicion de no_term en la forma oracional            
-#             # if (i == 0): continue # si es el primer elemento no se aplica ninguna regla
-            
-#             if not follows.__contains__(str(no_term)):
-#                 follows[str(no_term)] = []
-
-#             if i != len(sentence.symbols) - 1: # si detras hay otra forma oracional
-#                 sentence = sentence.symbols[i + 1:]
-#                 z_first = [x for x in firsts[str(sentence[0])] if type(x) != Epsilon] 
-
-#                 if len(z_first) != 0: # si z_first != epsilon, pongo los elementos del z_first en el Follow(a)
-#                     for f in z_first: # caso: X-> WAZ, A es un no-terminal y Z no deriva epsilon
-#                         if f not in follows[str(no_term)]:
-#                             follows[str(no_term)].append(f)  # First(Z) - epsilon subconj Follow(A)
-                
-#                 if len(z_first) == len(firsts[str(sentence[0])]): # significa que no hay epsilon en el first
-#                     continue
-              
-#             # si detras no viene otro elemento o Z ->* epsilon, entonces Follow(X) subconj Follow(no_term)
-#             if str(p.left) != str(no_term):
-#                 # if follows.__contains__(str(p.left)):
-#                 if follows[str(p.left)] != []:
-#                     for f in follows[str(p.left)]:
-#                         if f not in follows[str(no_term)]:
-#                             follows[str(no_term)].append(f)

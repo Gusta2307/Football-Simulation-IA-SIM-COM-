@@ -7,6 +7,10 @@ from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
 from compilacion.grammars.grammar import Grammar
+from compilacion.grammars.production import Production
+from compilacion.grammars.sentence import Sentence
+from compilacion.parsing.grammar_items import ItemLR
+from compilacion.parsing.lrparser import LRParser
 from config import Config
 from compilacion.parsing.firsts_follows import calculate_firsts, calculate_follows
 from ejemplos import productions, S, E, terminales, no_terminales
@@ -25,24 +29,25 @@ def read_script(name):
     return line
 
 def main():
-    g = Grammar()
-    g.productions = productions
-    g.terminals = terminales
-    g.noTerminals = no_terminales
-    g.startNoTerminal = S
-    # g.startNoTerminal = E
-    firsts = calculate_firsts(g)
-    follows = calculate_follows(g, firsts)
+    # g = Grammar()
+    # g.productions = productions
+    # g.terminals = terminales
+    # g.noTerminals = no_terminales
+    # g.startNoTerminal = S
+    # # g.startNoTerminal = E
+    # firsts = calculate_firsts(g)
+    # follows = calculate_follows(g)
     
-    # firsts = calculate_firsts(G)
-    # follows = calculate_follows(G)
-    for f in firsts.keys():
-        print(f"first({f}) = {firsts[f]}")
-    print(" ")
+    lr_parser = LRParser(G)
+    print("")
+    # for f in firsts.keys():
+    #     print(f"first({f}) = {firsts[f]}")
+    # print(" ")
 
-    for f in follows.keys():
-        print(f"follow({f}) = {follows[f]}")
-    print(" ")
+    # for f in follows.keys():
+    #     print(f"follow({f}) = {follows[f]}")
+    # print(" ")
+
 
     # file_name = 'file0.txt'#input()
     # code = read_script(file_name).splitlines()

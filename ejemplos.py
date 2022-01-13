@@ -33,8 +33,7 @@ epsilon = Epsilon()
 # s_p1 = Production(S, Sentence(A))
 # s_p2 = Production(S, Sentence(A), Sentence(B))
 # s_p3 = Production(S, epsilon)
-# # s_p3 = Production(S, Sentence(epsilon, D, C))
-# # s_p3 = Production(S, Sentence(Z, D))
+# s_p3 = Production(S, Sentence(Z, D))
 
 
 # S.add_production(s_p3)
@@ -77,6 +76,8 @@ E1 = NoTerminal('E1')
 T = NoTerminal('T')
 T1 = NoTerminal('T1')
 F = NoTerminal('F')
+X = NoTerminal('X')
+Y = NoTerminal('Y')
 
 # # Producciones E
 # e_p1 = Production(E, Sentence(T, E1))
@@ -98,16 +99,19 @@ F = NoTerminal('F')
 # f_p1 = Production(F, Sentence(OpenBracket, E, CloseBracket), Sentence(Id), Sentence(N))
 # F.add_production(f_p1)
 
+# # Producciones X
+# x_p1 = Production(X, Sentence(T, E, E1, F))
+# X.add_production(x_p1)
+
 # no_terminales = [E, E1, T, T1, F]
+# no_terminales = [E, E1, T, T1, F, X]
 # productions = [e_p1, e1_p1, t_p1, t1_p1, f_p1]
+# productions = [e_p1, e1_p1, t_p1, t1_p1, f_p1, x_p1]
 # productions = [e_p1, e1_p1, t_p1, t1_p1, f_p1, i_p1]
 
 
 
 # EJEMPLO 3 (ok)
-X = NoTerminal('X')
-Y = NoTerminal('Y')
-
 # # Producciones E
 # e_p1 = Production(E, Sentence(T, X))
 # E.add_production(e_p1)
@@ -145,12 +149,12 @@ Y = NoTerminal('Y')
 s_p1 = Production(S, Sentence(E))
 S.add_production(s_p1)
 
-e_p1 = Production(E, Sentence(Plus, T, E), Sentence(T))
-# e_p1 = Production(E, Sentence(T, Plus, E), Sentence(T))
+# e_p1 = Production(E, Sentence(Plus, T, E), Sentence(T))
+e_p1 = Production(E, Sentence(T, Plus, E), Sentence(T))
 E.add_production(e_p1)
 
-t_p1 = Production(T, Sentence(Mult, F, T), Sentence(F))
-# t_p1 = Production(T, Sentence(F, Mult, T), Sentence(F))
+# t_p1 = Production(T, Sentence(Mult, F, T), Sentence(F))
+t_p1 = Production(T, Sentence(F, Mult, T), Sentence(F))
 T.add_production(t_p1)
 
 f_p1 = Production(F, Sentence(OpenBracket, E, CloseBracket), Sentence(N))

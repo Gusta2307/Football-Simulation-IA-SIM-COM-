@@ -1,4 +1,4 @@
-from compilacion.analisis_lexico.afn import Afn
+from compilacion.parsing.afn.afn import Afn
 from compilacion.analisis_lexico.token import *
 
 

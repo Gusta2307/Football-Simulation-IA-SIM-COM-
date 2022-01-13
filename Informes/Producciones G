@@ -1,13 +1,13 @@
-Producciones del lexer
+Producciones
 
 S -> SL
-SL -> ; ST SL | €  #(SL -> ; ST Z   Z -> ; ST Z | €)
+SL -> ST; | ST ; SL
 ST -> D | AS | FR | IF | FUN | ARD
 D  -> TYD id ( ARG )
 AS -> TY id = E | TY id = EB
-FR -> for id in id : { ST } | for id in id . id : { ST }
-IF -> if EB : { ST } | if EB : { ST } else { ST }
-FUN -> function TY id ( ARG )
+FR -> for id in id : { SL } | for id in id . id : { SL }
+IF -> if EB : { SL } | if EB : { SL } else { SL }
+FUN -> function TY id ( ARG ) { SL }
 ARD -> TY id IDL [ IDL ]
 TYD -> player | team | game | manager | referee
 ARG -> id | id = AT | id = AT , ARG

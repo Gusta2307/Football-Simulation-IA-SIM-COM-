@@ -13,11 +13,11 @@ Validacion de las Reglas Sintacticas
    <def-var>:= <type-def> id "("<arg-list>")"
 <assign-var>:= <type> ID "=" <expr>
              | <type> ID "=" <expr-boolean>
- <for-cycle>:= "for" ID "in" ID ":" "{"<stat>"}"
-             | "for" ID "in" ID"."ID" ":" "{"<stat>"}"
-   <if-cond>:= "if" <expr-boolean> ":" "{"<stat>"}"
-             | "if" <expr-boolean> ":" "{"<stat>"}" "else" "{"<stat>"}"
-<function-func> := "function" <type> ID "("<arg-list>")" "{"<stat>"}"
+ <for-cycle>:= "for" ID "in" ID ":" "{"<stat-list>"}"
+             | "for" ID "in" ID"."ID" ":" "{"<stat-list>"}"
+   <if-cond>:= "if" <expr-boolean> ":" "{"<stat-list>"}"
+             | "if" <expr-boolean> ":" "{"<stat-list>"}" "else" "{"<stat-list>"}"
+<function-func> := "function" <type> ID "("<arg-list>")" "{"<stat-list>"}"
   <def-array>:= <type> ID "["<ID-list>"]"
   <type-def>:= player
              | team

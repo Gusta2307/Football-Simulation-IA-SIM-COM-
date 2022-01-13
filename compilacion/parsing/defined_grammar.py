@@ -69,7 +69,6 @@ text = G.define_terminal('<text>')
 S = G.define_noTerminal('S')
 SL = G.define_noTerminal('SL')
 ST = G.define_noTerminal('ST')
-Z = G.define_noTerminal('Z')
 D = G.define_noTerminal('D')
 AS = G.define_noTerminal('AS')
 FR = G.define_noTerminal('FR')
@@ -102,9 +101,7 @@ G.startNoTerminal = S
 # Producciones
 epsilon = G.epsilon
 G.add_production(Production(S, Sentence(SL))) # S -> SL
-G.add_production(Production(SL, Sentence(statSep, ST, SL), epsilon)) # SL -> ; ST SL | €
-# G.add_production(Production(SL, Sentence(statSep, ST, Z))) # SL -> ; ST Z
-# G.add_production(Production(Z, Sentence(statSep, ST, Z), epsilon)) # Z-> ; ST Z | €
+G.add_production(Production(SL, Sentence(ST, statSep), Sentence(ST, statSep, SL))) # SL -> ; ST SL | €
 G.add_production(Production(ST, Sentence(D), Sentence(AS), Sentence(FR), Sentence(IF), Sentence(FUN), Sentence(ARD))) # ST -> D | AS | FR | IF | FUN | ARD
 G.add_production(Production(D, Sentence(TYD, iden, openB, ARG, closeB))) # D -> TYD id ( ARG )
 G.add_production(Production(TYD, Sentence(player), Sentence(team), Sentence(game), Sentence(manager), Sentence(referee))) # TYD -> player | team | game | manager | referee
@@ -116,9 +113,9 @@ G.add_production(Production(TY, Sentence(TYD), Sentence(intTerm), Sentence(strTe
 G.add_production(Production(ARI, Sentence(iden, openSquareB, num, closeSquareB))) # ARI -> id [ num ]
 G.add_production(Production(FUNC, Sentence(iden, openB, closeB), Sentence(iden, openB, EL, closeB))) # FUNC -> id ( ) | id ( EL )
 G.add_production(Production(EL, Sentence(E), Sentence(EB), Sentence(E, valueSep, EL), Sentence(EB, valueSep, EL))) # EL -> E | EB | E , EL | EB , EL
-G.add_production(Production(FR, Sentence(forTerm, iden, inTerm, iden, doblePoint, openCurlyB, ST, closeCurlyB), Sentence(forTerm, iden, inTerm, iden, point, iden, doblePoint, openCurlyB, ST, closeCurlyB))) # FR -> for id in id : { ST } | for id in id . id : { ST }
-G.add_production(Production(IF, Sentence(ifTerm, EB, doblePoint, openCurlyB, ST, closeCurlyB), Sentence(ifTerm, EB, doblePoint, openCurlyB, ST, closeCurlyB, elseTerm, openCurlyB, ST, closeCurlyB))) # IF -> if EB : { ST } | if EB : { ST } else { ST }
-G.add_production(Production(FUN, Sentence(function, TY, iden, openB, ARG, closeB))) # FUN -> function TY id ( ARG )
+G.add_production(Production(FR, Sentence(forTerm, iden, inTerm, iden, doblePoint, openCurlyB, SL, closeCurlyB), Sentence(forTerm, iden, inTerm, iden, point, iden, doblePoint, openCurlyB, SL, closeCurlyB))) # FR -> for id in id : { SL } | for id in id . id : { SL }
+G.add_production(Production(IF, Sentence(ifTerm, EB, doblePoint, openCurlyB, SL, closeCurlyB), Sentence(ifTerm, EB, doblePoint, openCurlyB, SL, closeCurlyB, elseTerm, openCurlyB, SL, closeCurlyB))) # IF -> if EB : { SL } | if EB : { SL } else { SL }
+G.add_production(Production(FUN, Sentence(function, TY, iden, openB, ARG, closeB, openCurlyB, SL, closeCurlyB))) # FUN -> function TY id ( ARG )
 G.add_production(Production(ARD, Sentence(TY, iden, openSquareB, IDL, closeSquareB))) # ARD -> TY id IDL [ IDL ]
 G.add_production(Production(IDL, Sentence(iden), Sentence(iden, valueSep, IDL))) # IDL -> id | id , IDL
 G.add_production(Production(E, Sentence(T, X))) # E -> T X
