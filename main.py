@@ -29,16 +29,16 @@ def read_script(name):
     return line
 
 def main():
-    # g = Grammar()
-    # g.productions = productions
-    # g.terminals = terminales
-    # g.noTerminals = no_terminales
-    # g.startNoTerminal = S
-    # # g.startNoTerminal = E
-    # firsts = calculate_firsts(g)
+    g = Grammar()
+    g.productions = productions
+    g.terminals = terminales
+    g.noTerminals = no_terminales
+    g.startNoTerminal = S
+    # g.startNoTerminal = E
+    # firsts = calculate_firsts(G)
     # follows = calculate_follows(g)
     
-    lr_parser = LRParser(G)
+    lr_parser = LRParser(g)
     print("")
     # for f in firsts.keys():
     #     print(f"first({f}) = {firsts[f]}")

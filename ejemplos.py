@@ -14,6 +14,7 @@ D = NoTerminal('D')
 I = NoTerminal('I')
 Z = NoTerminal('Z')
 
+assig = Terminal('=')
 N = Terminal('num')
 Id = Terminal('id')
 Plus = Terminal('+')
@@ -146,23 +147,42 @@ Y = NoTerminal('Y')
 
 
 # ejemplo 4 (ok)
+# s_p1 = Production(S, Sentence(E))
+# S.add_production(s_p1)
+
+# # e_p1 = Production(E, Sentence(Plus, T, E), Sentence(T))
+# e_p1 = Production(E, Sentence(T, Plus, E), Sentence(T))
+# E.add_production(e_p1)
+
+# # t_p1 = Production(T, Sentence(Mult, F, T), Sentence(F))
+# t_p1 = Production(T, Sentence(F, Mult, T), Sentence(F))
+# T.add_production(t_p1)
+
+# f_p1 = Production(F, Sentence(OpenBracket, E, CloseBracket), Sentence(N))
+# F.add_production(f_p1)
+
+# productions = [s_p1, e_p1, t_p1, f_p1]
+# terminales = [Plus, Mult, OpenBracket, CloseBracket, N]
+# no_terminales = [S, E, T, F]
+
+
+#ejemplo 5
+
 s_p1 = Production(S, Sentence(E))
 S.add_production(s_p1)
 
-# e_p1 = Production(E, Sentence(Plus, T, E), Sentence(T))
-e_p1 = Production(E, Sentence(T, Plus, E), Sentence(T))
+e_p1 = Production(E, Sentence(A, assig, A), Sentence(N))
 E.add_production(e_p1)
 
-# t_p1 = Production(T, Sentence(Mult, F, T), Sentence(F))
-t_p1 = Production(T, Sentence(F, Mult, T), Sentence(F))
-T.add_production(t_p1)
+a_p1 = Production(A, Sentence(N, Plus, A), Sentence(N))
+A.add_production(a_p1)
 
-f_p1 = Production(F, Sentence(OpenBracket, E, CloseBracket), Sentence(N))
-F.add_production(f_p1)
+# x_p1 = Production(X, Sentence(Plus), Sentence(Mult))
+# X.add_production(x_p1)
 
-productions = [s_p1, e_p1, t_p1, f_p1]
-terminales = [Plus, Mult, OpenBracket, CloseBracket, N]
-no_terminales = [S, E, T, F]
+productions = [s_p1, e_p1, a_p1]
+terminales = [assig, Plus, N, Mult]
+no_terminales = [S, E, A, X]
 
 
 # terminales = [N, Id,Plus,Mult,Sub,Div,OpenBracket,CloseBracket,Union]
