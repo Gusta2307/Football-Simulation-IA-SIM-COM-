@@ -15,7 +15,7 @@ I = NoTerminal('I')
 Z = NoTerminal('Z')
 
 assig = Terminal('=')
-N = Terminal('num')
+N = Terminal('Number')
 Id = Terminal('id')
 Plus = Terminal('+')
 Mult = Terminal('*')

@@ -40,6 +40,12 @@ class ComplexState:
         
         return None
     
+    def get_transition(self, symbol):
+        for sym in self.transitions:
+            if sym.name == str(symbol):
+                return self.transitions[sym]
+        return None
+
     def __str__(self):
         return str(self.states)
     

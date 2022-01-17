@@ -25,6 +25,12 @@ class ItemLR:
         tail = Sentence(*self.sentence.symbols[self.pos:])
         return tail
 
+    def lookahead_contains(self, elem):
+        for look in self.lookaheads:
+            if str(look) == elem:
+                return True
+        return False
+
     def __str__(self) -> str:
         return f"{str(self.production.left)} -> {str(self.head)}.{str(self.tail)} {self.lookaheads}"
 
@@ -66,7 +72,7 @@ class GrammarItems:
                         for sent in p.right:
                             item_sent = Sentence(*item.sentence.symbols[pos + 1:])
                             first = {str(item_sent) : []}
-                            calculate_sentence_firsts(item_sent, first, self.G.epsilon)                            
+                            calculate_sentence_firsts(item_sent, first, self.G.epsilon)
                             look = item.lookaheads if len(item_sent.symbols) == 0 else first[str(item_sent)]
                             new_item = ItemLR(p, sent, 0, look)
                             if not new_item in eps_set:
