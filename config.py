@@ -1,5 +1,32 @@
 
 class Config:
+    class IA:
+        class Estrategia:
+            ATAQUE =  'ATAQUE'
+            DEFENSA = 'DEFENSA'
+
+        class Zona:
+            ATAQUE = 'ATAQUE'
+            CENTRO = 'CENTRO'
+            DEFENSA = 'DEFENSA'
+
+            REL_ZONA_POS = {
+                'DEL': ATAQUE,
+                'MC': CENTRO,
+                'DEF': DEFENSA,
+                'GK': DEFENSA
+            }
+
+            SIGUIENTE_ZONA = {
+                DEFENSA: CENTRO,
+                CENTRO: ATAQUE
+            }
+
+            ANTERIOR_ZONA = {
+                ATAQUE: CENTRO,
+                CENTRO: DEFENSA
+            }
+
     def __init__(self) -> None:
         #POSICIONES
         self.POSICIONES = ['DEL', 'MC', 'DEF', 'GK']
@@ -32,6 +59,8 @@ class Config:
         self.ACT_DESPEJAR_BALON = 'ACT DESPEJAR BALON'
         self.ACT_ESCOGER_ALINEACION = 'ACT ESCOGER ALINEACION'
         self.ACT_HACER_CAMBIOS = 'ACT HACER CAMBIOS'
+        self.ACT_AVANZAR_POSICION = 'ACT AVANZAR POSICION'
+        self.ACT_RETROCEDER_POSICION = 'ACT RETROCEDER POSICION'
 
         #ESTADOS DE LAS ACCIONES
         #TIRO A PORTERIA
@@ -83,3 +112,6 @@ class Config:
         #MANAGER
         # [DEL, MC, DEF, GK]
         self.ESQUEMA_DE_JUEGO = [[3, 3, 4, 1]]
+
+
+        #

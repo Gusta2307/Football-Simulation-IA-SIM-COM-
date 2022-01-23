@@ -1,6 +1,9 @@
+import imp
 import random
 import time
-
+from classes.arbitro import arbitro
+from classes.manager import Manager
+from IA.optimizador import Optimizador
 from classes.reporte import Reporte
 from utiles import analisis_acciones_list, elimina_tipo
 from config import Config
@@ -29,9 +32,17 @@ class Partido:
         self.__tiempo = None
 
         self.estado = config.INICIAR_PARTIDO
+        
+        self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+        self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+
         self.ultima_accion = None #ultima accion q realizo el jugador que tenia el balon
 
-        self.pos_balon = None #jugador con la posecion de balon
+        self.pos_balon = None #jugador con la pocesion de balon
+
+        self.op = Optimizador(self)
+        self.op.optimizar()
+    
 
     def __empezar_tiempo(self):
         self.__tiempo = float(0)
@@ -40,9 +51,6 @@ class Partido:
         return f'{int(self.__tiempo)}\''
 
     def __iniciar_partido(self):
-        self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
-        self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
-
         print('Inicia el partido...')
         self.__empezar_tiempo()
         equipo = random.randint(1, 2)
@@ -55,7 +63,7 @@ class Partido:
                 temp_jugador_list.append(jugador)
         self.pos_balon = temp_jugador_list[random.randint(0, len(temp_jugador_list) - 1)]
         
-        return self.pos_balon.escoger_accion(self)
+        return self.pos_balon.escoger_accion_agente(self)
 
     def __reanudar_partido_pos_gol(self):
         eq = self.eq1 if self.ultima_accion.agente.equipo == self.eq2 else self.eq2
@@ -68,14 +76,17 @@ class Partido:
         print("Se reanuda el partido")
         
     
-    def simular(self):
+    def simular(self, opt = False):
         iter = 20
         act = self.__iniciar_partido()
         act.ejecutar(self)
         while int(self.__tiempo) < 45:
             acciones_actual = []
             for j in self.arbitros + self.eq1.jugadores_en_campo + self.eq2.jugadores_en_campo + [self.eq1.manager, self.eq2.manager]:
-                accion = j.escoger_accion(self)
+                if isinstance(j, arbitro) or isinstance(j, Manager):
+                    accion = j.escoger_accion_agente(self)
+                else:
+                    accion = j.escoger_accion_estrategia(self)
                 acciones_actual.append(accion)
             acciones_actual = analisis_acciones_list(acciones_actual, self.ultima_accion, self.estado)
 
@@ -94,12 +105,15 @@ class Partido:
                 eq = [self.eq1.nombre, self.eq2.nombre]
                 for e in eq:
                     while self.cambios_pendiente[e]:
-                        self.cambios_pendiente[e].pop().poscondicion(self)
+                        self.cambios_pendiente[e].pop().poscondicion(self, opt)
                         
             if len(acciones_actual) != 0:
                 iter -= 1
-
-        print(self.reporte)
+        self.restablecer_variables() #retorna un reporte y antes restablecer todas las variables
+        return self.reporte
 
     def eq_dic(self, eq1, eq2):
         return {1:eq1, 2: eq2}
+
+    def restablecer_variables(self):
+        pass

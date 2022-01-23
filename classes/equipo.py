@@ -1,8 +1,8 @@
 from collections import defaultdict
-from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
+#from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
 
-class Equipo(Declaration):
+class Equipo(): #(Declaration):
     def __init__(self, nombre, manager, jugadores) -> None:
         self.nombre = nombre
         self.manager = manager
@@ -16,18 +16,18 @@ class Equipo(Declaration):
 
         self.manager.equipo = self
 
-    @property
+    #@property
     def jugadores_en_campo(self):
         return self._jugadores_en_campo
 
-    @jugadores_en_campo.setter
+    #@jugadores_en_campo.setter
     def jugadores_en_campo(self, jugadores):
         self._jugadores_en_campo = jugadores
 
-    @property
+    #@property
     def jugadores_en_banca(self):
         return self._jugadores_en_banca
 
-    @jugadores_en_banca.setter
+    #@jugadores_en_banca.setter
     def jugadores_en_banca(self, jugadores):
         self._jugadores_en_banca = jugadores
