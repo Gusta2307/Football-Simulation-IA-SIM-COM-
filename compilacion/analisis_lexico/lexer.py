@@ -7,6 +7,11 @@ class Lexer:
         self.regex = regex  # recibe las expresiones regulares
         self.afn = Afn()    # recibe un automata finito
 
+    def buildDerivationTree(self):
+        pass
+
+    def buildDerivationTreeByRegex(self):
+        pass
 
     def tokenize(self, line_input):
         pass

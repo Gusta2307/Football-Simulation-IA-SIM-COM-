@@ -1,7 +1,11 @@
 import os
+<<<<<<< HEAD
 from IA.estrategia import Estrategia
 from IA.range import *
 from IA.optimizador import Optimizador
+=======
+from compilacion.analisis_lexico.token import Token, TokenType
+>>>>>>> 45cc196172f33172dbd5ec2d251a97cb7159877d
 from compilacion.analisis_semantico import *
 from classes.equipo import Equipo
 from classes.arbitro import arbitro
@@ -33,15 +37,16 @@ def read_script(name):
     return line
 
 def main():
-    # g = Grammar()
-    # g.productions = productions
-    # g.terminals = terminales
-    # g.noTerminals = no_terminales
-    # g.startNoTerminal = S
-    # # g.startNoTerminal = E
-    # firsts = calculate_firsts(g)
+    g = Grammar()
+    g.productions = productions
+    g.terminals = terminales
+    g.noTerminals = no_terminales
+    g.startNoTerminal = S
+    # g.startNoTerminal = E
+    # firsts = calculate_firsts(G)
     # follows = calculate_follows(g)
     
+<<<<<<< HEAD
     #lr_parser = LRParser(G)
     #print("")
     # for f in firsts.keys():
@@ -52,6 +57,13 @@ def main():
     #     print(f"follow({f}) = {follows[f]}")
     # print(" ")
 
+=======
+    lr_parser = LRParser(g)
+    tokens = [Token('9', 'Number', 0, 0), Token('=', '=', 0, 1), Token('5', 'Number', 0, 2), Token('+', '+', 0, 2), Token('4', 'Number', 0, 3)]
+    logger = []
+    lr_parser.parser(tokens, logger)
+    print("")
+>>>>>>> 45cc196172f33172dbd5ec2d251a97cb7159877d
 
     # file_name = 'file0.txt'#input()
     # code = read_script(file_name).splitlines()
