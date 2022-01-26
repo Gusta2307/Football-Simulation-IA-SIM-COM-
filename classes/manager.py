@@ -3,17 +3,16 @@ from act.act_manager.escoger_alineacion import Escoger_alineacion
 from act.act_manager.hacer_cambio import Hacer_cambio
 from act.default import Default
 import numpy
-#from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
+from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
 from config import Config
 config = Config()
 
-class Manager(Agente): #(Agente, Declaration):
-    def __init__(self, nombre, pais, experiencia, edad, estrategia=None) -> None:
+class Manager(Agente, Declaration):
+    def __init__(self, nombre, pais, experiencia, edad) -> None:
         self.nombre = nombre
         self.pais = pais
         self.experiencia = experiencia
-        self.estrategia = estrategia
         self.edad = edad
         self.equipo = None
 
@@ -25,15 +24,8 @@ class Manager(Agente): #(Agente, Declaration):
             'ESCOGER_ALINEACION': (Escoger_alineacion(self), 0.5),
             'HACER_CAMBIO': (Hacer_cambio(self), 0.1),
         }
-
-    # def escoger_accion_estrategia(self, partido):
-    #     estrategia_accion = None
-    #     if self.estrategia != None: 
-    #         estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
-        
-    #     return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_agente(partido)
     
-    def escoger_accion_agente(self, partido):
+    def escoger_accion(self, partido):
         acciones_posibles = list(filter(lambda x: x[0].precondicion(partido), self.acciones.values()))
 
         temp_p = []

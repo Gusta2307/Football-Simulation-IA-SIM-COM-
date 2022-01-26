@@ -1,5 +1,7 @@
 import numpy
 from act.accion import Accion
+from act.act_jugador.hacer_falta import Hacer_Falta
+from classes.partido import Partido
 from config import Config
 
 config = Config()

@@ -2,7 +2,8 @@ import numpy
 from act.accion import Accion
 from config import Config
 
-from colorama import Fore, Style
+from colorama import Fore
+from colorama import Style
 
 config = Config()
 
@@ -26,7 +27,6 @@ class Atajar(Accion):
         atajar = numpy.random.choice(numpy.arange(0, 2), p=[1 - self.agente.atajar_balon , self.agente.atajar_balon])
 
         if atajar:
-            print("REBOTE:", self.agente.sin_rebote, self.agente.rebote_banda, self.agente.rebote_linea_final, self.agente.rebote_jugador)
             rebote = numpy.random.choice(numpy.arange(0, 4), p=[self.agente.sin_rebote, self.agente.rebote_banda, self.agente.rebote_linea_final, self.agente.rebote_jugador])
             
             if rebote == 0:

@@ -66,8 +66,3 @@ def print_alineacion(esquema:list, jugadores):
         result += f'{j.nombre}\n'
     
     print(result)
-
-
-#Devuelve si el reporte r1 es mejor que el reporte r2
-def es_mejor(r1, r2, equipo):
-    return r1._goles[equipo.nombre] > r2._goles[equipo.nombre]

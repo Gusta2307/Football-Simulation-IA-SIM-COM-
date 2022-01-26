@@ -1,7 +1,8 @@
 import numpy
 from act.accion import Accion
 from config import Config
-from colorama import Fore, Style
+from colorama import Fore
+from colorama import Style
 
 config = Config()
 

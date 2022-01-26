@@ -5,9 +5,7 @@ from compilacion.analisis_semantico.Ast.programNode import ProgramNode
 
 
 def visitor(f):
-    def none(node, logger):
-        if node is ProgramNode:
-            pass
+    def none(*args, **kw_args):
         pass
     return none
 

@@ -58,4 +58,5 @@ class State:
 
 
 class AnyItem:
-    pass
+    def __init__(self) -> None:
+        self.tokenType = None

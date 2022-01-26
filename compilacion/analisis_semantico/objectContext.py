@@ -1,9 +1,11 @@
 from compilacion.analisis_semantico.type import MyType
 
+
 class ObjectContext:
     def __init__(self) -> None:
         self.definedTypes = {}
-        self.definedSymbols = {}  
+        self.definedSymbols = {}
+    
 
     def get_type(self, typeName: str) -> MyType:
         return self.definedTypes[typeName]
@@ -11,6 +13,7 @@ class ObjectContext:
     def type_of(self, symbol: str) -> MyType:
         if self.definedSymbols.__contains__(symbol):
             return self.definedSymbols[symbol]
+    
 
     def define_symbol(self, symbol: str, sym_type: MyType) -> bool:
         if not self.definedSymbols.__contains__(symbol):

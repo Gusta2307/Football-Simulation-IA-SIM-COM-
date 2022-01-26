@@ -120,6 +120,16 @@ class Afn:
             return new_state
         return None
                 
+    def Goto_Tokenize(self, symbol):
+        if not self.broken:
+            new_state = self.current_state.add_transition(symbol)
+            if new_state is not None:
+                self.current_state = new_state
+            else:
+                self.broken = True
+                new_state = self.current_state
+            return new_state
+        return None
                 
     def reset(self):
         self.broken = False

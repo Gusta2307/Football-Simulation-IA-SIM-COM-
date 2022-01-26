@@ -1,6 +1,7 @@
 import random
 import numpy
 from act.accion import Accion
+from classes.partido import Partido
 from config import Config
 from utiles import clasificar_jugadores
 
@@ -16,7 +17,6 @@ class Hacer_cambio(Accion):
         self.cambio = [] # Lista de tuplas (Jugador que entra, Jugador que sale)
         self.__descripcion = f"El manager {self.agente.nombre} del equipo "
         self.tiempo = 0
-
     
     def descripcion(self):
         return self.__descripcion
@@ -39,7 +39,7 @@ class Hacer_cambio(Accion):
                 break
 
 
-    def poscondicion(self, partido, opt):
+    def poscondicion(self, partido:Partido):
         banca = self.agente.equipo.jugadores_en_banca
         campo = self.agente.equipo.jugadores_en_campo
         print(f"El {self.agente.equipo.nombre} va ha realizar cambios")
@@ -47,8 +47,6 @@ class Hacer_cambio(Accion):
             banca.remove(j1)
             campo.remove(j2)
             campo.append(j1)
-            if not opt: 
-                partido.op._optimizar_agente(j1)
             print(f"ENTRA: {Fore.GREEN}{j1.nombre}{Style.RESET_ALL} SALE: {Fore.RED}{j2.nombre}{Style.RESET_ALL}")
 
         self.agente.equipo.jugadores_en_banca = banca

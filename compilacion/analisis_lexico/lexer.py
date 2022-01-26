@@ -1,4 +1,3 @@
-from os import stat
 from compilacion.parsing.afn.afn import Afn
 from compilacion.analisis_lexico.token import *
 from compilacion.parsing.afn.state import AnyItem, State
@@ -14,7 +13,76 @@ class Lexer:
 
 
     def tokenize(self, line_input):
-        pass
+        tokens = []
+        self.afn.reset()
+
+        i, col, row = 0, 0, 0
+        new_token_col, new_token_row, new_token_pos = 0, 0, 0
+        last_token_col, last_token_row, last_token_pos = 0, 0, 0
+        c, valid_token = None, None
+
+        while i < len(line_input):
+            if i == len(line_input):
+                tokens.append(valid_token)
+                valid_token = None
+                if new_token_pos >= len(line_input):
+                    break
+                i, col, row = new_token_pos, new_token_col, new_token_row
+
+            if c == '\n':
+                row += 1
+                col = 0
+
+            c = line_input[i]
+
+            self.afn.current_state = self.afn.Goto_Tokenize(c)
+            if self.afn.broken:
+                if not valid_token is None:
+                    tokens.append(valid_token)
+                    last_token_pos, last_token_col, last_token_row = i, col, row
+                    i, col, row = new_token_pos, new_token_col, new_token_row
+                else:
+                    #BATACANG Error lexicografico
+                    # tokens.append(ErrorToken(
+                    #         line_input[new_token_pos:i+1],
+                    #         new_token_col,
+                    #         new_token_row,
+                    #         new_token_pos)
+                    #     )
+                    #error
+                    last_token_pos, last_token_col, last_token_row = i+1,col+1,row
+                    new_token_pos, new_token_col, new_token_row = i+1,col+1,row
+                    i+=1
+                
+                valid_token = None
+                self.afn.reset()
+                continue
+            
+            if not self.afn.broken and self.afn.current_state.is_final_state:
+                #buscando el tipo de token de menor precedencia de entre todos los posibles tokens a resumir
+                index = min([self.precedent[x.item.tokenType] for x in self.afn.current_state.states if x.is_final_state])
+                # type_token = self.index_token[index_type_token]
+                tokenType = None
+
+                for t in self.precedent:
+                    if self.precedent[t] == index:
+                        tokenType = t
+
+                valid_token = Token(
+                        tokenType,
+                        line_input[last_token_pos:i+1],
+                        last_token_col,
+                        last_token_row,
+                        last_token_pos
+                    )
+                new_token_pos, new_token_col, new_token_row = i+1,col+1,row
+            
+            i+=1
+            col+=1
+        
+        return tokens
+
+        
 
 
     def build_LexerAFN(self):
@@ -23,8 +91,8 @@ class Lexer:
         state, priority = 0, 0
 
         for r in self.regex:
-            # if r == 'num' or r == '.':
-            #     print("IDE")
+            if r == 'num'  or r == 'id':
+                print("IDE")
             tree = self.buildAstByRegex(self.regex[r], errors)
             new_state = self.createAfnState(state, tree.ast, r)
             list_state.append(new_state)

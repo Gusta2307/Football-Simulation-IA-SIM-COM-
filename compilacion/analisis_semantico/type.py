@@ -1,8 +1,9 @@
+from typing import List
 from compilacion.analisis_semantico.method import *
 
 
 class MyType:
-    def __init__(self, name, attributes: list[Attribute], methods: list[Method]) -> None:
+    def __init__(self, name, attributes: List[Attribute], methods: List[Method]) -> None:
         self.name = name
         self.attributes = attributes
         self.methods = methods
@@ -26,7 +27,7 @@ class MyType:
             return True
         return False
 
-    def define_method(self, name: str, return_type, args: list[Attribute]) -> bool:
+    def define_method(self, name: str, return_type, args: List[Attribute]) -> bool:
         if not self.contains_method(name):
             method = Method(name, return_type, args)
             self.methods.append(method)
