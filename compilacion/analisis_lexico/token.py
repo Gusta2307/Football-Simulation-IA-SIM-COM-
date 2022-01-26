@@ -7,19 +7,11 @@ class Token:
         self.line = line
         self.column = column
     
-    def __str__(self) -> str:
-        return self.text + " " + str(self.tokenType.name)
-
-
-class TokenType(Enum):
-    Keyword = auto(),
-    Identifier = auto(),
-    Number = auto(),
-    Symbol = auto(),
-    Text = auto(),
-    Separator = auto(),
-    Quote = auto(),
-    Bracket = auto(),
-    Operator = auto(),
-    Assign = auto(),
-    EOF = auto(),
+    def __str__(self):
+        return str((self.tokenType,
+                    self.text,
+                    "line: "+str(self.line),
+                    "column: "+str(self.column)))
+    
+    def __repr__(self):
+        return str(self)

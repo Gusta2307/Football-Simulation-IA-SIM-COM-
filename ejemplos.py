@@ -171,16 +171,20 @@ Y = NoTerminal('Y')
 s_p1 = Production(S, Sentence(E))
 S.add_production(s_p1)
 
-e_p1 = Production(E, Sentence(A, assig, A), Sentence(N))
+e_p1 = Production(E, Sentence(A, assig, A))
+e_p2 = Production(E, Sentence(N))
 E.add_production(e_p1)
+E.add_production(e_p2)
 
-a_p1 = Production(A, Sentence(N, Plus, A), Sentence(N))
+a_p1 = Production(A, Sentence(N, Plus, A))
+a_p2 = Production(A, Sentence(N))
 A.add_production(a_p1)
+A.add_production(a_p2)
 
 # x_p1 = Production(X, Sentence(Plus), Sentence(Mult))
 # X.add_production(x_p1)
 
-productions = [s_p1, e_p1, a_p1]
+productions = [s_p1, e_p1, e_p2, a_p1, a_p2]
 terminales = [assig, Plus, N, Mult]
 no_terminales = [S, E, A, X]
 

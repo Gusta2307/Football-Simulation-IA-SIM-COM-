@@ -2,9 +2,10 @@ from compilacion.grammars.noTerminal import NoTerminal
 
 
 class Production:
-    def __init__(self, left : NoTerminal, *args) -> None:
+    def __init__(self, left : NoTerminal, sentence, attribute=None) -> None:
         self.left = left
-        self.right = [s for s in args] # secuencia de formas oracionales
+        self.right = [sentence] # secuencia de formas oracionales
+        self.attribute = attribute  # es una expresion lambda
 
     def __str__(self) -> str:
         string = ""

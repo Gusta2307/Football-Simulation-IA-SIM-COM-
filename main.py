@@ -1,5 +1,4 @@
 import os
-from compilacion.analisis_lexico.token import Token, TokenType
 from compilacion.analisis_semantico import *
 from classes.equipo import Equipo
 from classes.arbitro import arbitro
@@ -8,14 +7,12 @@ from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
 from compilacion.grammars.grammar import Grammar
-from compilacion.grammars.production import Production
-from compilacion.grammars.sentence import Sentence
-from compilacion.parsing.grammar_items import ItemLR
 from compilacion.parsing.lrparser import LRParser
+from compilacion.analisis_lexico.lexer import Lexer
+from compilacion.analisis_lexico.regex.regex import regex
+from compilacion.analisis_lexico.regex.regex_grammar import regex_grammar
+from ejemplos import productions, S, terminales, no_terminales
 from config import Config
-from compilacion.parsing.firsts_follows import calculate_firsts, calculate_follows
-from ejemplos import productions, S, E, terminales, no_terminales
-from compilacion.parsing.defined_grammar import G
 
 
 config = Config()
@@ -30,19 +27,25 @@ def read_script(name):
     return line
 
 def main():
-    g = Grammar()
-    g.productions = productions
-    g.terminals = terminales
-    g.noTerminals = no_terminales
-    g.startNoTerminal = S
+    # g = Grammar()
+    # g.productions = productions
+    # g.terminals = terminales
+    # g.noTerminals = no_terminales
+    # g.startNoTerminal = S
+    # lr_p = LRParser(g)
     # g.startNoTerminal = E
     # firsts = calculate_firsts(G)
     # follows = calculate_follows(g)
     
-    lr_parser = LRParser(g)
-    tokens = [Token('9', 'Number', 0, 0), Token('=', '=', 0, 1), Token('5', 'Number', 0, 2), Token('+', '+', 0, 2), Token('4', 'Number', 0, 3)]
-    logger = []
-    lr_parser.parser(tokens, logger)
+    lr_parser = LRParser(regex_grammar)
+    lexer = Lexer(regex, lr_parser)
+    lexer.tokenize("sum1 = 99")
+    lexer.tokenize("player p1 = (name='Messi')")
+    print("")
+    
+    # tokens = [Token('9', 'Number', 0, 0), Token('=', '=', 0, 1), Token('5', 'Number', 0, 2), Token('+', '+', 0, 2), Token('4', 'Number', 0, 3)]
+    # logger = []
+    # lr_parser.parser(tokens, logger)
     print("")
 
     # file_name = 'file0.txt'#input()

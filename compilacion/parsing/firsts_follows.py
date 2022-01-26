@@ -6,7 +6,7 @@ from compilacion.grammars.terminal import Terminal
 
 
 def calculate_firsts(G: Grammar):
-    firsts = {}
+    firsts = {'$':'$'}
 
     for term in G.terminals:  # calcular firsts de los terminales
         if not firsts.__contains__(term.name): 
