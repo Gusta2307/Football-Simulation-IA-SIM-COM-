@@ -49,9 +49,9 @@ class Escoger_alineacion(Accion):
                 break
         self.agente.equipo.jugadores_en_banca = jugadores_banca
         
-        print(self.descripcion())
+        # print(self.descripcion())
 
-        print_alineacion(escoger_esquema, jugadores_campo)
+        # print_alineacion(escoger_esquema, jugadores_campo)
 
         # self.poscondicion(partido)
 
