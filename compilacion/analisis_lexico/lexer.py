@@ -1,3 +1,4 @@
+from os import stat
 from compilacion.parsing.afn.afn import Afn
 from compilacion.analisis_lexico.token import *
 from compilacion.parsing.afn.state import AnyItem, State
@@ -82,8 +83,6 @@ class Lexer:
         
         return tokens
 
-        
-
 
     def build_LexerAFN(self):
         errors = []
@@ -91,8 +90,8 @@ class Lexer:
         state, priority = 0, 0
 
         for r in self.regex:
-            if r == 'num'  or r == 'id':
-                print("IDE")
+            # if r == 'num' or r == '.':
+            #     print("IDE")
             tree = self.buildAstByRegex(self.regex[r], errors)
             new_state = self.createAfnState(state, tree.ast, r)
             list_state.append(new_state)

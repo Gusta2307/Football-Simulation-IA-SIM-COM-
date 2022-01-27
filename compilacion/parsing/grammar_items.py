@@ -38,6 +38,13 @@ class ItemLR:
     def __repr__(self) -> str:
         return str(self)
 
+    def __eq__(self, __o: object) -> bool:
+        return
+
+    def __hash__(self) -> int:
+        ls = tuple(look for look in self.lookaheads)
+        return hash((self.production, self.pos, ls))
+
 
 class GrammarItems:
     def __init__(self, G: Grammar) -> None:

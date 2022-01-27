@@ -50,13 +50,12 @@ class State:
     def __repr__(self) -> str:
         return str(self.item)
 
-    # def __hash__(self):
-    #     return hash(self.item)
+    def __hash__(self):
+        return hash(self.item)
 
-    # def __eq__(self, other):
-    #     return str(self.item) == str(other.item)
+    def __eq__(self, other):
+        return str(self.item) == str(other.item)
 
 
 class AnyItem:
-    def __init__(self) -> None:
-        self.tokenType = None
+    pass

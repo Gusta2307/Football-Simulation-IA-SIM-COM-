@@ -28,12 +28,13 @@ class LRParser:
         queue_state = [init_state] # cola de estados
         symbols_transitions = set()
         symbols_transitions_list = []
-        calculed_item_state = {}
-        # calculed_item_state = set()
+        # calculed_item_state = {}
+        calculed_item_state = set()
 
         while len(queue_state) > 0:
             state = queue_state.pop(0)
-            if not calculed_item_state.__contains__(str(state)):
+            # if not calculed_item_state.__contains__(str(state)):
+            if not state in calculed_item_state:
                 item = state.item
                 next_item = self.grammar_items.next_item(item)
                 next_symbol = self.grammar_items.next_symbol(item)
@@ -57,7 +58,8 @@ class LRParser:
                     afn.add_epsilon_transition(state, eps_state)
                     queue_state.append(eps_state)
 
-                calculed_item_state[str(state)] = state
+                # calculed_item_state[str(state)] = state
+                calculed_item_state.add(state)
                 i += 1
 
         afn = Afn()
