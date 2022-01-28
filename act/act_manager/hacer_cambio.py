@@ -3,16 +3,16 @@ import numpy
 from act.accion import Accion
 from config import Config
 from utiles import clasificar_jugadores
+from IA.range import Range
 
-from colorama import Fore
-from colorama import Style
+from colorama import Fore, Style
 
 config = Config()
 
 class Hacer_cambio(Accion):
     def __init__(self, agente) -> None:
         self.agente = agente
-        self.tipo = config.ACT_HACER_CAMBIOS
+        self.tipo = config.ACCIONES.MANAGER.ACT_HACER_CAMBIOS
         self.cambio = [] # Lista de tuplas (Jugador que entra, Jugador que sale)
         self.__descripcion = f"El manager {self.agente.nombre} del equipo "
         self.tiempo = 0
@@ -49,6 +49,10 @@ class Hacer_cambio(Accion):
             campo.append(j1)
             if not opt: 
                 partido.op._optimizar_agente(j1)
+            else:
+                for v in j1.estrategia.variables.keys():
+                    if isinstance(j1.estrategia.variables[v], Range):
+                        j1.estrategia.variables[v] = j1.estrategia.variables[v].get_value()
             print(f"ENTRA: {Fore.GREEN}{j1.nombre}{Style.RESET_ALL} SALE: {Fore.RED}{j2.nombre}{Style.RESET_ALL}")
 
         self.agente.equipo.jugadores_en_banca = banca

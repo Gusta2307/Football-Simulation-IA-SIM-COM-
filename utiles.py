@@ -13,19 +13,19 @@ def filter(funct, iterable):
     return result_f, result
 
 def analisis_acciones_list(acciones_actual, ultima_accion,estado):
-    if ultima_accion.tipo == config.ACT_PASE:
-        acciones_actual = escoge_una(acciones_actual, config.ACT_INTERCEPTAR_BALON)
-        intercepcion, _ = filter(lambda x: x.tipo == config.ACT_INTERCEPTAR_BALON, iterable=acciones_actual)
+    if ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_PASE:
+        acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_INTERCEPTAR_BALON)
+        intercepcion, _ = filter(lambda x: x.tipo == config.ACCIONES.JUGADOR.ACT_INTERCEPTAR_BALON, iterable=acciones_actual)
 
         if len(intercepcion) > 0:
-            acciones_actual = elimina_tipo(acciones_actual, config.ACT_RECIBIR_BALON)         
+            acciones_actual = elimina_tipo(acciones_actual, config.ACCIONES.JUGADOR.ACT_RECIBIR_BALON)         
             
-    if estado == config.REANUDAR_PARTIDO: #cuando se marca un gol
-        acciones_actual = escoge_una(acciones_actual, config.ACT_PASE)
+    if estado == config.PARTIDO.ESTADO.REANUDAR_PARTIDO: #cuando se marca un gol
+        acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_PASE)
 
-    acciones_actual = escoge_una(acciones_actual, config.ACT_HACER_FALTA)
+    acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_HACER_FALTA)
 
-    acciones_actual = escoge_una(acciones_actual, config.ACT_SAQUE_BANDA)
+    acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_SAQUE_BANDA)
 
     return acciones_actual
     

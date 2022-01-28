@@ -5,7 +5,7 @@ config = Config()
 class Default(Accion):
     def __init__(self, agente) -> None:
         self.agente = agente
-        self.tipo = config.ACT_DEFAULT
+        self.tipo = config.ACCIONES.JUGADOR.ACT_DEFAULT
     
     def descripcion(selfq):
         return ""

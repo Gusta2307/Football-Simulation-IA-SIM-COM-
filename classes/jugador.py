@@ -24,9 +24,8 @@ class Jugador(Agente):
         self.posicion = pos
         self.equipo = None
         self.estrategia = estrategia
-        self.ubicacion_campo = config.IA.Zona.REL_ZONA_POS[self.posicion]
+        self.ubicacion_campo = config.ZONA.REL_ZONA_POS[self.posicion]
         
-        print(self.nombre)
         #Las prob de que se realicen satisfactoriamente
         self.tiro_porteria = list_prob[0]
         self.pase = list_prob[1]
@@ -96,11 +95,11 @@ class Jugador(Agente):
         if self.estrategia != None: 
             estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
         
-        return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_agente(partido)
+        return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_base(partido)
       
 
-    def escoger_accion_agente(self, partido):
-       if partido.estado == config.INICIAR_PARTIDO or partido.estado == config.REANUDAR_PARTIDO:
+    def escoger_accion_base(self, partido):
+       if partido.estado == config.PARTIDO.ESTADO.INICIAR_PARTIDO or partido.estado == config.PARTIDO.ESTADO.REANUDAR_PARTIDO:
            if self.acciones_dict()['PASE'].precondicion(partido) and partido.pos_balon == self:
                return self.acciones_dict()['PASE']
            
@@ -109,7 +108,7 @@ class Jugador(Agente):
        temp_p = []
        for item in acciones_posibles:
            # print(item, acciones_posibles)
-           if item.tipo == config.ACT_RECIBIR_BALON and partido.ultima_accion.tipo == config.ACT_PASE:  # VERIFICAR SI PUEDO RECIBIR BALON
+           if item.tipo == config.ACCIONES.JUGADOR.ACT_RECIBIR_BALON and partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_PASE:  # VERIFICAR SI PUEDO RECIBIR BALON
                return item
            temp_p.append(0.3/len(acciones_posibles))
 
@@ -121,18 +120,18 @@ class Jugador(Agente):
 
     def seleccionar_jugador_pase(self, partido):
         index = -1
-        if self.ubicacion_campo == config.IA.Zona.ATAQUE:
+        if self.ubicacion_campo == config.ZONA.ATAQUE:
             index = numpy.random.choice(numpy.arange(0, 4), p=[0.5,   0.35,   0.1,  0.05])
-        elif self.ubicacion_campo == config.IA.Zona.CENTRO:
+        elif self.ubicacion_campo == config.ZONA.CENTRO:
             index = numpy.random.choice(numpy.arange(0, 4), p=[0.4,   0.3,   0.2,  0.1])
-        elif self.ubicacion_campo == config.IA.Zona.DEFENSA:
+        elif self.ubicacion_campo == config.ZONA.DEFENSA:
             index = numpy.random.choice(numpy.arange(0, 4), p=[0.05,   0.4,   0.25,  0.3])
         # elif self.ubicacion_campo == 'GK':
         #     index = numpy.random.choice(numpy.arange(0, 3), p=[0.3,   0.3,   0.4])
 
         temp_list = []
         for item in self.equipo.jugadores_en_campo:
-            if item.posicion == config.POSICIONES[index]:
+            if item.posicion == config.POSICIONES.POS[index]:
                 temp_list.append(item)
         jugador2 = temp_list[int(random.randint(0, len(temp_list)- 1))]
 

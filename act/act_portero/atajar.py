@@ -12,14 +12,14 @@ class Atajar(Accion):
         self.__descripcion = f"El portero {self.agente.nombre} "
         self.estado = None
         self.tiempo = 0.13
-        self.tipo = config.ACT_ATAJAR
+        self.tipo = config.ACCIONES.JUGADOR.ACT_ATAJAR
     
     def descripcion(self):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
         # if partido.ultima_accion.tipo == config.ACT_TIRO_PORTERIA:
-        return ((partido.ultima_accion.tipo == config.ACT_TIRO_PORTERIA and partido.ultima_accion.estado == config.A_PORTERIA) or partido.ultima_accion.tipo == config.ACT_SAQUE_ESQUINA)  and partido.ultima_accion.agente.equipo != self.agente.equipo  
+        return ((partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_TIRO_PORTERIA and partido.ultima_accion.estado == config.ACCIONES.ESTADO.TIRO_PORTERIA.A_PORTERIA) or partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_SAQUE_ESQUINA)  and partido.ultima_accion.agente.equipo != self.agente.equipo  
         # return False
 
     def ejecutar(self, partido):
@@ -30,13 +30,13 @@ class Atajar(Accion):
             rebote = numpy.random.choice(numpy.arange(0, 4), p=[self.agente.sin_rebote, self.agente.rebote_banda, self.agente.rebote_linea_final, self.agente.rebote_jugador])
             
             if rebote == 0:
-                self.estado = config.SIN_REBOTE
+                self.estado = config.ACCIONES.ESTADO.ATAJAR.SIN_REBOTE
             elif rebote == 1:
-                self.estado = config.REBOTE_BANDA
+                self.estado = config.ACCIONES.ESTADO.ATAJAR.REBOTE_BANDA
             elif rebote == 2:
-                self.estado = config.REBOTE_LINEA_FINAL
+                self.estado = config.ACCIONES.ESTADO.ATAJAR.REBOTE_LINEA_FINAL
             elif rebote == 3:
-                self.estado = config.REBOTE_JUGADOR
+                self.estado = config.ACCIONES.ESTADO.ATAJAR.REBOTE_JUGADOR
             self.poscondicion(partido, atajar, rebote)
 
             print(f"{partido.obtener_tiempo()} {self.descripcion()} {Fore.RED}{self.estado} {Style.RESET_ALL}")
@@ -44,7 +44,7 @@ class Atajar(Accion):
             print(f"{partido.obtener_tiempo()} El jugador {partido.ultima_accion.agente} {Fore.CYAN} marco GOOOOOL {Style.RESET_ALL}")
             # partido.ultima_accion.agente.equipo.estadisticas['GOLES'] += 1
             self.tiempo = 0.8
-            self.estado = config.NO_ATAJO
+            self.estado = config.ACCIONES.ESTADO.ATAJAR.NO_ATAJO
             self.poscondicion(partido, atajar, -1)
 
 
@@ -55,12 +55,12 @@ class Atajar(Accion):
             if rebote == 0:
                 partido.pos_balon = self.agente
             elif rebote == 1 or rebote == 2:
-                partido.estado = config.DETENIDO
+                partido.estado = config.PARTIDO.ESTADO.DETENIDO
             elif rebote == 3:
                 partido.pos_balon = None
             partido.ultima_accion = self    
         else:
             partido.pos_balon = None
-            partido.estado = config.REANUDAR_PARTIDO
+            partido.estado = config.PARTIDO.ESTADO.REANUDAR_PARTIDO
             partido.reporte.annadir_gol(partido.ultima_accion.agente.equipo.nombre)
         

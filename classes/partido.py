@@ -1,7 +1,5 @@
-import imp
 import random
-import time
-from classes.arbitro import arbitro
+from classes.arbitro import Arbitro
 from classes.manager import Manager
 from IA.optimizador import Optimizador
 from classes.reporte import Reporte
@@ -20,8 +18,8 @@ class Partido:
         self.reporte = Reporte(self.eq1.nombre, self.eq2.nombre)
 
         self.cambios_por_equipo = {
-            eq1.nombre: [config.VENTANAS_DE_CAMBIOS, config.TOTAL_DE_CAMBIOS],
-            eq2.nombre: [config.VENTANAS_DE_CAMBIOS, config.TOTAL_DE_CAMBIOS]
+            eq1.nombre: [config.PARTIDO.CONFIG.VENTANAS_DE_CAMBIOS, config.PARTIDO.CONFIG.TOTAL_DE_CAMBIOS],
+            eq2.nombre: [config.PARTIDO.CONFIG.VENTANAS_DE_CAMBIOS, config.PARTIDO.CONFIG.TOTAL_DE_CAMBIOS]
         }
 
         self.cambios_pendiente = {
@@ -31,7 +29,7 @@ class Partido:
 
         self.__tiempo = None
 
-        self.estado = config.INICIAR_PARTIDO
+        self.estado = config.PARTIDO.ESTADO.INICIAR_PARTIDO
         
         self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
         self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
@@ -63,7 +61,7 @@ class Partido:
                 temp_jugador_list.append(jugador)
         self.pos_balon = temp_jugador_list[random.randint(0, len(temp_jugador_list) - 1)]
         
-        return self.pos_balon.escoger_accion_agente(self)
+        return self.pos_balon.escoger_accion_base(self)
 
     def __reanudar_partido_pos_gol(self):
         eq = self.eq1 if self.ultima_accion.agente.equipo == self.eq2 else self.eq2
@@ -83,25 +81,25 @@ class Partido:
         while int(self.__tiempo) < 45:
             acciones_actual = []
             for j in self.arbitros + self.eq1.jugadores_en_campo + self.eq2.jugadores_en_campo + [self.eq1.manager, self.eq2.manager]:
-                if isinstance(j, arbitro) or isinstance(j, Manager):
-                    accion = j.escoger_accion_agente(self)
+                if isinstance(j, Arbitro) or isinstance(j, Manager):
+                    accion = j.escoger_accion_base(self)
                 else:
                     accion = j.escoger_accion_estrategia(self)
                 acciones_actual.append(accion)
             acciones_actual = analisis_acciones_list(acciones_actual, self.ultima_accion, self.estado)
 
            
-            acciones_actual = elimina_tipo(acciones_actual, config.ACT_DEFAULT)
+            acciones_actual = elimina_tipo(acciones_actual, config.ACCIONES.JUGADOR.ACT_DEFAULT)
            
             for item in acciones_actual:
                 if item.precondicion(self):
                     item.ejecutar(self)
                     self.__tiempo += item.tiempo
 
-            if self.estado == config.REANUDAR_PARTIDO:
+            if self.estado == config.PARTIDO.ESTADO.REANUDAR_PARTIDO:
                 self.__reanudar_partido_pos_gol()
 
-            if self.estado == config.DETENIDO:
+            if self.estado == config.PARTIDO.ESTADO.DETENIDO:
                 eq = [self.eq1.nombre, self.eq2.nombre]
                 for e in eq:
                     while self.cambios_pendiente[e]:

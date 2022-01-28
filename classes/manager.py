@@ -5,8 +5,8 @@ from act.default import Default
 import numpy
 #from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
-from config import Config
-config = Config()
+#from config import Config
+#config = Config()
 
 class Manager(Agente): #(Agente, Declaration):
     def __init__(self, nombre, pais, experiencia, edad, estrategia=None) -> None:
@@ -26,14 +26,14 @@ class Manager(Agente): #(Agente, Declaration):
             'HACER_CAMBIO': (Hacer_cambio(self), 0.1),
         }
 
-    # def escoger_accion_estrategia(self, partido):
-    #     estrategia_accion = None
-    #     if self.estrategia != None: 
-    #         estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
+    def escoger_accion_estrategia(self, partido):
+        estrategia_accion = None
+        if self.estrategia != None: 
+            estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
         
-    #     return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_agente(partido)
+        return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_base(partido)
     
-    def escoger_accion_agente(self, partido):
+    def escoger_accion_base(self, partido):
         acciones_posibles = list(filter(lambda x: x[0].precondicion(partido), self.acciones.values()))
 
         temp_p = []

@@ -6,7 +6,7 @@ from act.default import Default
 from config import Config
 config = Config()
 
-class arbitro(Agente): #(Agente, Declaration):
+class Arbitro(Agente): #(Agente, Declaration):
     def __init__(self, nombre, experiencia, list_prob):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
         self.nombre = nombre
         self.experiencia = experiencia
@@ -25,8 +25,15 @@ class arbitro(Agente): #(Agente, Declaration):
             'CANTAR_FALTA': (Cantar_falta(self), self.cantar_falta)
         }
 
-    def escoger_accion_agente(self, partido):
-        if partido.ultima_accion.tipo == config.ACT_HACER_FALTA:
+    def escoger_accion_base(self, partido):
+        if partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_HACER_FALTA:
             return self.acciones['CANTAR_FALTA'][0]
         else:
             return Default(self)
+
+    def escoger_accion_estrategia(self, partido):
+        estrategia_accion = None
+        if self.estrategia != None: 
+            estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
+        
+        return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_base(partido)

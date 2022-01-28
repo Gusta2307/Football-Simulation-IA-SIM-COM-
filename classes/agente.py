@@ -6,8 +6,12 @@ class Agente(abc.ABC):
         raise NotImplementedError
     
     @abc.abstractclassmethod
-    def escoger_accion_agente(self, partido):
+    def escoger_accion_base(self, partido):
         raise NotImplementedError
+
+    @abc.abstractclassmethod
+    def escoger_accion_estrategia(self, partido):
+        raise NotImplementedError 
     
     
 

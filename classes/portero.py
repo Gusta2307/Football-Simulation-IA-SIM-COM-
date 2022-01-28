@@ -36,14 +36,14 @@ class Portero(Jugador):
 
 
     def escoger_accion_agente(self, partido):
-        if partido.ultima_accion.tipo == config.ACT_TIRO_PORTERIA and partido.estado == config.EN_JUEGO:
+        if partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_TIRO_PORTERIA and partido.estado == config.PARTIDO.ESTADO.EN_JUEGO:
             if self.acciones['ATAJAR'].precondicion(partido):
                 return self.acciones['ATAJAR']
                 
         if self.acciones['SAQUE_PORTERIA'].precondicion(partido):
                 return self.acciones['SAQUE_PORTERIA']
 
-        if partido.ultima_accion.tipo == config.ACT_ATAJAR and partido.ultima_accion.estado == config.SIN_REBOTE and self.acciones['PASE'].precondicion(partido):
+        if partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_ATAJAR and partido.ultima_accion.estado == config.ACCIONES.ESTADO.ATAJAR.SIN_REBOTE and self.acciones['PASE'].precondicion(partido):
             #El portero hace un pase a alguien de su equipo
             return self.acciones['PASE']
 
@@ -51,7 +51,7 @@ class Portero(Jugador):
 
         temp_p = []
         for item in acciones_posibles:
-            if item.tipo == config.ACT_RECIBIR_BALON and partido.ultima_accion.tipo == config.ACT_PASE:  # VERIFICAR SI PUEDO RECIBIR BALON
+            if item.tipo == config.ACCIONES.JUGADOR.ACT_RECIBIR_BALON and partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_PASE:  # VERIFICAR SI PUEDO RECIBIR BALON
                 return item
             temp_p.append(0.3/len(acciones_posibles))
         temp_p.append(1 - sum(temp_p))
