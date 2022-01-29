@@ -1,3 +1,4 @@
+from typing import List
 from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.Ast.instructions.breakNode import BreakNode
 from compilacion.analisis_semantico.Ast.instructions.continueNode import ContinueNode
@@ -5,7 +6,7 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class ForNode(Instruction):
-    def __init__(self, item: str, iterable:str, list_items: list, body: list[Instruction]) -> None:
+    def __init__(self, item: str, iterable:str, body: List[Instruction], list_items=None) -> None:
         self.item = item
         self.iter = iterable
         self.list_items = list_items

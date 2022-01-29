@@ -2,7 +2,7 @@
 Definicion de la gramatica de las expresiones regulares
 """
 
-from compilacion.analisis_lexico.regex.valueNode import ValueNode
+from compilacion.analisis_lexico.regex.Ast.valueNode import ValueNode
 from compilacion.grammars.grammar import Grammar
 from compilacion.grammars.production import Production
 from compilacion.grammars.sentence import Sentence

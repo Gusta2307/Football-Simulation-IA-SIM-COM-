@@ -1,1 +1,27 @@
-a.equipo = as6as/3;
+player p1 = (name="Messi", age=32, pos="DEL");
+int a = 2;
+int b = p1.age;
+int c = a + b;
+float prob = 0.1;
+
+if c >= 30:
+{
+  float prob = 0.2;
+};
+
+function float aumentar(float prob, float value):
+{
+  float new_prob = prob + value;
+  if new_prob >= 0 AND new_prob <= 1:
+  {
+     return new_prob;
+  };
+  return 0;
+};
+
+float prob1 = aumentar(prob, 0.3);
+print(prob1);
+
+team t1 = TEAM.Barcelona;
+bool gol = true;
+str name = "Ronaldo";

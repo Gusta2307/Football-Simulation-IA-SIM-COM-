@@ -8,7 +8,7 @@ class Afn:
         self.init_state = None
         self.states_dict = dict()
         self.complex_states = set()
-        self.dict_complex_state = dict()
+        # self.dict_complex_state = dict()
         self.broken = False
 
     
@@ -53,14 +53,14 @@ class Afn:
    # tuple_states = tuple(states)
         # if not self.afn_contains_complex_state(states):
         #     self.complex_states_dict[tuple_states] = ComplexState(states, self)
-        #     pass
-    def afn_contains_complex_state(self, states):
-        for complex_st in self.complex_states:
-            for st in complex_st.states:
-                for s in states:
-                    if str(s) == str(st):
-                        return True
-        return False
+    #     #     pass
+    # def afn_contains_complex_state(self, states):
+    #     for complex_st in self.complex_states:
+    #         for st in complex_st.states:
+    #             for s in states:
+    #                 if str(s) == str(st):
+    #                     return True
+    #     return False
 
 
     def get_state(self, state):
@@ -87,7 +87,7 @@ class Afn:
         self.init_state = self.add_complexState(init_state.epsilonClausure, True)
         self.current_state = self.init_state
         self.complex_states.add(self.current_state)
-        self.states_dict[init_state] = init_state
+        # self.states_dict[init_state] = init_state
         return self.init_state
 
 
@@ -99,8 +99,8 @@ class Afn:
         while len(list_complex) > 0:
             st = list_complex.pop()
            
-            if len(st.states) == 36 or len(st.states)==12:
-                print("STATE 36, 12")
+            # if len(st.states) == 36 or len(st.states)==12:
+            #     print("STATE 36, 12")
             
             trans_symbols = set()
             
@@ -115,8 +115,8 @@ class Afn:
             # print(" ")
             for sym in trans_symbols: # por cada uno de estos simbolos se obliga a calcular sus trancisiones
                 # print("------------------------SYMBOL:-------------------", sym)
-                if str(sym) == 'G':
-                    print("GGGG")
+                # if str(sym) == 'G':
+                #     print("GGGG")
                 n = st.add_transition(sym)
                 # if not calculed_state.__contains__(str(n)):  
                 if not n in calculed_state:
@@ -138,6 +138,19 @@ class Afn:
             return new_state
         return None
                 
+    
+    def Goto_Tokenize(self, symbol): # dado el estado actual y el simbolo que viene, cambiar al estado correspondiente
+        if not self.broken:
+            new_state = self.current_state.add_transition(symbol)
+            if new_state is not None:
+                self.current_state = new_state
+            else:
+                self.broken = True
+                new_state = self.current_state
+            return new_state
+        return None
+
+    
                 
     def reset(self):
         self.broken = False

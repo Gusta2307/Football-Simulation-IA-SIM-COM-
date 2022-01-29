@@ -2,7 +2,7 @@ from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.Ast.expression import Expression
 from compilacion.analisis_semantico.scope import Scope
 
-class ReturnNode(Instruction):
+class FilterNode(Instruction):
     def __init__(self, iterable:str, list_item: list, condition: Expression) -> None:
         self.iter = iterable
         self.list_item = list_item

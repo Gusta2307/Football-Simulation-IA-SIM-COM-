@@ -2,7 +2,7 @@ from collections import defaultdict
 from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
 
-class Equipo(Declaration):
+class Equipo:
     def __init__(self, nombre, manager, jugadores) -> None:
         self.nombre = nombre
         self.manager = manager

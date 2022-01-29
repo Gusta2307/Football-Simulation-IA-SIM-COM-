@@ -1,8 +1,11 @@
-player        p1            (  name    =     "Messi "  ) ;
-  g < 9;
-a <- 100;
-a <-100;
+bool y = NOT x < 20;
 
-b<-"Ronaldo";
-d <- "Hilo";
-c <-(50)
+function int increment():
+{
+   return 1 + 1;
+   return (1 + 1);
+};
+
+int g = increment();
+
+bool t = NOT (x >= 0 AND x >= 2);

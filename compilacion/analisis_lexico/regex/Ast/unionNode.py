@@ -9,7 +9,7 @@ class UnionNode(AstNode):
     
     def evaluate(self):
         init_state = State(AnyItem())
-        # final_state = State(AnyItem(), True)
+        # final_state = State(AnyItem())
 
         l_inits, l_finals = self.left
         r_inits, r_finals = self.right

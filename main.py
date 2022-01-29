@@ -6,12 +6,11 @@ from classes.jugador import Jugador
 from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
-from compilacion.grammars.grammar import Grammar
 from compilacion.parsing.lrparser import LRParser
 from compilacion.analisis_lexico.lexer import Lexer
 from compilacion.analisis_lexico.regex.regex import regex
 from compilacion.analisis_lexico.regex.regex_grammar import regex_grammar
-from ejemplos import productions, S, terminales, no_terminales
+from compilacion.parsing.syntax_grammar import G
 from config import Config
 
 
@@ -27,21 +26,28 @@ def read_script(name):
     return line
 
 def main():
-    # g = Grammar()
-    # g.productions = productions
-    # g.terminals = terminales
-    # g.noTerminals = no_terminales
-    # g.startNoTerminal = S
-    # lr_p = LRParser(g)
-    # g.startNoTerminal = E
-    # firsts = calculate_firsts(G)
-    # follows = calculate_follows(g)
+    errors = []
+    print("Input file:")
+    file_name = input()
+    code = read_script(file_name)
     
-    lr_parser = LRParser(regex_grammar)
-    lexer = Lexer(regex, lr_parser)
-    lexer.tokenize("sum1 = 99")
-    lexer.tokenize("player p1 = (name='Messi')")
+    lexer_parser = LRParser(regex_grammar)
+    lexer = Lexer(regex, lexer_parser)
+
+    # Analizador Lexico
+    tokens_temp = lexer.tokenize(code, errors)
+    tokens = [token for token in tokens_temp if token.tokenType != 'space']
+    
+    # Analizador Sintactico
+    parser = LRParser(G)
+    tree = parser.parser(tokens, errors)
     print("")
+
+
+    # tokens = lexer.tokenize("p[-1]", errors)
+    # t2 = lexer.tokenize('player p1 = (name="Messi")', errors)
+    # t3 = lexer.tokenize("prob1 = 99.09", errors)
+    # t4 = lexer.tokenize('player p1 = (name="Messi") # compilacion', errors)
     
     # tokens = [Token('9', 'Number', 0, 0), Token('=', '=', 0, 1), Token('5', 'Number', 0, 2), Token('+', '+', 0, 2), Token('4', 'Number', 0, 3)]
     # logger = []
@@ -49,7 +55,7 @@ def main():
     print("")
 
     # file_name = 'file0.txt'#input()
-    # code = read_script(file_name).splitlines()
+    
     # compiler = Compiling()
     # for token in compiler.Lexical.tokenize(code):
     #     print(token)

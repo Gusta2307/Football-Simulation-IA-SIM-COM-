@@ -56,7 +56,7 @@ class ComplexState:
 
     def get_transition(self, symbol):
         for sym in self.transitions:
-            if sym.name == str(symbol):
+            if str(sym) == str(symbol):   # sym.name
                 return self.transitions[sym]
         return None
 

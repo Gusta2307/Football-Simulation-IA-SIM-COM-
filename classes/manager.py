@@ -8,7 +8,7 @@ from compilacion.analisis_semantico.Ast.instructions.variables.declaration impor
 from config import Config
 config = Config()
 
-class Manager(Agente, Declaration):
+class Manager(Agente):
     def __init__(self, nombre, pais, experiencia, edad) -> None:
         self.nombre = nombre
         self.pais = pais

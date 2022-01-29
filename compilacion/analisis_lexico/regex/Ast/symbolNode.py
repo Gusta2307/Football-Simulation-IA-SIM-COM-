@@ -9,6 +9,6 @@ class SymbolNode(AstNode):
     
     def evaluate(self):
         init_state = State(AnyItem())
-        final_state = State(AnyItem(), True)
+        final_state = State(AnyItem())
         init_state.add_transition(self.symbol, final_state)
         return [init_state], [final_state]

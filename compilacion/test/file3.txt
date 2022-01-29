@@ -1,8 +1,21 @@
-n<= 90
-p== get
-p<- get;
-player p1(name="Messi", posicion="DEL",equipo="Barcelona"); #messi es argentino
-team t1 (name="Barcelona", players=players);
-get_players<- filter t1.players by (_.age>20 and_.age<50 and _.posicion=="DEL")
-get <-100;
-p<-get;
+strategy st1
+{
+   variables
+   {
+      BALL_PASS = rangeint(0,5),
+      SHOT_ON_GOAL = rangeint(0,2, f(a)),
+      INTERCEPT_BALL = rangebool(),
+      DO_LACK = rangebool(f(b)),
+      RECEIVE_BALL = rangefloat(0.1, 0.4),
+      THROW_IN = rangefloat(0.3, 0.9),
+      CORNER_KICK = rangefloat(1.0, 2.2, f(c)),
+      CLEAR_BALL = rangechoice([1,2,3,4]),
+      COMMIT_FOUL = rangechoice([1,2,3,4], f(c))
+   };
+   
+   execute(stat_game)
+   {
+      int a = 1;
+      int c = a + 2;
+   };
+};

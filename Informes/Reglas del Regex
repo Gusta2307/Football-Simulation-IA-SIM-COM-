@@ -1,0 +1,39 @@
+S' -> S
+S -> A | S
+S -> A
+
+A -> B A
+A -> B
+
+B -> C*
+B -> C+
+B -> C?
+B -> C
+
+C -> (S)
+C -> (.S)
+C -> E
+
+E-> symbol
+E -> [F]
+E -> [I]
+
+F -> G F
+F -> G
+
+G-> symbol
+G -> symbol - symbol 
+G -> _ - symbol
+G -> symbol - _
+
+I -> (
+I -> )
+I -> [
+I -> ]
+I -> |
+I -> *
+I -> -
+I -> +
+I -> _
+I -> ?
+I -> .

@@ -9,5 +9,5 @@ class VariableNode(Instruction):
 
 
     def execute(self, scope: Scope):
-        if (scope.check_var(self.identifier)):
+        if scope.check_var(self.identifier):
             scope.defineVar[self.identifier] = self

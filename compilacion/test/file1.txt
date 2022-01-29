@@ -1,5 +1,22 @@
-c <- "Roberto"; # x = 100:
-team >hola <- 90;
-if(x>10 and x < 11):{}
-k <- "Cristian";# x = 100:
-filter players by (_.age>20);
+player players[p1, p2];
+int c = -2;
+
+for i in players:
+{ 
+   print(players[i]);
+};
+
+
+if b > 5:
+{ 
+   print(b);
+}
+else
+{
+  print(b + 5);
+};
+
+int b = len(players);
+int c = len(t.players);
+
+filter players by (_.age > 20);

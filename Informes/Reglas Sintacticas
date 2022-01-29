@@ -1,51 +1,109 @@
 Validacion de las Reglas Sintacticas
 
   <program> := <stat-list>
+  
 <stat-list> := <stat> ";"
-	     | <stat> ";" <stat-list>
-     <stat> :=  <def-var>
+             | <stat> ";" <stat-list>
+	     
+     <stat> := <def-var>
    	     | <assign-var>
-   	     | <const-var>
      	     | <for-cycle>
      	     | <if-cond>
      	     | <function-func>
      	     | <def-array>
-   <def-var>:= <type-def> id "("<arg-list>")"
-<assign-var>:= <type> ID "=" <expr>
-             | <type> ID "=" <expr-boolean>
- <for-cycle>:= "for" ID "in" ID ":" "{"<stat-list>"}"
-             | "for" ID "in" ID"."ID" ":" "{"<stat-list>"}"
+     	     | <print-var>
+     	     | <len-list>
+     	     | <filter-val>
+     	     | <return-val>
+     	     | <strategy>
+     	     
+   <def-var> := <type-def> id "("<arg-list>")"
+   
+<assign-var> := <type> ID "=" <expr>
+             |  <type> ID "=" <expr-boolean>
+             
+ <for-cycle> := "for" ID "in" ID ":" "{"<stat-list>"}"
+             |  "for" ID "in" ID "." ID" ":" "{"<stat-list>"}"
+             |  "for" ID "in" "_" "." ID" ":" "{"<stat-list>"}"
+             
    <if-cond>:= "if" <expr-boolean> ":" "{"<stat-list>"}"
              | "if" <expr-boolean> ":" "{"<stat-list>"}" "else" "{"<stat-list>"}"
+             | "if" <expr-boolean> ":" "{"<stat-list>"}" "else" "{"<stat-list>"}"
+             
 <function-func> := "function" <type> ID "("<arg-list>")" "{"<stat-list>"}"
+
   <def-array>:= <type> ID "["<ID-list>"]"
+  
+  <print-var>:= "print" <expr>
+              | "print" <expr-boolean>
+  
+   <len-list>:= "len" ID
+              | "len" ID "." ID
+              | "len" "_" "." ID
+              
+ <filter-val>:= "filter" ID "by" "("<expr-boolean>")"
+              | "filter" ID "." ID "by" "("<expr-boolean>")"
+              | "filter" "_" "." ID "by" "("<expr-boolean>")"
+              
+ <return-val>:= "return" <atom>
+ 
+  <strategy> := "strategy" ID "{"<stat-strategy>"}"
+ 
   <type-def>:= player
              | team
              | game
              | manager
              | referee
-  <arg-list>:= ID
-             | ID "=" <atom>
-             | ID "=" <atom> "," <arg-list>
+             
+   <arg-list> := <type> ID
+               | <type> ID, <arg-list>
+  
+  <attribute-list> := ID "=" <atom>
+                    | ID "=" <atom> "," <arg-list>
+      
    <ID-list>:= ID
              | ID "," <ID-list>
+             
       <type>:= <type-def>
              | int
              | str
              | bool
              | float
+             | range
+                          
+<stat-stategy> := <variables>
+                | <execute-func>
+
+   <variables> := "{" <actions-var> "}"
+<execute-func> := "execute" "(" ID ")" "{" "}"
+
+ <actions-var> := <labels-var> "=" <atom>
+                | <labels-var> "=" <atom> "," <actions-var>
+ 
+ <labels-var> := PASE
+               | HACER_FALTA
+               | AVANZAR_POS
+               | TIRO
+               | DESPEJE
+               | ATAJAR
+               | MANTENER_POS 
+        
       <expr>:= <term> + <expr>
              | <term> - <expr>
              | <term>
+             
       <term>:= <factor> * <term>
              | <factor> / <term>
              | <factor>
+             
     <factor>:= "("<expr>")"
-             | <atom-arithm>
+             | <atom>
+             
 <expr-boolean>:= <term-boolean> "OR" <expr-boolean>
                | <term-boolean> "AND" <expr-boolean>
                | "NOT" <expr-boolean>
                | <term-boolean>
+               
 <term-boolean>:= <fact-boolean> ">" <term-boolean>
                | <fact-boolean> ">=" <term-boolean>
                | <fact-boolean> "<" <term-boolean>
@@ -53,18 +111,41 @@ Validacion de las Reglas Sintacticas
                | <fact-boolean> "==" <term-boolean>
                | <fact-boolean> "!=" <term-boolean>
                | <fact-boolean>
+               
  <fact-boolean>:= "("<expr-boolean>")"
-		| <atom-arithm>
- <atom-arithm>:= ID
-               | NUMBER
+		| <atom>
+
+        <atom>:= ID
+               | STRING
+               | <bool-type>
+               | <int-num>
+               | <float-num>
                | <func-call>
                | <array-index>
-      <atom>:= <atom-arithm>
-             | Text
+               | <range-type>
+               
+   <bool-type> := TRUE
+                | FALSE  
+                     
+      <int-num> := NUMBER
+      
+    <float-num> := <int-num>
+                 | <int-num> "." <int-num>
+    
+   <range-type>:= "range" "." "rangeint" "(" <int-num> "," <int-num>  ")"
+                | "range" "." "rangefloat" "(" <float-num> "," <float-num>  ")"
+                | "range" "." "rangebool" "(" ")"
+                | "range" "." "rangechoice" "(" ")"
+   
  <func-call>:= ID "("")"
              | ID "("<expr-list>")"
-<array-index>:= ID "["NUMBER"]"
+             
+<array-index>:= ID "[<int-num>]"
+
  <expr-list>:= <expr>
              | <expr-boolean>
              | <expr> "," <expr-list>
              | <expr-boolean> "," <expr-list>
+             
+<atom-list> := <atom>
+             | <atom> , <atom-list>

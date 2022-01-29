@@ -16,7 +16,7 @@ from config import Config
 config = Config()
 
 
-class Jugador(Agente, Declaration):
+class Jugador(Agente):
     def __init__(self, nombre, pos, list_prob, list_act_prob):#  gol_p, atajar_p, pase_efectivo_p, pase_largo_p, pase_intercep_p, gol_partido, atajar_partido, no_falta, falta_leve, falta_amarilla, falta_roja, pos_array) -> None:
         self.nombre = nombre
         self.posicion = pos

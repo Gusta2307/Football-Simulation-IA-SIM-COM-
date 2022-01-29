@@ -6,7 +6,7 @@ from compilacion.analisis_semantico.Ast.instructions.variables.declaration impor
 from config import Config
 config = Config()
 
-class arbitro(Agente, Declaration):
+class arbitro(Agente):
     def __init__(self, nombre, experiencia, list_prob):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
         self.nombre = nombre
         self.experiencia = experiencia

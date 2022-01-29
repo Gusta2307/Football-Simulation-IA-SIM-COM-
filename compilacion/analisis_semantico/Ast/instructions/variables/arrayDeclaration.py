@@ -5,7 +5,7 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class ArrayDeclaration(VariableNode):
-    def __init__(self, identifier: str, var_type: str, items: List[Expression]) -> None:
+    def __init__(self, identifier: str, var_type: str, items) -> None:
         super().__init__(identifier)
         super().__init__(var_type)
         self.items = items

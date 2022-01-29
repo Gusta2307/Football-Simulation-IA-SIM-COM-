@@ -27,7 +27,7 @@ class LRParser:
         init_state = State(init_items)
         queue_state = [init_state] # cola de estados
         symbols_transitions = set()
-        symbols_transitions_list = []
+        # symbols_transitions_list = []
         # calculed_item_state = {}
         calculed_item_state = set()
 
@@ -40,7 +40,7 @@ class LRParser:
                 next_symbol = self.grammar_items.next_symbol(item)
                 if next_symbol is not None and not next_symbol in symbols_transitions:
                     symbols_transitions.add(next_symbol)
-                    symbols_transitions_list.append(next_symbol)
+                    # symbols_transitions_list.append(next_symbol)
 
                 if next_item is not None:
                     next_item_state = State(next_item)
@@ -83,6 +83,9 @@ class LRParser:
             curr_token = tokens[i].tokenType 
             afn.current_state = state_stack[-1]
 
+            if tokens[0].tokenType == 'strategy':
+                print("shift")
+
             for state in afn.current_state.states:
                 item = state.item
                 
@@ -104,8 +107,8 @@ class LRParser:
             
             if shift:
                 if len(reduce_prod) == 0:
-                    # if tokens[1].tokenType == '.' or (len(tokens)>11  and tokens[12].tokenType == '.'):
-                    #     print("")
+                    if tokens[0].tokenType == 'strategy':
+                        print("shift")
                     goto = afn.Goto(curr_token) # afn.q(t.type_token)
                     state_stack.append(goto) # state_stack.append(afn.active)
                     tree_stack.append(SyntaxTree(tokens[i])) # tree_stack.append(SyntaxTree(t))
@@ -118,6 +121,8 @@ class LRParser:
                     # if tokens[1].tokenType == '.' or (len(tokens)>11  and tokens[12].tokenType == '.'):
                     #     print("")
                     # (p_left, p_right)  = reduce_prod.pop() # tomo la production
+                    if tokens[0].tokenType == 'strategy':
+                        print("reduce")
                     r_production  = reduce_prod.pop() # tomo la production
                     root = SyntaxTree(r_production.left, r_production)
                     # root = SyntaxTree(r_production.left, Production(r_production.left, p_right))

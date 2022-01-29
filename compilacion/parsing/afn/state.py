@@ -58,4 +58,11 @@ class State:
 
 
 class AnyItem:
-    pass
+    def __init__(self) -> None:
+        self.tokenType = None
+    
+    def __str__(self) -> str:
+        return str(self.tokenType)
+    
+    def __repr__(self) -> str:
+        return str(self)
