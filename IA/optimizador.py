@@ -49,10 +49,6 @@ class Optimizador:
 
                 a.estrategia.variables = copy.deepcopy(mejor_conj_valores)
 
-           # mejores_variables.append((a, a.estrategia.variables))
-        
-        #return mejores_variables
-
     def _optimizar_agente(self, a):
         variables = dict()
         mejores_variables = dict()
