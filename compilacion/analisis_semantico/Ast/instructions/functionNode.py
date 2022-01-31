@@ -4,11 +4,10 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class FunctionNode(Instruction):
-    def __init__(self, identifier: str, return_type: str, args: List[str], arg_types: List[str],  body: List[Instruction]) -> None:
+    def __init__(self, identifier: str, return_type: str, args,  body: List[Instruction]) -> None:
         self.identifier = identifier
         self.return_type = return_type
         self.args = args
-        self.arg_types = arg_types
         self.body = body
         self.func_scope = None
     
@@ -16,7 +15,7 @@ class FunctionNode(Instruction):
         func_scope = Scope()
         
         for arg in self.args:
-            func_scope.define_variables(arg)
+            func_scope.define_variables(arg.identifier)
         
         self.func_scope = func_scope
 
@@ -24,7 +23,7 @@ class FunctionNode(Instruction):
             if not inst.checkSemantic(func_scope):
                 return False
                 
-        return scope.defineFun(self.identifier, self.args)
+        return scope.define_function(self.identifier, self.args)
 
     def evaluateFunction(self, values):
         for i in range(len(values)):            
@@ -39,5 +38,5 @@ class FunctionNode(Instruction):
 
 
     def execute(self, scope: Scope):
-        if (scope.check_fun(self.identifier)):
+        if (scope.check_fun((self.identifier, len(self.args)))):
             scope.defineFun[self.identifier] = self

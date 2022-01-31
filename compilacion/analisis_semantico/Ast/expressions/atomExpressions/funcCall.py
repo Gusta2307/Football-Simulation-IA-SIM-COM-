@@ -7,7 +7,7 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class FuncCall(AtomExpression):
-    def __init__(self, identifier: str, args: List[Expression]) -> None:
+    def __init__(self, identifier: str, args=None) -> None:
         self.identifier = identifier
         self.args = args
 

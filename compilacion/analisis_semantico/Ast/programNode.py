@@ -10,24 +10,11 @@ class ProgramNode(AstNode):
         self.statement = statement
     
     def checkSemantic(self, scope: Scope) -> bool:
-        # logger = None
-        # collector = TypeCollector()
-        # collector.visit(self, logger)
-
-        # builder = TypeBuilder(collector.context)
-        # builder.visit(self, logger)
-
-        # checker = TypeChecker(builder.context)
-        # checker.visit(self, logger)
-
-        #si logger tiene errores, return False
-
         for inst in self.statement:
             if not inst.checkSemantic(scope):
                 return False
         return True
 
     def execute(self, scope: Scope):
-        if self.checkSemantic(scope):
-            for inst in self.statement:
-                inst.execute(scope)
+        for inst in self.statement:
+            inst.execute(scope)

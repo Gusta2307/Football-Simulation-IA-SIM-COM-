@@ -1,5 +1,6 @@
 player players[p1, p2];
 int c = -2;
+int d = 2*(1 + 2);
 
 for i in players:
 { 

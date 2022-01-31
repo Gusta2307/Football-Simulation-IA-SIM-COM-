@@ -1,12 +1,13 @@
 player p1 = (name="Messi", age=32, pos="DEL");
 int a = 2;
-int b = p1.age;
-int c = a + b;
+int b = -1;
+int c = a + b + 30;
 float prob = 0.1;
+print(prob);
 
 if c >= 30:
 {
-  float prob = 0.2;
+  float prob1 = 0.2;
 };
 
 function float aumentar(float prob, float value):
@@ -19,9 +20,8 @@ function float aumentar(float prob, float value):
   return 0;
 };
 
-float prob1 = aumentar(prob, 0.3);
-print(prob1);
+float result = aumentar(prob, 0.3);
+print(result);
 
-team t1 = TEAM.Barcelona;
 bool gol = true;
 str name = "Ronaldo";

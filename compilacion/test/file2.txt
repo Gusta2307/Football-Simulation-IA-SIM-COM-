@@ -1,3 +1,5 @@
+int b = p1.age;
+team t1 = TEAM.Barcelona;
 bool y = NOT x < 20;
 
 function int increment():

@@ -3,15 +3,46 @@ Definicion de la gramatica del lenguaje
 Gramatica G = < S, N, T, P >
 """
 
-from compilacion.analisis_semantico.Ast.expressions.atomExpressions.lenNode import LenNode
-from compilacion.analisis_semantico.Ast.expressions.atomExpressions.printNode import PrintNode
+from compilacion.analisis_semantico.Ast.attributeNode import AttributeNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.boolNode import BoolNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.funcCall import FuncCall
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.idNode import IdNode
+from compilacion.analisis_semantico.Ast.instructions.indexNode import IndexNode
+from compilacion.analisis_semantico.Ast.instructions.lenNode import LenNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.numberNode import FloatNode, IntNode
+from compilacion.analisis_semantico.Ast.instructions.printNode import PrintNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangebool import RangeBoolNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangechoice import RangeChoiceNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangefloat import RangeFloatNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangeint import RangeIntNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.strNode import StrNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.addNode import AddNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.andNode import AndNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.divNode import DivNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.equalsNode import EqualsNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.greaterNode import GreaterNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.greaterOrEqualsNode import GreaterOrEqualsNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.lessNode import LessNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.lessOrEqualsNode import LessOrEqualsNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.modNode import ModNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.mulNode import MultNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.notEqualsNode import NotEqualsNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.orNode import OrNode
+from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.subNode import SubNode
+from compilacion.analisis_semantico.Ast.expressions.operators.unaryOperators.negationNode import NegationNode
+from compilacion.analisis_semantico.Ast.expressions.operators.unaryOperators.notNode import NotNode
 from compilacion.analisis_semantico.Ast.instruction import Instruction
+from compilacion.analisis_semantico.Ast.instructions.executeNode import ExecuteNode
 from compilacion.analisis_semantico.Ast.instructions.filterNode import FilterNode
 from compilacion.analisis_semantico.Ast.instructions.forNode import ForNode
+from compilacion.analisis_semantico.Ast.instructions.functionNode import FunctionNode
+from compilacion.analisis_semantico.Ast.instructions.returnNode import ReturnNode
+from compilacion.analisis_semantico.Ast.instructions.variableNode import VariableNode
 from compilacion.analisis_semantico.Ast.instructions.variables.arrayDeclaration import ArrayDeclaration
 from compilacion.analisis_semantico.Ast.instructions.variables.assignNode import AssignNode
 from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 from compilacion.analisis_semantico.Ast.instructions.conditional import Conditional
+from compilacion.analisis_semantico.Ast.instructions.strategyNode import StrategyNode
 from compilacion.grammars.grammar import Grammar
 from compilacion.grammars.sentence import Sentence
 from compilacion.grammars.production import Production
@@ -118,7 +149,6 @@ returnVal = G.define_noTerminal('<return-val>')
 defStrategy = G.define_noTerminal('<def-strategy>')
 typeDef = G.define_noTerminal('<type-def>')
 argList = G.define_noTerminal('<arg-list>')
-idList = G.define_noTerminal('<id-list>')
 typeNoTerm = G.define_noTerminal('<type>')
 typeId = G.define_noTerminal('<type-id>')
 typeDef = G.define_noTerminal('<type-def>')
@@ -150,9 +180,6 @@ idAtom = G.define_noTerminal('<id-atom>')
 atomIndex = G.define_noTerminal('<atom-index>')
 statStragList = G.define_noTerminal('<stat-strategy-list>')
 labelsVarAtom = G.define_noTerminal('<labels-var-atom>')
-expressionList = G.define_noTerminal('<expression-list>')
-brackets = G.define_noTerminal('<brackets>')
-idBrackets = G.define_noTerminal('<id-brackets>')
 atomIndex = G.define_noTerminal('<atom-index>')
 rangeintparam = G.define_noTerminal('<rangeint-param>')
 rangefloatparam = G.define_noTerminal('<rangefloat-param>')
@@ -164,10 +191,10 @@ G.startNoTerminal = program
 
 # Producciones
 epsilon = G.epsilon
-G.add_production(Production(program, Sentence(statList), lambda x: ProgramNode(x[0])))    # <program> := <stat-list>
+G.add_production(Production(program, Sentence(statList), lambda x: ProgramNode(x[0]))) # <program> := <stat-list>
 
-G.add_production(Production(statList, Sentence(stat, statSep, statList), lambda x: x[0])) # <stat-list> := <stat> ; <stat-list>
-G.add_production(Production(statList, Sentence(stat, statSep), lambda x: x[0]))           # <stat-list> := <stat>;
+G.add_production(Production(statList, Sentence(stat, statSep, statList), lambda x: [x[0]] + x[2])) # <stat-list> := <stat> ; <stat-list>
+G.add_production(Production(statList, Sentence(stat, statSep), lambda x: [x[0]]))                  # <stat-list> := <stat> ;
 
 G.add_production(Production(stat, Sentence(assignVar), lambda x: x[0]))    # <stat> := <assign-var>
 G.add_production(Production(stat, Sentence(forCycle), lambda x: x[0]))     # <stat> := <for-cycle>
@@ -180,13 +207,8 @@ G.add_production(Production(stat, Sentence(filterVal), lambda x: x[0]))    # <st
 G.add_production(Production(stat, Sentence(returnVal), lambda x: x[0]))    # <stat> := <return-val>
 G.add_production(Production(stat, Sentence(defStrategy), lambda x: x[0]))  # <stat> := <strategy>
 
-G.add_production(Production(assignVar, Sentence(typeId, assign, declaration), lambda x: x[0])) # <assign-var> := <type-id> = <declaration>
-
-G.add_production(Production(declaration, Sentence(defVar), lambda x: x[0]))    # <declaration> := <def-var>
-G.add_production(Production(declaration, Sentence(assignDel), lambda x: x[0])) # <declaration> := <assign-del>
-
-G.add_production(Production(defVar, Sentence(openBracket, attrList, closeBracket), lambda x: Declaration(x[1], x[0], x[3]))) # <def-var> := (<attr-list>)
-G.add_production(Production(assignDel, Sentence(expr), lambda x: x[0]))                                                      # <assign-del> := <expr>
+G.add_production(Production(assignVar, Sentence(typeId, assign, openBracket, attrList, closeBracket), lambda x: Declaration(x[0].identifier, x[0].type, x[3]))) # <assign-var> := <type-id> = ( <attr-list> )
+G.add_production(Production(assignVar, Sentence(typeId, assign, expr), lambda x: AssignNode(x[0].identifier, x[0].type, x[2]))) # <assign-var> := <type-id> = <expr>
 
 G.add_production(Production(typeNoTerm, Sentence(player), lambda x: x[0]))     # <type> := player
 G.add_production(Production(typeNoTerm, Sentence(team), lambda x: x[0]))       # <type> := team
@@ -200,139 +222,114 @@ G.add_production(Production(typeNoTerm, Sentence(boolTerm), lambda x: x[0]))   #
 G.add_production(Production(typeNoTerm, Sentence(rangeTerm), lambda x: x[0]))  # <type> := range
 G.add_production(Production(typeNoTerm, Sentence(objectTerm), lambda x: x[0])) # <type> := object
 
-G.add_production(Production(typeId, Sentence(typeNoTerm, ID), lambda x: x[0]))                                                   # <type-id> := <type> id
-G.add_production(Production(idAtom, Sentence(ID, assign, atom), lambda x: x[0]))                                                 # <id-atom> := ID = <atom>
-G.add_production(Production(instList, Sentence(openCurlyB, statList, closeCurlyB), lambda x: ForNode(x[1], x[3], x[6])))         # <instruction-list> := {<stat-list>}
-G.add_production(Production(arguments, Sentence(openBracket, argList, closeBracket), lambda x: ForNode(x[1], x[3], x[6])))       # <arguments> := (<arg-list>)
-G.add_production(Production(arguments, Sentence(brackets), lambda x: ForNode(x[1], x[3], x[6])))                                 # <arguments> := <brackets>
-G.add_production(Production(expressionList, Sentence(openBracket, exprList, closeBracket), lambda x: ForNode(x[1], x[3], x[6]))) # <expression-list> := (<expr-list>)
-G.add_production(Production(brackets, Sentence(openBracket, closeBracket), lambda x: ForNode(x[1], x[3], x[6])))                 # <brackets> := ()
+G.add_production(Production(typeId, Sentence(typeNoTerm, ID), lambda x: VariableNode(x[1], x[0])))    # <type-id> := <type> id
+G.add_production(Production(idAtom, Sentence(ID, assign, atom), lambda x: AttributeNode(x[0], x[2]))) # <id-atom> := ID = <atom>
+G.add_production(Production(instList, Sentence(openCurlyB, statList, closeCurlyB), lambda x: x[1]))              # <instruction-list> := { <stat-list> }
+G.add_production(Production(arguments, Sentence(openBracket, argList, closeBracket), lambda x: x[1]))            # <arguments> := ( <arg-list> )
+G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lambda x: None))                     # <arguments> := ()
 
-G.add_production(Production(forCycle, Sentence(forTerm, ID, inTerm, atom, doblePoint, instList), lambda x: ForNode(x[1], x[3], x[6]))) # <for-cycle> := for ID in <atom> : <instruction-list>
+G.add_production(Production(forCycle, Sentence(forTerm, ID, inTerm, atom, doblePoint, instList), lambda x: ForNode(x[1], x[3], x[5]))) # <for-cycle> := for ID in <atom> : <instruction-list>
 
-G.add_production(Production(conditional, Sentence(ifTerm, expr, doblePoint, instList, elseTerm, instList), lambda x: Conditional(x[1], x[4], None, x[8]))) # <conditional> := if <expr> : <instruction-list> else <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, doblePoint, instList), lambda x: Conditional(x[1], x[4])))                                 # <conditional> := if <expr> : <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, doblePoint, instList, elseTerm, instList), lambda x: Conditional(x[1], x[3], None, x[5]))) # <conditional> := if <expr> : <instruction-list> else <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, doblePoint, instList), lambda x: Conditional(x[1], x[3])))                                 # <conditional> := if <expr> : <instruction-list>
 
-G.add_production(Production(functionFunc, Sentence(function, typeId, arguments, doblePoint, instList))) # <function-func> := function <type-id> <arguments> <instruction-list>
+G.add_production(Production(functionFunc, Sentence(function, typeId, arguments, doblePoint, instList), lambda x: FunctionNode(x[1].identifier, x[1].type, x[2], x[4]))) # <function-func> := function <type-id> <arguments> : <instruction-list>
 
-G.add_production(Production(defArray, Sentence(typeId, atom), lambda x: ArrayDeclaration(x[1], x[0], x[3]))) # <def-array> := <type-id> <atom>
+G.add_production(Production(defArray, Sentence(typeId, atom), lambda x: ArrayDeclaration(x[0].identifier, x[0].type, x[1]))) # <def-array> := <type-id> <atom>
 
-G.add_production(Production(printVar, Sentence(printTerm, expr), lambda x: PrintNode(x[1]))) # <print-var> := <expr>
+G.add_production(Production(printVar, Sentence(printTerm, openBracket, expr, closeBracket), lambda x: PrintNode(x[2]))) # <print-var> := print ( <expr> )
 
-G.add_production(Production(lenList, Sentence(lenTerm, openBracket, atom, closeBracket), lambda x: LenNode(x[1]))) # <len-list> := len (<atom>)
+G.add_production(Production(lenList, Sentence(lenTerm, openBracket, atom, closeBracket), lambda x: LenNode(x[2]))) # <len-list> := len ( <atom> )
 
-G.add_production(Production(filterVal, Sentence(filterTerm, atom, by, expr), lambda x: FilterNode(x[1], x[4]))) # <filter-val> := filter <atom> by <expr>
+G.add_production(Production(filterVal, Sentence(filterTerm, atom, by, expr), lambda x: FilterNode(x[1], x[3]))) # <filter-val> := filter <atom> by <expr>
 
 
-G.add_production(Production(returnVal, Sentence(returnTerm, expr))) # <return-val> := return <expr>
+G.add_production(Production(returnVal, Sentence(returnTerm, expr), lambda x: ReturnNode(x[1]))) # <return-val> := return <expr>
 
-G.add_production(Production(argList, Sentence(typeId, valueSep, argList), lambda x: x[0])) # <arg-list> := <type-id>, <arg-list>
-G.add_production(Production(argList, Sentence(typeId), lambda x: x[0]))                    # <arg-list> := <type-id>
+G.add_production(Production(argList, Sentence(typeId, valueSep, argList), lambda x: [x[0]] + x[2])) # <arg-list> := <type-id>, <arg-list>
+G.add_production(Production(argList, Sentence(typeId), lambda x: [x[0]]))                           # <arg-list> := <type-id>
 
-G.add_production(Production(attrList, Sentence(idAtom, valueSep, attrList), lambda x: x[0])) # <atrr-list> := <id-atom>, <attr-list>
-G.add_production(Production(attrList, Sentence(idAtom), lambda x: x[0]))                     # <attr-list> := <id-atom>
+G.add_production(Production(attrList, Sentence(idAtom, valueSep, attrList), lambda x: [x[0]] + x[2])) # <atrr-list> := <id-atom>, <attr-list>
+G.add_production(Production(attrList, Sentence(idAtom), lambda x: [x[0]]))                            # <attr-list> := <id-atom>
 
-G.add_production(Production(idList, Sentence(ID, valueSep, idList), lambda x: x[0])) # <ID-list> := ID , <ID-list>
-G.add_production(Production(idList, Sentence(ID), lambda x: x[0]))                   # <ID-list> := ID
+G.add_production(Production(expr, Sentence(term, plus, expr), lambda x: AddNode(x[0], x[2])))     # <expr> := <term> + <expr>
+G.add_production(Production(expr, Sentence(term, sub, expr), lambda x: SubNode(x[0], x[2])))      # <expr> := <term> - <expr>
+G.add_production(Production(expr, Sentence(term, andTerm , expr), lambda x: AndNode(x[0], x[2]))) # <expr> := <term> AND <expr>
+G.add_production(Production(expr, Sentence(term, orTerm, expr), lambda x: OrNode(x[0], x[2])))    # <expr> := <term> OR <expr>
+G.add_production(Production(expr, Sentence(notTerm, expr), lambda x: NotNode(x[1])))              # <expr> := NOT <expr> 
+G.add_production(Production(expr, Sentence(term), lambda x: x[0]))                                # <expr> := <term>
 
-G.add_production(Production(expr, Sentence(term, plus, expr)))     # <expr> := <term> + <expr>
-G.add_production(Production(expr, Sentence(term, sub, expr)))      # <expr> := <term> - <expr>
-G.add_production(Production(expr, Sentence(term, andTerm , expr))) # <expr> := <term> AND <expr>
-G.add_production(Production(expr, Sentence(term, orTerm, expr)))   # <expr> := <term> OR <expr>
-G.add_production(Production(expr, Sentence(notTerm, expr)))        # <expr> := NOT <expr> 
-G.add_production(Production(expr, Sentence(term)))                 # <expr> := <term>
+G.add_production(Production(term, Sentence(factor, mult, term), lambda x: MultNode(x[0], x[2])))               # <term> := <factor> * <term>
+G.add_production(Production(term, Sentence(factor, div, term), lambda x: DivNode(x[0], x[2])))                 # <term> := <factor> / <term>
+G.add_production(Production(term, Sentence(factor, mod, term), lambda x: ModNode(x[0], x[2])))                 # <term> := <factor> % <term>
+G.add_production(Production(term, Sentence(factor, great, term), lambda x: GreaterNode(x[0], x[2])))           # <term> := <factor> > <term>
+G.add_production(Production(term, Sentence(factor, greatEq, term), lambda x: GreaterOrEqualsNode(x[0], x[2]))) # <term> := <factor> >= <term>
+G.add_production(Production(term, Sentence(factor, less, term), lambda x: LessNode(x[0], x[2])))               # <term> := <factor> < <term>
+G.add_production(Production(term, Sentence(factor, lessEq, term), lambda x: LessOrEqualsNode(x[0], x[2])))     # <term> := <factor> <= <term>
+G.add_production(Production(term, Sentence(factor, equals, term), lambda x: EqualsNode(x[0], x[2])))           # <term> := <factor> == <term>
+G.add_production(Production(term, Sentence(factor, notEquals, term), lambda x: NotEqualsNode(x[0], x[2])))     # <term> := <factor> != <term>
+G.add_production(Production(term, Sentence(factor), lambda x: x[0]))                                           # <term> := <factor>
 
-G.add_production(Production(term, Sentence(factor, mult, term)))      # <term> := <factor> * <term>
-G.add_production(Production(term, Sentence(factor, div, term)))       # <term> := <factor> / <term>
-G.add_production(Production(term, Sentence(factor, mod, term)))       # <term> := <factor> % <term>
-G.add_production(Production(term, Sentence(factor, great, term)))     # <term> := <factor> > <term>
-G.add_production(Production(term, Sentence(factor, greatEq, term)))   # <term> := <factor> >= <term>
-G.add_production(Production(term, Sentence(factor, less, term)))      # <term> := <factor> < <term>
-G.add_production(Production(term, Sentence(factor, lessEq, term)))    # <term> := <factor> <= <term>
-G.add_production(Production(term, Sentence(factor, equals, term)))    # <term> := <factor> == <term>
-G.add_production(Production(term, Sentence(factor, notEquals, term))) # <term> := <factor> != <term>
-G.add_production(Production(term, Sentence(factor)))                  # <term> := <factor>
+G.add_production(Production(factor, Sentence(openBracket, expr, closeBracket), lambda x: x[1])) # <factor> := ( <expr> )
+G.add_production(Production(factor, Sentence(atom), lambda x: x[0]))                            # <factor> := <atom>
 
-G.add_production(Production(factor, Sentence(openBracket, expr, closeBracket))) # <factor> := (<expr>)
-G.add_production(Production(factor, Sentence(atom)))                            # <factor> := <atom>
-G.add_production(Production(factor, Sentence(sub, factor)))                     # <factor> := - <factor>
+G.add_production(Production(atom, Sentence(ID), lambda x: IdNode(x[0])))                                 # <atom> := ID
+G.add_production(Production(atom, Sentence(TEXT), lambda x: StrNode(x[0])))                              # <atom> := TEXT
+G.add_production(Production(atom, Sentence(boolType), lambda x: x[0]))                                   # <atom> := <bool-type>
+G.add_production(Production(atom, Sentence(numberType), lambda x: x[0]))                                 # <atom> := <number-type>
+G.add_production(Production(atom, Sentence(sub, numberType), lambda x: NegationNode(x[1])))              # <atom> := - <number-type>
+G.add_production(Production(atom, Sentence(funcCall), lambda x: x[0]))                                   # <atom> := <funcCall>
+G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                 # <atom> := <array-index>
+G.add_production(Production(atom, Sentence(rangeType), lambda x: x[0]))                                  # <atom> := <range-type>
+G.add_production(Production(atom, Sentence(ID, point, ID), lambda x:(IdNode(x[0]),  IdNode(x[2]))))      # <atom> := ID . ID
+G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))            # <atom> := TEAM . ID
+G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2]))))      # <atom> := _ . ID
+G.add_production(Production(atom, Sentence(openSquareB, atomList, closeSquareB), lambda x: x[1]))        # <atom> := [<atom-list>]
+G.add_production(Production(atom, Sentence(atomIndex), lambda x: x[0]))                                  # <atom> := <atom-index>
+G.add_production(Production(atom, Sentence(lenList), lambda x: x[0]))                                    # <atom> := <len-list>
 
-G.add_production(Production(atom, Sentence(ID)))                                  # <atom> := ID
-G.add_production(Production(atom, Sentence(TEXT)))                                # <atom> := TEXT
-G.add_production(Production(atom, Sentence(boolType)))                            # <atom> := <bool-type>
-G.add_production(Production(atom, Sentence(numberType)))                          # <atom> := <number-type>
-G.add_production(Production(atom, Sentence(funcCall)))                            # <atom> := <funcCall>
-G.add_production(Production(atom, Sentence(arrayIndex)))                          # <atom> := <array-index>
-G.add_production(Production(atom, Sentence(rangeType)))                           # <atom> := <range-type>
-G.add_production(Production(atom, Sentence(ID, point, ID)))                       # <atom> := ID . ID
-G.add_production(Production(atom, Sentence(TEAM, point, ID)))                     # <atom> := TEAM . ID
-G.add_production(Production(atom, Sentence(underscore, point, ID)))               # <atom> := _ . ID
-G.add_production(Production(atom, Sentence(openSquareB, atomList, closeSquareB))) # <atom> := [<atom-list>]
-G.add_production(Production(atom, Sentence(atomIndex)))                           # <atom> := <atom-index>
-G.add_production(Production(atom, Sentence(lenList)))                             # <atom> := <len-list>
+G.add_production(Production(atomList, Sentence(atom, valueSep, atomList), lambda x: [x[0]] + x[2])) # <atom-list> := <atom>, <atom-list>
+G.add_production(Production(atomList, Sentence(atom), lambda x: [x[0]]))                            # <atom-list> := <atom>
 
-G.add_production(Production(atomList, Sentence(atom, valueSep, atomList ))) # <atom-list> := <atom>, <atom-list>
-G.add_production(Production(atomList, Sentence(atom)))                      # <atom-list> := <atom>
+G.add_production(Production(boolType, Sentence(trueTerm), lambda x: BoolNode(x[0])))  # <bool-type> := True
+G.add_production(Production(boolType, Sentence(falseTerm), lambda x: BoolNode(x[0]))) # <bool-type> := False
 
-G.add_production(Production(boolType, Sentence(trueTerm)))  # <bool-type> := True
-G.add_production(Production(boolType, Sentence(falseTerm))) # <bool-type> := False
+G.add_production(Production(numberType, Sentence(intNum), lambda x: x[0]))   # <number>:= <int-num>
+G.add_production(Production(numberType, Sentence(floatNum), lambda x: x[0])) # <number>:= <float-num>
 
-G.add_production(Production(numberType, Sentence(intNum)))   # <number>:= <int-num>
-G.add_production(Production(numberType, Sentence(floatNum))) # <number>:= <float-num>
+G.add_production(Production(intNum, Sentence(NUM), lambda x: IntNode(int(x[0])))) # <int-num> := NUMBER
+G.add_production(Production(floatNum, Sentence(intNum, point, intNum), lambda x: FloatNode(float(str(x[0].value) + x[1] + str(x[2].value))))) # <float-num> := <int-num> . <int-num>
 
-G.add_production(Production(intNum, Sentence(NUM)))                     # <int-num> := NUMBER
-G.add_production(Production(floatNum, Sentence(intNum, point, intNum))) # <float-num> := <int-num> . <int-num>
+G.add_production(Production(funcCall, Sentence(ID, openBracket, closeBracket), lambda x: FuncCall(x[0])))  # <func-call> := ID ()
+G.add_production(Production(funcCall, Sentence(ID, openBracket, exprList,closeBracket), lambda x: FuncCall(x[0], x[2]))) # <func-call> := ID (<expr-list>)
 
-G.add_production(Production(funcCall, Sentence(ID, brackets)))                           # <func-call> := ID <brackets>
-G.add_production(Production(funcCall, Sentence(ID, openBracket, exprList,closeBracket))) # <func-call> := ID <expression-list>
+G.add_production(Production(arrayIndex, Sentence(ID, atomIndex), lambda x: IndexNode(x[0], x[1]))) # <array-index> := ID <atomIndex>
+G.add_production(Production(atomIndex, Sentence(openSquareB, atom, closeSquareB), lambda x: x[1])) # <atom-index> := [ <atom> ]
 
-G.add_production(Production(arrayIndex, Sentence(ID, atomIndex)))                  # <array-index> := ID <atomIndex>
-G.add_production(Production(atomIndex, Sentence(openSquareB, atom, closeSquareB))) # <atom-index> := [<atom>]
+G.add_production(Production(exprList, Sentence(expr, valueSep, exprList), lambda x: [x[0]] + x[2])) # <expr-list> := <expr> , <expr-list>
+G.add_production(Production(exprList, Sentence(expr), lambda x: [x[0]]))                            # <expr-list> := <expr>
 
-G.add_production(Production(exprList, Sentence(expr, valueSep, exprList))) # <expr-list> := <expr> , <expr-list>
-G.add_production(Production(exprList, Sentence(expr)))                     # <expr-list> := <expr>
+G.add_production(Production(defStrategy, Sentence(strategy, ID, strategies), lambda x: StrategyNode(x[1], x[2]))) # <def-strategy> := strategy ID <strategies>
+G.add_production(Production(strategies, Sentence(openCurlyB, statStragList, closeCurlyB), lambda x: x[1])) # <strategies> := { <stat-strategy-list> }
 
-G.add_production(Production(defStrategy, Sentence(strategy, ID, strategies))) # <def-strategy> := strategy ID <strategies>
-G.add_production(Production(strategies, Sentence(openCurlyB, statStragList, closeCurlyB)))  # <strategies> := { <stat-strategy-list> }
+G.add_production(Production(statStragList, Sentence(statStrag, statSep, statStragList), lambda x: [x[0]] + x[2])) # <stat-strategy-list> := <stat-strategy> ; <stat-strategy-list>
+G.add_production(Production(statStragList, Sentence(statStrag, statSep), lambda x: [x[0]]))                       # <stat-strategy-list> := <stat-strategy> ;
 
-G.add_production(Production(statStragList, Sentence(statStrag, statSep, statStragList))) # <stat-strategy-list> := <stat-strategy> ; <stat-strategy-list>
-G.add_production(Production(statStragList, Sentence(statStrag, statSep)))                         # <stat-strategy-list> := <stat-strategy> ;
+G.add_production(Production(statStrag, Sentence(variables), lambda x: x[0]))   # <stat-strategy> := <variables>
+G.add_production(Production(statStrag, Sentence(executeFunc), lambda x: x[0])) # <stat-strategy> := <execute-func>
 
-G.add_production(Production(statStrag, Sentence(variables)))   # <stat-strategy> := <variables>
-G.add_production(Production(statStrag, Sentence(executeFunc))) # <stat-strategy> := <execute-func>
+G.add_production(Production(variables, Sentence(variablesTerm, openCurlyB, attrList, closeCurlyB), lambda x: x[0])) # <variables> := variables { <attribute-list> }
+G.add_production(Production(executeFunc, Sentence(execute, openBracket, ID, closeBracket, instList), lambda x: ExecuteNode(x[2], x[4]))) # <execute-func> := execute (ID) <instruction-list>
 
-G.add_production(Production(variables, Sentence(variablesTerm, openCurlyB, attrList, closeCurlyB)))   # <variables> := variables { <attribute-list> }
-G.add_production(Production(executeFunc, Sentence(execute, openBracket, ID, closeBracket, instList))) # <execute-func> := execute (ID) <instruction-list>
+G.add_production(Production(rangeType, Sentence(rangeintTerm, rangeintparam), lambda x: x[1]))                                       # <range-type> := rangeint <rangeint-params>
+G.add_production(Production(rangeType, Sentence(rangefloatTerm, rangefloatparam), lambda x: x[1]))                                   # <range-type> := rangefloat <rangefloatparam>
+G.add_production(Production(rangeType, Sentence(rangechoiceTerm, rangechoiceparam), lambda x: x[1]))                                 # <range-type> := rangechoice <rangechoiceparam>
 
-# G.add_production(Production(actionsVar, Sentence(idAtom, valueSep, actionsVar))) # <actions-var> := <id-atom> , <actions-var>
-# G.add_production(Production(actionsVar, Sentence(labelsVarAtom)))                       # <actions-var> := <id-atom>
-
-# G.add_production(Production(actionsVar, Sentence(labelsVarAtom, valueSep, actionsVar))) # <actions-var> := <labels-var-atom>, <actions-var>
-# G.add_production(Production(actionsVar, Sentence(labelsVarAtom)))                       # <actions-var> := <labels-var-atom> 
-
-# G.add_production(Production(labelsVarAtom, Sentence(labelsVar, assign, atom))) # <labels-var-atom> := <labels-var> = <atom>
-
-# G.add_production(Production(labelsVar, Sentence(ballPass)))      # <labels-var> := BALL_PASS
-# G.add_production(Production(labelsVar, Sentence(shotOnGoal)))    # <labels-var> := SHOT_ON_GOAL
-# G.add_production(Production(labelsVar, Sentence(interceptBall))) # <labels-var> := INTERCEPT_BALL
-# G.add_production(Production(labelsVar, Sentence(doLack)))        # <labels-var> := DO_LACK
-# G.add_production(Production(labelsVar, Sentence(receiveBall)))   # <labels-var> := RECEIVE_BALL
-# G.add_production(Production(labelsVar, Sentence(throwIn)))       # <labels-var> := THROW_IN
-# G.add_production(Production(labelsVar, Sentence(cornerKick)))    # <labels-var> := CORNER_KICK
-# G.add_production(Production(labelsVar, Sentence(clearBall)))     # <labels-var> := CLEAR_BALL
-# G.add_production(Production(labelsVar, Sentence(commitFoul)))    # <labels-var> := COMMIT_FOUL
-
-G.add_production(Production(rangeType, Sentence(rangeintTerm, rangeintparam)))                        # <range-type> := rangeint <rangeint-params>
-G.add_production(Production(rangeType, Sentence(rangefloatTerm, rangefloatparam)))                    # <range-type> := rangefloat <rangefloatparam>
-G.add_production(Production(rangeType, Sentence(rangeboolTerm, brackets)))                            # <range-type> := rangebool <brackets>
-G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, funcCall, closeBracket))) # <range-type> := rangebool (<funcCall>)
-G.add_production(Production(rangeType, Sentence(rangechoiceTerm, rangechoiceparam)))                  # <range-type> := rangechoice <rangechoiceparam>
-
-G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, closeBracket)))                     # <rangeint-params> := (<int-num>, <int-num>)
-G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, valueSep, funcCall, closeBracket))) # <rangeint-params> := (<int-num>, <int-num>, <funcCall>)
-
-G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, closeBracket)))                     # <rangefloat-params> := (<float-num>, <float-num>)
-G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, valueSep, funcCall, closeBracket))) # <rangefloat-params> := (<float-num>, <float-num>, <funcCall>)
-
-G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, closeBracket)))                     # <rangechoice-params> := (<atom>)
-G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, valueSep, funcCall, closeBracket))) # <rangechoice-params> := (<atom>, <funcCall>)
+G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, closeBracket), lambda x: RangeBoolNode()))                                                           # <range-type> := rangebool ()
+G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, funcCall, closeBracket), lambda x: RangeBoolNode(x[1])))                                             # <range-type> := rangebool (<funcCall>)
+G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, closeBracket), lambda x: RangeIntNode(x[1], x[3])))                                   # <rangeint-params> := (<int-num>, <int-num>)
+G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, valueSep, funcCall, closeBracket), lambda x: RangeIntNode(x[1], x[3], x[5])))         # <rangeint-params> := (<int-num>, <int-num>, <funcCall>)
+G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, closeBracket), lambda x: RangeFloatNode(x[1], x[3])))                           # <rangefloat-params> := (<float-num>, <float-num>)
+G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, valueSep, funcCall, closeBracket), lambda x: RangeFloatNode(x[1], x[3], x[5]))) # <rangefloat-params> := (<float-num>, <float-num>, <funcCall>)
+G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, closeBracket), lambda x: RangeChoiceNode(x[1])))                                                       # <rangechoice-params> := (<atom>)
+G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, valueSep, funcCall, closeBracket), lambda x: RangeChoiceNode(x[1], x[3])))                             # <rangechoice-params> := (<atom>, <funcCall>)

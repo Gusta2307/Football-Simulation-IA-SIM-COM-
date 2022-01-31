@@ -7,7 +7,8 @@ class VariableNode(Instruction):
         self.identifier = identifier
         self.type = var_type
 
-
+    def checkSemantic(self, scope: Scope) -> bool:
+        return True
+    
     def execute(self, scope: Scope):
-        if scope.check_var(self.identifier):
-            scope.defineVar[self.identifier] = self
+        pass

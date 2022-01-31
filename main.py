@@ -6,6 +6,7 @@ from classes.jugador import Jugador
 from classes.manager import Manager
 from classes.partido import Partido
 from classes.portero import Portero
+from compilacion.analisis_semantico.scope import Scope
 from compilacion.parsing.lrparser import LRParser
 from compilacion.analisis_lexico.lexer import Lexer
 from compilacion.analisis_lexico.regex.regex import regex
@@ -41,8 +42,16 @@ def main():
     # Analizador Sintactico
     parser = LRParser(G)
     tree = parser.parser(tokens, errors)
-    print("")
+    astTree = tree.evaluate_attributes()
+    
+    # Analisis Semantico
+    scope = Scope()
+    check_ok = astTree.checkSemantic(scope)
+    # chequeo de tipos tambien
 
+    # Ejecucion
+    if check_ok:
+        astTree.execute(scope)
 
     # tokens = lexer.tokenize("p[-1]", errors)
     # t2 = lexer.tokenize('player p1 = (name="Messi")', errors)
