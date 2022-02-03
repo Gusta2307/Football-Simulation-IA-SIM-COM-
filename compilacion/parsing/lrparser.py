@@ -89,7 +89,7 @@ class LRParser:
                 if next_symbol is not None and type(next_symbol) == Terminal:
                     if curr_token == next_symbol.name:
                         shift = True
-                           
+            print(curr_token)
             if len(reduce_prod) > 1:
                 errors.append("Error: conflict reduce-reduce")
                 break

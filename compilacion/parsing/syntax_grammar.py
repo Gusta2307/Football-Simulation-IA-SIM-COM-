@@ -126,6 +126,7 @@ intTerm = G.define_terminal('int')
 strTerm = G.define_terminal('str')
 boolTerm = G.define_terminal('bool')
 floatTerm = G.define_terminal('float')
+voidTerm = G.define_terminal('void')
 trueTerm = G.define_terminal('true')
 falseTerm = G.define_terminal('false')
 objectTerm = G.define_terminal('object')
@@ -215,6 +216,7 @@ G.add_production(Production(stat, Sentence(returnVal), lambda x: x[0]))      # <
 G.add_production(Production(stat, Sentence(defStrategy), lambda x: x[0]))    # <stat> := <strategy>
 G.add_production(Production(stat, Sentence(breakNoTerm), lambda x: x[0]))    # <stat> := <break>
 G.add_production(Production(stat, Sentence(continueNoTerm), lambda x: x[0])) # <stat> := <continue>
+G.add_production(Production(stat, Sentence(funcCall), lambda x: x[0]))       # <stat> := <funcCall>
 
 G.add_production(Production(breakNoTerm, Sentence(breakTerm), lambda x: BreakNode()))          # <break> := break
 G.add_production(Production(continueNoTerm, Sentence(continueTerm), lambda x: ContinueNode())) # <continue> := continue
@@ -233,12 +235,13 @@ G.add_production(Production(typeNoTerm, Sentence(floatTerm), lambda x: x[0]))  #
 G.add_production(Production(typeNoTerm, Sentence(boolTerm), lambda x: x[0]))   # <type> := bool
 G.add_production(Production(typeNoTerm, Sentence(rangeTerm), lambda x: x[0]))  # <type> := range
 G.add_production(Production(typeNoTerm, Sentence(objectTerm), lambda x: x[0])) # <type> := object
+G.add_production(Production(typeNoTerm, Sentence(voidTerm), lambda x: x[0]))   # <type> := void
 
 G.add_production(Production(typeId, Sentence(typeNoTerm, ID), lambda x: VariableNode(x[1], x[0])))    # <type-id> := <type> id
 G.add_production(Production(idAtom, Sentence(ID, assign, atom), lambda x: AttributeNode(x[0], x[2]))) # <id-atom> := ID = <atom>
 G.add_production(Production(instList, Sentence(openCurlyB, statList, closeCurlyB), lambda x: x[1]))   # <instruction-list> := { <stat-list> }
 G.add_production(Production(arguments, Sentence(openBracket, argList, closeBracket), lambda x: x[1])) # <arguments> := ( <arg-list> )
-G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lambda x: None))          # <arguments> := ()
+G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lambda x: []))            # <arguments> := ()
 
 G.add_production(Production(forCycle, Sentence(forTerm, ID, inTerm, atom, doblePoint, instList), lambda x: ForNode(x[1], x[3], x[5]))) # <for-cycle> := for ID in <atom> : <instruction-list>
 
@@ -257,6 +260,7 @@ G.add_production(Production(filterVal, Sentence(filterTerm, atom, by, expr), lam
 
 
 G.add_production(Production(returnVal, Sentence(returnTerm, expr), lambda x: ReturnNode(x[1]))) # <return-val> := return <expr>
+G.add_production(Production(returnVal, Sentence(returnTerm), lambda x: ReturnNode()))           # <return-val> := return
 
 G.add_production(Production(argList, Sentence(typeId, valueSep, argList), lambda x: [x[0]] + x[2])) # <arg-list> := <type-id>, <arg-list>
 G.add_production(Production(argList, Sentence(typeId), lambda x: [x[0]]))                           # <arg-list> := <type-id>
@@ -285,20 +289,20 @@ G.add_production(Production(term, Sentence(factor), lambda x: x[0]))            
 G.add_production(Production(factor, Sentence(openBracket, expr, closeBracket), lambda x: x[1])) # <factor> := ( <expr> )
 G.add_production(Production(factor, Sentence(atom), lambda x: x[0]))                            # <factor> := <atom>
 
-G.add_production(Production(atom, Sentence(ID), lambda x: IdNode(x[0])))                                 # <atom> := ID
-G.add_production(Production(atom, Sentence(TEXT), lambda x: StrNode(x[0])))                              # <atom> := TEXT
-G.add_production(Production(atom, Sentence(boolType), lambda x: x[0]))                                   # <atom> := <bool-type>
-G.add_production(Production(atom, Sentence(numberType), lambda x: x[0]))                                 # <atom> := <number-type>
-G.add_production(Production(atom, Sentence(sub, numberType), lambda x: NegationNode(x[1])))              # <atom> := - <number-type>
-G.add_production(Production(atom, Sentence(funcCall), lambda x: x[0]))                                   # <atom> := <funcCall>
-G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                 # <atom> := <array-index>
-G.add_production(Production(atom, Sentence(rangeType), lambda x: x[0]))                                  # <atom> := <range-type>
-G.add_production(Production(atom, Sentence(ID, point, ID), lambda x:(IdNode(x[0]),  IdNode(x[2]))))      # <atom> := ID . ID
-G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))            # <atom> := TEAM . ID
-G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2]))))      # <atom> := _ . ID
-G.add_production(Production(atom, Sentence(openSquareB, atomList, closeSquareB), lambda x: x[1]))        # <atom> := [<atom-list>]
-G.add_production(Production(atom, Sentence(atomIndex), lambda x: x[0]))                                  # <atom> := <atom-index>
-G.add_production(Production(atom, Sentence(lenList), lambda x: x[0]))                                    # <atom> := <len-list>
+G.add_production(Production(atom, Sentence(ID), lambda x: IdNode(x[0])))                            # <atom> := ID
+G.add_production(Production(atom, Sentence(TEXT), lambda x: StrNode(x[0])))                         # <atom> := TEXT
+G.add_production(Production(atom, Sentence(boolType), lambda x: x[0]))                              # <atom> := <bool-type>
+G.add_production(Production(atom, Sentence(numberType), lambda x: x[0]))                            # <atom> := <number-type>
+G.add_production(Production(atom, Sentence(sub, numberType), lambda x: NegationNode(x[1])))         # <atom> := - <number-type>
+G.add_production(Production(atom, Sentence(funcCall), lambda x: x[0]))                              # <atom> := <funcCall>
+G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                            # <atom> := <array-index>
+G.add_production(Production(atom, Sentence(rangeType), lambda x: x[0]))                             # <atom> := <range-type>
+G.add_production(Production(atom, Sentence(ID, point, ID), lambda x:(IdNode(x[0]),  IdNode(x[2])))) # <atom> := ID . ID
+G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))       # <atom> := TEAM . ID
+G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2])))) # <atom> := _ . ID
+G.add_production(Production(atom, Sentence(openSquareB, atomList, closeSquareB), lambda x: x[1]))   # <atom> := [<atom-list>]
+G.add_production(Production(atom, Sentence(atomIndex), lambda x: x[0]))                             # <atom> := <atom-index>
+G.add_production(Production(atom, Sentence(lenList), lambda x: x[0]))                               # <atom> := <len-list>
 
 G.add_production(Production(atomList, Sentence(atom, valueSep, atomList), lambda x: [x[0]] + x[2])) # <atom-list> := <atom>, <atom-list>
 G.add_production(Production(atomList, Sentence(atom), lambda x: [x[0]]))                            # <atom-list> := <atom>

@@ -1,4 +1,3 @@
-from os import stat
 from compilacion.parsing.afn.afn import Afn
 from compilacion.analisis_lexico.token import *
 from compilacion.parsing.afn.state import AnyItem, State

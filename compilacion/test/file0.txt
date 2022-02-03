@@ -1,3 +1,8 @@
+function float write_console():
+{
+   print("Probando, probando,...");
+};
+
 player p1 = (name="Messi", age=32, pos="DEL");
 int a = 2;
 int b = -1;
@@ -20,6 +25,7 @@ function float aumentar(float prob, float value):
   return 0;
 };
 
+write_console();
 float result = aumentar(prob, 0.3);
 print(result);
 

@@ -1,5 +1,3 @@
-from numpy import take
-from compilacion.grammars.epsilon import Epsilon
 from compilacion.grammars.grammar import Grammar
 from compilacion.grammars.noTerminal import NoTerminal
 from compilacion.grammars.sentence import Sentence

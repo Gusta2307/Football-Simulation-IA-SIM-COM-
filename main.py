@@ -38,10 +38,18 @@ def main():
     # Analizador Lexico
     tokens_temp = lexer.tokenize(code, errors)
     tokens = [token for token in tokens_temp if token.tokenType != 'space']
-    
+    # for t in tokens:
+        # print(t.text)
+        
     # Analizador Sintactico
     parser = LRParser(G)
+    print("Voy para el parse")
     tree = parser.parser(tokens, errors)
+    
+    if len(errors) > 0:
+        print(errors)
+        return
+
     astTree = tree.evaluate_attributes()
     
     # Analisis Semantico

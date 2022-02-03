@@ -12,10 +12,12 @@ class FuncCall(AtomExpression):
         self.args = args
 
     def checkSemantic(self, scope: Scope) -> bool:
-        for expr in self.args:
-            if not expr.checkSemantic(scope):
-                return False
-        return scope.check_fun(self.identifier, len(self.args))
+        if self.args is not None:
+            for expr in self.args:
+                if not expr.checkSemantic(scope):
+                    return False
+            return scope.check_fun(self.identifier, len(self.args))
+        return True
     
     def evaluate(self, scope: Scope):
         if scope.check_fun(self.identifier, len(self.args)):

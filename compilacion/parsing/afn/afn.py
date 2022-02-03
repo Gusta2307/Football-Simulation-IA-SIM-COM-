@@ -132,8 +132,11 @@ class Afn:
                 # if sym == 'G':
                 #     print("GGG")
                 # if not n in calculed_state:
-                if not calculed_state.__contains__(hash(n)):
+                # if not calculed_state.__contains__(hash(n)):
+                try:
                     # calculed_state.add(n)
+                    calculed_state[hash(n)]
+                except:
                     calculed_state[hash(n)] = n
                     list_complex.append(n)
     
