@@ -7,6 +7,7 @@ class Afn:
         self.states = {}      
         self.init_state = None
         self.states_dict = dict()
+        self.dict_complex_states = dict()
         self.complex_states = set()
         self.broken = False
 
@@ -19,20 +20,37 @@ class Afn:
 
     def add_complexState(self, states, init_state=False): # añade un estado compuesto al automata
         if init_state:
-            new_state_complex = ComplexState(states, self)
-            self.complex_states.add(new_state_complex)
-            return new_state_complex
-        else:
-            # complex_st = filter(lambda x: x.states <= states and states <= x.states, self.complex_states)
-            # if complex_st != []:
-            #     return complex_st
-            for complex_st in self.complex_states:
-                if complex_st.states <= states and states <= complex_st.states:
-                    return complex_st
-            
             new_complex_st = ComplexState(states, self)
             self.complex_states.add(new_complex_st)
-            return new_complex_st 
+            self.dict_complex_states[hash(new_complex_st)] = new_complex_st
+            return new_complex_st
+        else:
+            new_complex_st = ComplexState(states, self)
+            st_hash = hash(new_complex_st)
+
+            try:
+                return self.dict_complex_states[st_hash]
+            except:
+                self.dict_complex_states[st_hash] = new_complex_st
+                return new_complex_st
+                
+            # if st_hash in self.dict_complex_states.keys():
+            #     return self.dict_complex_states[st_hash]
+            
+            # self.dict_complex_states[st_hash] = new_complex_st
+            # return new_complex_st 
+
+
+        # if not self.dict_complex_states.__contains__(hash(new_complex_st)):
+        #     self.dict_complex_states[hash(new_complex_st)] = new_complex_st
+        # return self.dict_complex_states[hash(new_complex_st)]
+
+        # for complex_st in self.complex_states:
+        #     if complex_st.states <= states and states <= complex_st.states:
+        #         return complex_st
+        
+        # new_complex_st = ComplexState(states, self)
+        # self.complex_states.add(new_complex_st)
 
         # pass
         # tuple_states = tuple(states)
@@ -95,20 +113,28 @@ class Afn:
     def build_afd(self, init_state): # construir el AFD dado el AFN
         self.createInitComplexState(init_state)
         list_complex = list(self.complex_states) # calcular todas las transiciones
-        calculed_state = set()
+        # calculed_state = set()
+        calculed_state = dict()
 
         while len(list_complex) > 0:
             st = list_complex.pop()
             trans_symbols = set()
             
+            # if len(st.states) == 36 or len(st.states) == 12:
+            #     print("...")
+
             for state in st.states: # tomar todos los simbolos desde donde hay transiciones
                 for symbol in state.transitions:
                     trans_symbols.add(symbol)
             
             for sym in trans_symbols: # por cada uno de estos simbolos se obliga a calcular sus trancisiones
                 n = st.add_transition(sym)
-                if not n in calculed_state:
-                    calculed_state.add(n)
+                # if sym == 'G':
+                #     print("GGG")
+                # if not n in calculed_state:
+                if not calculed_state.__contains__(hash(n)):
+                    # calculed_state.add(n)
+                    calculed_state[hash(n)] = n
                     list_complex.append(n)
     
 

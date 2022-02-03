@@ -1,4 +1,4 @@
-
+import copy
 
 class State:
     def __init__(self, item, is_final_state=False) -> None:

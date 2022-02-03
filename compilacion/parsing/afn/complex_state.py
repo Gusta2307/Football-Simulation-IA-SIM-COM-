@@ -58,10 +58,14 @@ class ComplexState:
         return str(self)
 
     def __hash__(self):
-        h = ""
+        h = 0
         for x in self.states:
-            h += str(hash(x))
-        return hash(h)
+            h += hash(x)
+        return h
+        # h = ""
+        # for x in self.states:
+        #     h += str(hash(x))
+        # return hash(h)
     
     def __eq__(self, other):
         return self.states == other.states
