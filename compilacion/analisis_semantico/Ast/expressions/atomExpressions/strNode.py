@@ -10,3 +10,6 @@ class StrNode(Expression):
 
     def evaluate(self, scope: Scope):
         return self.text
+    
+    def __str__(self) -> str:
+        return str(self.text)

@@ -7,9 +7,11 @@ from compilacion.analisis_semantico.Ast.attributeNode import AttributeNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.boolNode import BoolNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.funcCall import FuncCall
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.idNode import IdNode
-from compilacion.analisis_semantico.Ast.instructions.indexNode import IndexNode
-from compilacion.analisis_semantico.Ast.instructions.lenNode import LenNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.indexNode import IndexNode
+from compilacion.analisis_semantico.Ast.expressions.atomExpressions.lenNode import LenNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.numberNode import FloatNode, IntNode
+from compilacion.analisis_semantico.Ast.instructions.breakNode import BreakNode
+from compilacion.analisis_semantico.Ast.instructions.continueNode import ContinueNode
 from compilacion.analisis_semantico.Ast.instructions.printNode import PrintNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangebool import RangeBoolNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangechoice import RangeChoiceNode
@@ -61,6 +63,7 @@ forTerm = G.define_terminal('for')
 inTerm = G.define_terminal('in')
 ifTerm = G.define_terminal('if')
 elseTerm = G.define_terminal('else')
+elifTerm = G.define_terminal('elif')
 filterTerm = G.define_terminal('filter')
 by = G.define_terminal('by')
 function = G.define_terminal('function')
@@ -126,6 +129,8 @@ floatTerm = G.define_terminal('float')
 trueTerm = G.define_terminal('true')
 falseTerm = G.define_terminal('false')
 objectTerm = G.define_terminal('object')
+breakTerm = G.define_terminal('break')
+continueTerm = G.define_terminal('continue')
 
 
 # No-terminales
@@ -185,6 +190,8 @@ rangeintparam = G.define_noTerminal('<rangeint-param>')
 rangefloatparam = G.define_noTerminal('<rangefloat-param>')
 rangeboolparam = G.define_noTerminal('<rangebool-param>')
 rangechoiceparam = G.define_noTerminal('<rangechoice-param>')
+breakNoTerm = G.define_noTerminal('<break>')
+continueNoTerm = G.define_noTerminal('<continue>')
 
 G.startNoTerminal = program
 
@@ -196,16 +203,21 @@ G.add_production(Production(program, Sentence(statList), lambda x: ProgramNode(x
 G.add_production(Production(statList, Sentence(stat, statSep, statList), lambda x: [x[0]] + x[2])) # <stat-list> := <stat> ; <stat-list>
 G.add_production(Production(statList, Sentence(stat, statSep), lambda x: [x[0]]))                  # <stat-list> := <stat> ;
 
-G.add_production(Production(stat, Sentence(assignVar), lambda x: x[0]))    # <stat> := <assign-var>
-G.add_production(Production(stat, Sentence(forCycle), lambda x: x[0]))     # <stat> := <for-cycle>
-G.add_production(Production(stat, Sentence(conditional), lambda x: x[0]))  # <stat> := <conditional>
-G.add_production(Production(stat, Sentence(functionFunc), lambda x: x[0])) # <stat> := <function-func>
-G.add_production(Production(stat, Sentence(defArray), lambda x: x[0]))     # <stat> := <def-array>
-G.add_production(Production(stat, Sentence(printVar), lambda x: x[0]))     # <stat> := <print-var>
-G.add_production(Production(stat, Sentence(lenList), lambda x: x[0]))      # <stat> := <len-list>
-G.add_production(Production(stat, Sentence(filterVal), lambda x: x[0]))    # <stat> := <filter-val>
-G.add_production(Production(stat, Sentence(returnVal), lambda x: x[0]))    # <stat> := <return-val>
-G.add_production(Production(stat, Sentence(defStrategy), lambda x: x[0]))  # <stat> := <strategy>
+G.add_production(Production(stat, Sentence(assignVar), lambda x: x[0]))      # <stat> := <assign-var>
+G.add_production(Production(stat, Sentence(forCycle), lambda x: x[0]))       # <stat> := <for-cycle>
+G.add_production(Production(stat, Sentence(conditional), lambda x: x[0]))    # <stat> := <conditional>
+G.add_production(Production(stat, Sentence(functionFunc), lambda x: x[0]))   # <stat> := <function-func>
+G.add_production(Production(stat, Sentence(defArray), lambda x: x[0]))       # <stat> := <def-array>
+G.add_production(Production(stat, Sentence(printVar), lambda x: x[0]))       # <stat> := <print-var>
+G.add_production(Production(stat, Sentence(lenList), lambda x: x[0]))        # <stat> := <len-list>
+G.add_production(Production(stat, Sentence(filterVal), lambda x: x[0]))      # <stat> := <filter-val>
+G.add_production(Production(stat, Sentence(returnVal), lambda x: x[0]))      # <stat> := <return-val>
+G.add_production(Production(stat, Sentence(defStrategy), lambda x: x[0]))    # <stat> := <strategy>
+G.add_production(Production(stat, Sentence(breakNoTerm), lambda x: x[0]))    # <stat> := <break>
+G.add_production(Production(stat, Sentence(continueNoTerm), lambda x: x[0])) # <stat> := <continue>
+
+G.add_production(Production(breakNoTerm, Sentence(breakTerm), lambda x: BreakNode()))          # <break> := break
+G.add_production(Production(continueNoTerm, Sentence(continueTerm), lambda x: ContinueNode())) # <continue> := continue
 
 G.add_production(Production(assignVar, Sentence(typeId, assign, openBracket, attrList, closeBracket), lambda x: Declaration(x[0].identifier, x[0].type, x[3]))) # <assign-var> := <type-id> = ( <attr-list> )
 G.add_production(Production(assignVar, Sentence(typeId, assign, expr), lambda x: AssignNode(x[0].identifier, x[0].type, x[2]))) # <assign-var> := <type-id> = <expr>
@@ -224,9 +236,9 @@ G.add_production(Production(typeNoTerm, Sentence(objectTerm), lambda x: x[0])) #
 
 G.add_production(Production(typeId, Sentence(typeNoTerm, ID), lambda x: VariableNode(x[1], x[0])))    # <type-id> := <type> id
 G.add_production(Production(idAtom, Sentence(ID, assign, atom), lambda x: AttributeNode(x[0], x[2]))) # <id-atom> := ID = <atom>
-G.add_production(Production(instList, Sentence(openCurlyB, statList, closeCurlyB), lambda x: x[1]))              # <instruction-list> := { <stat-list> }
-G.add_production(Production(arguments, Sentence(openBracket, argList, closeBracket), lambda x: x[1]))            # <arguments> := ( <arg-list> )
-G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lambda x: None))                     # <arguments> := ()
+G.add_production(Production(instList, Sentence(openCurlyB, statList, closeCurlyB), lambda x: x[1]))   # <instruction-list> := { <stat-list> }
+G.add_production(Production(arguments, Sentence(openBracket, argList, closeBracket), lambda x: x[1])) # <arguments> := ( <arg-list> )
+G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lambda x: None))          # <arguments> := ()
 
 G.add_production(Production(forCycle, Sentence(forTerm, ID, inTerm, atom, doblePoint, instList), lambda x: ForNode(x[1], x[3], x[5]))) # <for-cycle> := for ID in <atom> : <instruction-list>
 

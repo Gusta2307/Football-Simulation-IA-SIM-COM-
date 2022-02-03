@@ -13,3 +13,6 @@ class IdNode(AtomExpression):
         if scope.check_var(self.identifier):
             return scope.defineVar[self.identifier]
         return None
+    
+    def __str__(self) -> str:
+        return str(self.identifier)

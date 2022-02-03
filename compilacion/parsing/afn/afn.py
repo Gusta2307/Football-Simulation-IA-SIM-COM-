@@ -8,7 +8,6 @@ class Afn:
         self.init_state = None
         self.states_dict = dict()
         self.complex_states = set()
-        # self.dict_complex_state = dict()
         self.broken = False
 
     
@@ -24,14 +23,16 @@ class Afn:
             self.complex_states.add(new_state_complex)
             return new_state_complex
         else:
+            # complex_st = filter(lambda x: x.states <= states and states <= x.states, self.complex_states)
+            # if complex_st != []:
+            #     return complex_st
             for complex_st in self.complex_states:
                 if complex_st.states <= states and states <= complex_st.states:
                     return complex_st
             
             new_complex_st = ComplexState(states, self)
             self.complex_states.add(new_complex_st)
-            return new_complex_st
-        
+            return new_complex_st 
 
         # pass
         # tuple_states = tuple(states)
@@ -98,33 +99,17 @@ class Afn:
 
         while len(list_complex) > 0:
             st = list_complex.pop()
-           
-            # if len(st.states) == 36 or len(st.states)==12:
-            #     print("STATE 36, 12")
-            
             trans_symbols = set()
             
             for state in st.states: # tomar todos los simbolos desde donde hay transiciones
-                # print("__________________________________")
-                # print("STATE AFD:", state)
-                # print("TRANSIT:", state.transitions)
-                # print("_________________________________")
                 for symbol in state.transitions:
                     trans_symbols.add(symbol)
             
-            # print(" ")
             for sym in trans_symbols: # por cada uno de estos simbolos se obliga a calcular sus trancisiones
-                # print("------------------------SYMBOL:-------------------", sym)
-                # if str(sym) == 'G':
-                #     print("GGGG")
                 n = st.add_transition(sym)
-                # if not calculed_state.__contains__(str(n)):  
                 if not n in calculed_state:
-                    # self.complex_states.append(n)
-                    # calculed_state[str(n)] = n
                     calculed_state.add(n)
                     list_complex.append(n)
-                    
     
 
     def Goto(self, symbol): # dado el estado actual y el simbolo que viene, cambiar al estado correspondiente

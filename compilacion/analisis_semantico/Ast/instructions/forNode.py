@@ -6,20 +6,16 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class ForNode(Instruction):
-    def __init__(self, item: str, iterable:str, body: List[Instruction], list_items=None) -> None:
+    def __init__(self, item: str, iterable:str, body: List[Instruction]) -> None:
         self.item = item
         self.iter = iterable
-        self.list_items = list_items
         self.body = body
     
     def checkSemantic(self, scope: Scope) -> bool:
-        if not scope.check_var(self.iter):
+        if not scope.check_var(self.iter.identifier):
             return False
 
         if scope.define_variables(self.item):
-            for elem in self.lists_item:
-                if not elem.checkSemantic(scope):
-                    return False 
             for ins in self.body:
                 if not ins.checkSemantic(scope):
                     return False
@@ -28,8 +24,9 @@ class ForNode(Instruction):
 
     def execute(self, scope: Scope):
         if_break = 0
-        for items in self.list_items:
-            scope.defineVar[self.item] = items
+        iterable = scope.defineVar[self.iter.identifier]
+        for elem in iterable:
+            scope.defineVar[self.item] = elem.evaluate(scope)
             for item_body in self.body:
                 if type(item_body) == ContinueNode:
                     break

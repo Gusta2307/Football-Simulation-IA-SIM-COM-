@@ -19,10 +19,10 @@ class FuncCall(AtomExpression):
     
     def evaluate(self, scope: Scope):
         if scope.check_fun(self.identifier, len(self.args)):
-            function = scope.defineFun[(self.identifier, len(self.args))][1]
+            function = scope.defineFun[(self.identifier, len(self.args))]
             values = []
-            for expr in self.args:
-                value = expr.evaluate(function.func_scope)
+            for expr in self.args: # los argumentos se buscan en el scope de afuera
+                value = expr.evaluate(scope)
                 if value is None:
                     return None
                 else:
@@ -31,4 +31,4 @@ class FuncCall(AtomExpression):
                     else:
                         values.append(('id', value))
             return function.evaluateFunction(values)
-        return None        
+        return None

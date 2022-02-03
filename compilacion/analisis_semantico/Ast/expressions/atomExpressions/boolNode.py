@@ -11,3 +11,6 @@ class BoolNode(AtomExpression):
     
     def evaluate(self, scope: Scope):
         return self.value
+
+    def __str__(self) -> str:
+        return str(self.value)

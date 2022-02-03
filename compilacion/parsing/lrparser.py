@@ -27,20 +27,16 @@ class LRParser:
         init_state = State(init_items)
         queue_state = [init_state] # cola de estados
         symbols_transitions = set()
-        # symbols_transitions_list = []
-        # calculed_item_state = {}
         calculed_item_state = set()
 
         while len(queue_state) > 0:
             state = queue_state.pop(0)
-            # if not calculed_item_state.__contains__(str(state)):
             if not state in calculed_item_state:
                 item = state.item
                 next_item = self.grammar_items.next_item(item)
                 next_symbol = self.grammar_items.next_symbol(item)
                 if next_symbol is not None and not next_symbol in symbols_transitions:
                     symbols_transitions.add(next_symbol)
-                    # symbols_transitions_list.append(next_symbol)
 
                 if next_item is not None:
                     next_item_state = State(next_item)
@@ -58,7 +54,6 @@ class LRParser:
                     afn.add_epsilon_transition(state, eps_state)
                     queue_state.append(eps_state)
 
-                # calculed_item_state[str(state)] = state
                 calculed_item_state.add(state)
                 i += 1
 
@@ -67,7 +62,7 @@ class LRParser:
         return afn
 
 
-    def parser(self, tokens, logger, ast=False):
+    def parser(self, tokens, errors, ast=False):
         afn = self.afd
         grammar = self.grammar_items.G
         grammarItems = self.grammar_items
@@ -83,49 +78,35 @@ class LRParser:
             curr_token = tokens[i].tokenType 
             afn.current_state = state_stack[-1]
 
-            if tokens[0].tokenType == 'strategy':
-                print("shift")
-
             for state in afn.current_state.states:
                 item = state.item
                 
                 if len(item.sentence.symbols) == item.pos: # item de la forma X -> a., s
                     if item.lookahead_contains(curr_token):
-                        # reduce_prod.add((item.production.left, item.sentence))
                         reduce_prod.add(item.production)
                 
-                # item de la forma X -> a.cw, s
                 next_symbol = grammarItems.next_symbol(item)
                 if next_symbol is not None and type(next_symbol) == Terminal:
                     if curr_token == next_symbol.name:
                         shift = True
                            
-
             if len(reduce_prod) > 1:
-                logger.append("Error: conflicto reduce-reduce")
+                errors.append("Error: conflict reduce-reduce")
                 break
             
             if shift:
                 if len(reduce_prod) == 0:
-                    if tokens[0].tokenType == 'strategy':
-                        print("shift")
                     goto = afn.Goto(curr_token) # afn.q(t.type_token)
                     state_stack.append(goto) # state_stack.append(afn.active)
                     tree_stack.append(SyntaxTree(tokens[i])) # tree_stack.append(SyntaxTree(t))
                     i += 1
                 else:
-                    logger.append("Error: conflicto shift-reduce")
+                    errors.append("Error: conflict shift-reduce")
                     break
             else:
                 if len(reduce_prod) == 1:
-                    # if tokens[1].tokenType == '.' or (len(tokens)>11  and tokens[12].tokenType == '.'):
-                    #     print("")
-                    # (p_left, p_right)  = reduce_prod.pop() # tomo la production
-                    if tokens[0].tokenType == 'strategy':
-                        print("reduce")
                     r_production  = reduce_prod.pop() # tomo la production
                     root = SyntaxTree(r_production.left, r_production)
-                    # root = SyntaxTree(r_production.left, Production(r_production.left, p_right))
 
                     for _ in range(len(r_production.right[0].symbols)): # saco de la pila todos los elementos que estan en la parte derecha de la produccion
                         new_child = tree_stack.pop()
@@ -136,8 +117,6 @@ class LRParser:
                     root.childs.reverse()
 
                     if(ast):
-                        # if str(r_production.left) == 'S':
-                        #     print("III")
                         attributes = []
                         for item in root.childs:
                             try:
@@ -146,7 +125,6 @@ class LRParser:
                                 attributes.append(item)
                         root.ast = r_production.attribute(attributes).evaluate()
 
-                    # tree_stack.append(r_production.left)
                     tree_stack.append(root)
                     afn.current_state = state_stack[-1] # afn.active = state_stack[-1]
                     goto = afn.Goto(r_production.left) # afn.q(reduce_production.Left)
@@ -157,7 +135,9 @@ class LRParser:
                         if len(tree_stack) == 1 and tree_stack[0].value.name == grammar.startNoTerminal.name:
                             return tree_stack[0]
                         else:
-                            logger.append("Error:...")
+                            errors.append("Error: ")
+                            break
                     else:
-                        logger.append(f"Error: unexpected token {curr_token}")
+                        errors.append(f"Error: unexpected token")
+                        break
         return None

@@ -1,5 +1,6 @@
 from typing import List
 from compilacion.analisis_semantico.Ast.instruction import Instruction
+from compilacion.analisis_semantico.Ast.instructions.returnNode import ReturnNode
 from compilacion.analisis_semantico.scope import Scope
 
 
@@ -31,12 +32,17 @@ class FunctionNode(Instruction):
             if val_type == 'func':
                 self.func_scope.defineFunc[(self.args[i], len(self.args))] = value
             else:
-                self.func_scope.defineVar[self.args[i]] = value
+                self.func_scope.defineVar[self.args[i].identifier] = value
         
         for inst in self.body:
-            inst.execute(self.func_scope)
+            if type(inst) == ReturnNode:
+                value = inst.execute(self.func_scope)
+                return value
+            value = inst.execute(self.func_scope)
+            if value is not None:
+                return value
 
 
     def execute(self, scope: Scope):
-        if (scope.check_fun((self.identifier, len(self.args)))):
-            scope.defineFun[self.identifier] = self
+        if (scope.check_fun(self.identifier, len(self.args))):
+            scope.defineFun[(self.identifier, len(self.args))] = self

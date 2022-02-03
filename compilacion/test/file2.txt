@@ -11,3 +11,7 @@ function int increment():
 int g = increment();
 
 bool t = NOT (x >= 0 AND x >= 2);
+
+b = len(players);
+int c = len(t.players);
+filter players by (_.age > 20);

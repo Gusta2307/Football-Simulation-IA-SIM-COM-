@@ -12,6 +12,9 @@ class NumberNode(AtomExpression):
     def evaluate(self, scope: Scope):
         return self.value
 
+    def __str__(self) -> str:
+        return str(self.value)
+
 
 class IntNode(NumberNode):
     def __init__(self, value: int) -> None:

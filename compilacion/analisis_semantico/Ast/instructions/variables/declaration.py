@@ -19,4 +19,12 @@ class Declaration(VariableNode):
 
     def execute(self, scope: Scope):
         if scope.check_var(self.identifier):
-            scope.defineVar[self.identifier] = self.args
+            scope.defineVar[self.identifier] = self
+    
+    def __str__(self) -> str:
+        string = ""
+        for i in range(len(self.args)):
+            string += str(self.args[i])
+            if i != len(self.args) - 1:
+                string += ", "
+        return string

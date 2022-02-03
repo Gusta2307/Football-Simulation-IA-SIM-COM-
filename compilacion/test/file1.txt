@@ -1,12 +1,24 @@
+player p1 = (name="Messi");
+player p2 = (name="Neymar");
 player players[p1, p2];
-int c = -2;
+
+player p3 = players[-20];
+player p4 = players[30];
+
+int a = len(players);
+print(a);
+
+int c = 20;
 int d = 2*(1 + 2);
+
+int b = 7 - d;
+print(b);
 
 for i in players:
 { 
-   print(players[i]);
+   print(i);
+   break;
 };
-
 
 if b > 5:
 { 
@@ -16,8 +28,3 @@ else
 {
   print(b + 5);
 };
-
-int b = len(players);
-int c = len(t.players);
-
-filter players by (_.age > 20);

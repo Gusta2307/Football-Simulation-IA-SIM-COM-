@@ -1,6 +1,3 @@
-
-from typing import AbstractSet
-
 from compilacion.parsing.afn.state import State
 
 class ComplexState:
@@ -16,14 +13,6 @@ class ComplexState:
                 self.is_final_state = True
                 break
     
-
-    # def epsilonClausure(self, states) -> set:
-        # clausure = set()
-        # for state in states:
-        #     cl = state.epsilonClausure
-        #     clausure = clausure.union(cl)
-        # return clausure
-
     @staticmethod
     def epsilon_clausure_by_state(complex_state):
         epsilon_clausure = set()
