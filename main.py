@@ -1,4 +1,5 @@
 import os
+# import string
 from compilacion.analisis_semantico import *
 from classes.equipo import Equipo
 from classes.arbitro import Arbitro
@@ -55,6 +56,7 @@ def main():
     # Analisis Semantico
     scope = Scope()
     check_ok = astTree.checkSemantic(scope)
+    print("chequeo",check_ok)
     # chequeo de tipos tambien
 
     # Ejecucion
@@ -116,7 +118,6 @@ def main():
     # n = 20
     # while n:
     #     n -= 1
-
 
 if '__main__' == __name__:
     main()

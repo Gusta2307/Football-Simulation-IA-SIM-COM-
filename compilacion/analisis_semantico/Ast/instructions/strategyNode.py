@@ -1,5 +1,7 @@
 from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.scope import Scope
+from IA.estrategia import Estrategia
+from utiles import create_dict
 
 class StrategyNode(Instruction):
     def __init__(self, identifier, list_items) -> None:
@@ -15,5 +17,7 @@ class StrategyNode(Instruction):
         
         return scope.define_variables(self.identifier)
 
-    def execute(self, scope: Scope):
-        pass
+    def execute(self, scope: Scope): #list(lis(Attr1(BALL, ), Att), execute)
+        variables = create_dict(self.list_item[0])
+        estrategia = Estrategia(variables, self.list_item[1])
+        scope.defineVar[self.identifier] = estrategia

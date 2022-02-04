@@ -52,4 +52,19 @@ class Config_C:
             "jugadores": list
         }
 
-    
+    class RangeInt:
+        args = {
+            "li": int,
+            "ls": int,
+        }
+
+    class RangeFloat:
+        args = {
+            "li": float,
+            "ls": float,
+        }
+
+    class RangeChoice:
+        args = {
+            "valores": list
+        }

@@ -8,14 +8,14 @@ from config import Config
 config = Config()
 
 class Portero(Jugador):
-    def __init__(self, nombre, age, country, pos, list_prob, portero_prob, estrategia):
-        super().__init__(nombre, pos, age, country, list_prob, estrategia)
+    def __init__(self, name, age, country, pos, list_prob, goalkeeper_prob, strategy = None):
+        super().__init__(name, pos, age, country, list_prob, strategy)
         
-        self.atajar_balon = portero_prob[0]
-        self.sin_rebote = portero_prob[1]
-        self.rebote_banda = portero_prob[2]
-        self.rebote_linea_final = portero_prob[3]
-        self.rebote_jugador = portero_prob[4]
+        self.atajar_balon = goalkeeper_prob[0]
+        self.sin_rebote = goalkeeper_prob[1]
+        self.rebote_banda = goalkeeper_prob[2]
+        self.rebote_linea_final = goalkeeper_prob[3]
+        self.rebote_jugador = goalkeeper_prob[4]
         self.saque_porteria = list_prob[5]
 
         self.acciones.pop('SAQUE_BANDA')
@@ -23,7 +23,7 @@ class Portero(Jugador):
 
         self.acciones['ATAJAR'] = Atajar(self)
         self.acciones['SAQUE_PORTERIA'] = Saque_porteria(self)
-        self.estrategia = estrategia
+        self.estrategia = strategy
 
 
     def escoger_accion_estrategia(self, partido):

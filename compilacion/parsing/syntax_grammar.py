@@ -14,10 +14,6 @@ from compilacion.analisis_semantico.Ast.expressions.atomExpressions.numberNode i
 from compilacion.analisis_semantico.Ast.instructions.breakNode import BreakNode
 from compilacion.analisis_semantico.Ast.instructions.continueNode import ContinueNode
 from compilacion.analisis_semantico.Ast.instructions.printNode import PrintNode
-from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangebool import RangeBoolNode
-from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangechoice import RangeChoiceNode
-from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangefloat import RangeFloatNode
-from compilacion.analisis_semantico.Ast.expressions.atomExpressions.rangeint import RangeIntNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.strNode import StrNode
 from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.addNode import AddNode
 from compilacion.analisis_semantico.Ast.expressions.operators.binaryOperators.andNode import AndNode
@@ -181,6 +177,7 @@ arrayIndex = G.define_noTerminal('<array-index>')
 exprList = G.define_noTerminal('<expr-list>')
 atomList = G.define_noTerminal('<atom-list>')
 attrList = G.define_noTerminal('<attribute-list>')
+assignList = G.define_noTerminal('<assign-var-list>')
 instList = G.define_noTerminal('<instruction-list>')
 arguments = G.define_noTerminal('<arguments>')
 strategies = G.define_noTerminal('<strategies>')
@@ -224,6 +221,7 @@ G.add_production(Production(breakNoTerm, Sentence(breakTerm), lambda x: BreakNod
 G.add_production(Production(continueNoTerm, Sentence(continueTerm), lambda x: ContinueNode())) # <continue> := continue
 
 G.add_production(Production(assignVar, Sentence(typeId, assign, openBracket, attrList, closeBracket), lambda x: Declaration(x[0].identifier, x[0].type, x[3]))) # <assign-var> := <type-id> = ( <attr-list> )
+G.add_production(Production(assignVar, Sentence(typeId, assign, arguments), lambda x: Declaration(x[0].identifier, x[0].type, None)))           # <assign-var> := <type-id> = <arguments>
 G.add_production(Production(assignVar, Sentence(typeId, assign, expr), lambda x: AssignNode(x[0].identifier, x[0].type, x[2])))                                 # <assign-var> := <type-id> = <expr>
 
 G.add_production(Production(typeNoTerm, Sentence(player), lambda x: x[0]))          # <type> := player
@@ -305,7 +303,7 @@ G.add_production(Production(atom, Sentence(numberType), lambda x: x[0]))        
 G.add_production(Production(atom, Sentence(sub, numberType), lambda x: NegationNode(x[1])))                      # <atom> := - <number-type>
 G.add_production(Production(atom, Sentence(funcCall), lambda x: x[0]))                                           # <atom> := <funcCall>
 G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                         # <atom> := <array-index>
-G.add_production(Production(atom, Sentence(rangeType), lambda x: x[0]))                                          # <atom> := <range-type>
+# G.add_production(Production(atom, Sentence(rangeType), lambda x: x[0]))                                          # <atom> := <range-type>
 G.add_production(Production(atom, Sentence(ID, point, ID), lambda x:(IdNode(x[0]),  IdNode(x[2]))))              # <atom> := ID . ID
 G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))                    # <atom> := TEAM . ID
 G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2]))))              # <atom> := _ . ID
@@ -335,7 +333,7 @@ G.add_production(Production(exprList, Sentence(expr, valueSep, exprList), lambda
 G.add_production(Production(exprList, Sentence(expr), lambda x: [x[0]]))                            # <expr-list> := <expr>
 
 G.add_production(Production(defStrategy, Sentence(strategy, ID, strategies), lambda x: StrategyNode(x[1], x[2]))) # <def-strategy> := strategy ID <strategies>
-G.add_production(Production(strategies, Sentence(openCurlyB, statStragList, closeCurlyB), lambda x: x[1])) # <strategies> := { <stat-strategy-list> }
+G.add_production(Production(strategies, Sentence(openCurlyB, statStragList, closeCurlyB), lambda x: x[1]))        # <strategies> := { <stat-strategy-list> }
 
 G.add_production(Production(statStragList, Sentence(statStrag, statSep, statStragList), lambda x: [x[0]] + x[2])) # <stat-strategy-list> := <stat-strategy> ; <stat-strategy-list>
 G.add_production(Production(statStragList, Sentence(statStrag, statSep), lambda x: [x[0]]))                       # <stat-strategy-list> := <stat-strategy> ;
@@ -343,18 +341,22 @@ G.add_production(Production(statStragList, Sentence(statStrag, statSep), lambda 
 G.add_production(Production(statStrag, Sentence(variables), lambda x: x[0]))   # <stat-strategy> := <variables>
 G.add_production(Production(statStrag, Sentence(executeFunc), lambda x: x[0])) # <stat-strategy> := <execute-func>
 
-G.add_production(Production(variables, Sentence(variablesTerm, openCurlyB, attrList, closeCurlyB), lambda x: x[0])) # <variables> := variables { <attribute-list> }
-G.add_production(Production(executeFunc, Sentence(execute, openBracket, ID, closeBracket, instList), lambda x: ExecuteNode(x[2], x[4]))) # <execute-func> := execute (ID) <instruction-list>
+G.add_production(Production(assignList, Sentence(assignVar, valueSep, assignList), lambda x: [x[0]] + x[2])) # <assign-var-list> := <assign-var> , <assign-var-list>
+G.add_production(Production(assignList, Sentence(assignVar, valueSep), lambda x: [x[0]]))                    # <assign-var-list> := <assign-var> ,
 
-G.add_production(Production(rangeType, Sentence(rangeintTerm, rangeintparam), lambda x: x[1]))                                       # <range-type> := rangeint <rangeint-params>
-G.add_production(Production(rangeType, Sentence(rangefloatTerm, rangefloatparam), lambda x: x[1]))                                   # <range-type> := rangefloat <rangefloatparam>
-G.add_production(Production(rangeType, Sentence(rangechoiceTerm, rangechoiceparam), lambda x: x[1]))                                 # <range-type> := rangechoice <rangechoiceparam>
+G.add_production(Production(variables, Sentence(variablesTerm, openCurlyB, assignList, closeCurlyB), lambda x: x[2]))                    # <variables> := variables { <assign-var-list>  }
+G.add_production(Production(executeFunc, Sentence(execute, openBracket, ID, ID, closeBracket, instList), lambda x: ExecuteNode(x[2], x[6], x[4]))) # <execute-func> := execute (ID, ID) <instruction-list>
 
-G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, closeBracket), lambda x: RangeBoolNode()))                                                           # <range-type> := rangebool ()
-G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, funcCall, closeBracket), lambda x: RangeBoolNode(x[1])))                                             # <range-type> := rangebool (<funcCall>)
-G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, closeBracket), lambda x: RangeIntNode(x[1], x[3])))                                   # <rangeint-params> := (<int-num>, <int-num>)
-G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, valueSep, funcCall, closeBracket), lambda x: RangeIntNode(x[1], x[3], x[5])))         # <rangeint-params> := (<int-num>, <int-num>, <funcCall>)
-G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, closeBracket), lambda x: RangeFloatNode(x[1], x[3])))                           # <rangefloat-params> := (<float-num>, <float-num>)
-G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, valueSep, funcCall, closeBracket), lambda x: RangeFloatNode(x[1], x[3], x[5]))) # <rangefloat-params> := (<float-num>, <float-num>, <funcCall>)
-G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, closeBracket), lambda x: RangeChoiceNode(x[1])))                                                       # <rangechoice-params> := (<atom>)
-G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, valueSep, funcCall, closeBracket), lambda x: RangeChoiceNode(x[1], x[3])))                             # <rangechoice-params> := (<atom>, <funcCall>)
+
+# G.add_production(Production(rangeType, Sentence(rangeintTerm, rangeintparam), lambda x: x[1]))                                       # <range-type> := rangeint <rangeint-params>
+# G.add_production(Production(rangeType, Sentence(rangefloatTerm, rangefloatparam), lambda x: x[1]))                                   # <range-type> := rangefloat <rangefloatparam>
+# G.add_production(Production(rangeType, Sentence(rangechoiceTerm, rangechoiceparam), lambda x: x[1]))                                 # <range-type> := rangechoice <rangechoiceparam>
+
+# G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, closeBracket), lambda x: RangeBoolNode()))                                                           # <range-type> := rangebool ()
+# G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, funcCall, closeBracket), lambda x: RangeBoolNode(x[1])))                                             # <range-type> := rangebool (<funcCall>)
+# G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, closeBracket), lambda x: RangeIntNode(x[1], x[3])))                                   # <rangeint-params> := (<int-num>, <int-num>)
+# G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, valueSep, funcCall, closeBracket), lambda x: RangeIntNode(x[1], x[3], x[5])))         # <rangeint-params> := (<int-num>, <int-num>, <funcCall>)
+# G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, closeBracket), lambda x: RangeFloatNode(x[1], x[3])))                           # <rangefloat-params> := (<float-num>, <float-num>)
+# G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, valueSep, funcCall, closeBracket), lambda x: RangeFloatNode(x[1], x[3], x[5]))) # <rangefloat-params> := (<float-num>, <float-num>, <funcCall>)
+# G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, closeBracket), lambda x: RangeChoiceNode(x[1])))                                                       # <rangechoice-params> := (<atom>)
+# G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, valueSep, funcCall, closeBracket), lambda x: RangeChoiceNode(x[1], x[3])))                             # <rangechoice-params> := (<atom>, <funcCall>)

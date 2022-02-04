@@ -3,16 +3,16 @@
 
 
 class Equipo(): #(Declaration):
-    def __init__(self, nombre, country, manager, jugadores) -> None:
-        self.nombre = nombre
-        self.manager = manager
-        self.jugadores = jugadores
-        self.country = country
+    def __init__(self, name, country, coach, players) -> None:
+        self.nombre = name
+        self.manager = coach
+        self.jugadores = players
+        self.pais = country
 
         self._jugadores_en_campo = None
         self._jugadores_en_banca = None
 
-        for j in jugadores:
+        for j in self.jugadores:
             j.equipo = self
 
         self.manager.equipo = self

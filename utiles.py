@@ -1,9 +1,9 @@
 import random
 from config import Config
-from compilacion.comp_config import Config_C
+
 
 config = Config()
-config_C = Config_C()
+
 
 def filter(funct, iterable):
     result_f = []
@@ -83,7 +83,10 @@ def create_dict(args, scope):
     
     return dic
 
-def check_type(tipo, argumentos):
+def check_type(tipo, argumentos, scope):
+    from compilacion.comp_config import Config_C
+    config_C = Config_C()
+
     if tipo == "player":
         #nombre, pos, edad, list_prob, estrategia = None)
         if argumentos['name'].type == config_C.Player["name"].type and argumentos['country'].type == config_C.Player["country"].type and argumentos['pos'].type == config_C.Player["pos"] and argumentos['age'].type == config_C.Player['age'] and argumentos['list_prob'].type == config_C.Player['list_prob']:
@@ -120,4 +123,31 @@ def check_type(tipo, argumentos):
             else:
                 return len(argumentos.keys()) == 6
 
-            
+
+    elif tipo == "rangeint":
+        if argumentos['li'].type == config_C.Team["li"].type and argumentos['ls'].type == config_C.Team["ls"]:
+            if "distribution" in argumentos.keys() : 
+                return scope.check_function(argumentos["distribution"].value.identifier, 1) and len(argumentos.keys()) == 3
+            else:
+                return len(argumentos.keys()) == 2
+
+    elif tipo == "rangefloat":
+        if argumentos['li'].type == config_C.Team["li"].type and argumentos['ls'].type == config_C.Team["ls"]:
+            if "distribution" in argumentos.keys() : 
+                return scope.check_function(argumentos["distribution"].value.identifier, 1) and len(argumentos.keys()) == 3
+            else:
+                return len(argumentos.keys()) == 2
+
+    elif tipo == "rangechoice":
+        if argumentos['valores'].type == config_C.Team["valores"].type:
+            if "distribution" in argumentos.keys() :
+                return scope.check_function(argumentos["distribution"].value.identifier, 1) and len(argumentos.keys()) == 2
+            else:
+                return len(argumentos.keys()) == 1   
+
+    elif tipo == "rangebool":
+        if "distribution" in argumentos.keys() :
+                return scope.check_function(argumentos["distribution"].value.identifier, 1) and len(argumentos.keys()) == 1
+        else:
+            return len(argumentos.keys()) == 0
+

@@ -7,13 +7,13 @@ from config import Config
 config = Config()
 
 class Arbitro(Agente): #(Agente, Declaration):
-    def __init__(self, nombre, country, age, experiencia, list_prob, estrategia = None):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
-        self.nombre = nombre
-        self.experiencia = experiencia
-        self.country = country
-        self.age = age
+    def __init__(self, name, country, age, experence, list_prob, strategy = None):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
+        self.nombre = name
+        self.experiencia = experence
+        self.pais = country
+        self.edad = age
         
-        self.estrategia = estrategia
+        self.estrategia = strategy
         
         self.cantar_falta = list_prob[0]
         self.sacar_tarjeta = list_prob[1]

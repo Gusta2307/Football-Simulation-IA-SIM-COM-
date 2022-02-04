@@ -13,6 +13,9 @@ class Scope:
 
     def check_fun(self, identifier: str, count_args: int)-> bool:
         return self.defineFun.__contains__((identifier, count_args))
+    
+    def check_name_fun(self, identifier: str) -> bool:
+        return len(list(filter(lambda x : x[0] == identifier, self.defineFun.keys()))) > 0
 
 
     def define_variables(self, identifier: str) -> bool:

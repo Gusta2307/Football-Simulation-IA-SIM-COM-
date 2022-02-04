@@ -4,13 +4,23 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class ExecuteNode(Instruction):
-    def __init__(self, identifier, list_items, player) -> None:
-        self.identifier = identifier
+    def __init__(self, state_game, list_items, player) -> None:
+        self.state_game = state_game
         self.list_items = list_items
         self.player = player
     
     def checkSemantic(self, scope: Scope) -> bool:
-        return super().checkSemantic(scope)
+        func_scope = Scope()
+        self.func_scope = func_scope
 
+        for inst in self.list_items:
+            if not inst.checkSemantic(func_scope):
+                return False
+        return True
+        # return scope.define_function(self.identifier, self.args)
+
+    def evaluateStrategy(self, values):
+        pass    
+    
     def execute(self, scope: Scope):
-        return super().execute(scope)
+        pass

@@ -9,12 +9,12 @@ import numpy
 #config = Config()
 
 class Manager(Agente): #(Agente, Declaration):
-    def __init__(self, nombre, pais, experiencia, edad, estrategia=None) -> None:
-        self.nombre = nombre
-        self.pais = pais
-        self.experiencia = experiencia
-        self.estrategia = estrategia
-        self.edad = edad
+    def __init__(self, name, country, experence, age, strategy=None) -> None:
+        self.nombre = name
+        self.pais = country
+        self.experiencia = experence
+        self.estrategia = strategy
+        self.edad = age
         self.equipo = None
 
         self.acciones = self.acciones_dict()

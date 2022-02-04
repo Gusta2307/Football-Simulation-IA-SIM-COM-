@@ -11,29 +11,33 @@ from classes.equipo import Equipo
 from classes.portero import Portero
 from classes.arbitro import Arbitro
 from classes.manager import Manager
+from IA.range import RangeInt
+from IA.range import RangeBool
+from IA.range import RangeFloat
+from IA.range import RangeChoice
 
 
 class Declaration(VariableNode):
-    def __init__(self, identifier: str, var_type: str, args) -> None:
+    def __init__(self, identifier: str, var_type: str, args = None) -> None:
         super().__init__(identifier, var_type)
         self.args = args
     
     def checkSemantic(self, scope: Scope) -> bool:
-        for arg in self.args:
-            print(arg)
-            if not arg.checkSemantic(scope):
-                return False
+        if self.args is not None:
+            for arg in self.args:
+                print(arg)
+                if not arg.checkSemantic(scope):
+                    return False    
         return scope.define_variables(self.identifier)
 
     def execute(self, scope: Scope):
-        print("args:", self.args)
         if scope.check_var(self.identifier):  # prop = value, ej: name, Messi, tipo
             inst = None
             argumentos = create_dict(self.args, scope)
             if self.type == "player":
                 #nombre, pos, list_prob, estrategia = None # player p1 = ([AttributeNode(name, Messi, string), AttribuNode(age, 20, int)])
                 inst = Jugador(**argumentos)
-                # if check_type("player", argumentos):
+                # if check_type("player", argumentos, scope):
                     # inst = jugador(**argumentos)
                     # print("BIEN")
             elif self.type == "team": 
@@ -44,6 +48,14 @@ class Declaration(VariableNode):
                 inst = Arbitro(**argumentos)
             elif self.type == "manager":
                 inst = Manager(**argumentos)
+            elif self.type == "rangeint":
+                inst = RangeInt(**argumentos)
+            elif self.type == "rangefloat":
+                inst = RangeFloat(**argumentos)
+            elif self.type == "rangebool":
+                inst = RangeBool(**argumentos)
+            elif self.type == "rangechoice":
+                inst = RangeChoice(**argumentos)
             scope.defineVar[self.identifier] = inst
             
     

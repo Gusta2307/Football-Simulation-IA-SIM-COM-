@@ -1,0 +1,23 @@
+function void f(int n):
+{
+  print ("Probando");
+};
+
+rangeint BALL_PASS = (li=0, ls=5);
+rangeint SHOT_ON_GOAL = (li=0,ls=2, distribution=f);
+rangebool DO_LACK = (distribution=f);
+rangefloat RECEIVE_BALL = (li=0.1, ls=0.4);
+rangefloat THROW_IN = (li=0.3, ls=0.9);
+rangefloat CORNER_KICK = (li=1.0, ls=2.2, distribution=f);
+rangechoice CLEAR_BALL = (values=[1,2,3,4]);
+rangechoice COMMIT_FOUL = (values=[1,2,3,4], distribution=f);
+
+print("Hola");
+print(BALL_PASS);
+print(SHOT_ON_GOAL);
+print(DO_LACK);
+print(RECEIVE_BALL);
+print(THROW_IN);
+print(CORNER_KICK);
+print(CLEAR_BALL);
+print(COMMIT_FOUL);
