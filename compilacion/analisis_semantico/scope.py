@@ -15,6 +15,7 @@ class Scope:
         return self.defineFun.__contains__((identifier, count_args))
     
     def check_name_fun(self, identifier: str) -> bool:
+        print(self.defineFun)
         return len(list(filter(lambda x : x[0] == identifier, self.defineFun.keys()))) > 0
 
 

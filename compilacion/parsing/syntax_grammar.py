@@ -3,6 +3,7 @@ Definicion de la gramatica del lenguaje
 Gramatica G = < S, N, T, P >
 """
 
+from pickletools import read_stringnl_noescape
 from compilacion.analisis_semantico.Ast.attributeNode import AttributeNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.arrayAtom import ArrayAtomNode
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.boolNode import BoolNode
@@ -42,6 +43,7 @@ from compilacion.analisis_semantico.Ast.instructions.variables.assignNode import
 from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 from compilacion.analisis_semantico.Ast.instructions.conditional import Conditional
 from compilacion.analisis_semantico.Ast.instructions.strategyNode import StrategyNode
+from compilacion.analisis_semantico.Ast.instructions.variables.reassignNode import ReassignNode
 from compilacion.grammars.grammar import Grammar
 from compilacion.grammars.sentence import Sentence
 from compilacion.grammars.production import Production
@@ -216,12 +218,13 @@ G.add_production(Production(stat, Sentence(defStrategy), lambda x: x[0]))    # <
 G.add_production(Production(stat, Sentence(breakNoTerm), lambda x: x[0]))    # <stat> := <break>
 G.add_production(Production(stat, Sentence(continueNoTerm), lambda x: x[0])) # <stat> := <continue>
 G.add_production(Production(stat, Sentence(funcCall), lambda x: x[0]))       # <stat> := <funcCall>
+G.add_production(Production(stat, Sentence(idAtom), lambda x: ReassignNode(x[0].name, x[0].value))) # <stat> := <id-atom>
 
 G.add_production(Production(breakNoTerm, Sentence(breakTerm), lambda x: BreakNode()))          # <break> := break
 G.add_production(Production(continueNoTerm, Sentence(continueTerm), lambda x: ContinueNode())) # <continue> := continue
 
 G.add_production(Production(assignVar, Sentence(typeId, assign, openBracket, attrList, closeBracket), lambda x: Declaration(x[0].identifier, x[0].type, x[3]))) # <assign-var> := <type-id> = ( <attr-list> )
-G.add_production(Production(assignVar, Sentence(typeId, assign, arguments), lambda x: Declaration(x[0].identifier, x[0].type, None)))           # <assign-var> := <type-id> = <arguments>
+G.add_production(Production(assignVar, Sentence(typeId, assign, arguments), lambda x: Declaration(x[0].identifier, x[0].type, None)))                           # <assign-var> := <type-id> = <arguments>
 G.add_production(Production(assignVar, Sentence(typeId, assign, expr), lambda x: AssignNode(x[0].identifier, x[0].type, x[2])))                                 # <assign-var> := <type-id> = <expr>
 
 G.add_production(Production(typeNoTerm, Sentence(player), lambda x: x[0]))          # <type> := player
@@ -344,19 +347,5 @@ G.add_production(Production(statStrag, Sentence(executeFunc), lambda x: x[0])) #
 G.add_production(Production(assignList, Sentence(assignVar, valueSep, assignList), lambda x: [x[0]] + x[2])) # <assign-var-list> := <assign-var> , <assign-var-list>
 G.add_production(Production(assignList, Sentence(assignVar, valueSep), lambda x: [x[0]]))                    # <assign-var-list> := <assign-var> ,
 
-G.add_production(Production(variables, Sentence(variablesTerm, openCurlyB, assignList, closeCurlyB), lambda x: x[2]))                    # <variables> := variables { <assign-var-list>  }
-G.add_production(Production(executeFunc, Sentence(execute, openBracket, ID, ID, closeBracket, instList), lambda x: ExecuteNode(x[2], x[6], x[4]))) # <execute-func> := execute (ID, ID) <instruction-list>
-
-
-# G.add_production(Production(rangeType, Sentence(rangeintTerm, rangeintparam), lambda x: x[1]))                                       # <range-type> := rangeint <rangeint-params>
-# G.add_production(Production(rangeType, Sentence(rangefloatTerm, rangefloatparam), lambda x: x[1]))                                   # <range-type> := rangefloat <rangefloatparam>
-# G.add_production(Production(rangeType, Sentence(rangechoiceTerm, rangechoiceparam), lambda x: x[1]))                                 # <range-type> := rangechoice <rangechoiceparam>
-
-# G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, closeBracket), lambda x: RangeBoolNode()))                                                           # <range-type> := rangebool ()
-# G.add_production(Production(rangeType, Sentence(rangeboolTerm, openBracket, funcCall, closeBracket), lambda x: RangeBoolNode(x[1])))                                             # <range-type> := rangebool (<funcCall>)
-# G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, closeBracket), lambda x: RangeIntNode(x[1], x[3])))                                   # <rangeint-params> := (<int-num>, <int-num>)
-# G.add_production(Production(rangeintparam, Sentence(openBracket, intNum, valueSep, intNum, valueSep, funcCall, closeBracket), lambda x: RangeIntNode(x[1], x[3], x[5])))         # <rangeint-params> := (<int-num>, <int-num>, <funcCall>)
-# G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, closeBracket), lambda x: RangeFloatNode(x[1], x[3])))                           # <rangefloat-params> := (<float-num>, <float-num>)
-# G.add_production(Production(rangefloatparam, Sentence(openBracket, floatNum, valueSep, floatNum, valueSep, funcCall, closeBracket), lambda x: RangeFloatNode(x[1], x[3], x[5]))) # <rangefloat-params> := (<float-num>, <float-num>, <funcCall>)
-# G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, closeBracket), lambda x: RangeChoiceNode(x[1])))                                                       # <rangechoice-params> := (<atom>)
-# G.add_production(Production(rangechoiceparam, Sentence(openBracket, atom, valueSep, funcCall, closeBracket), lambda x: RangeChoiceNode(x[1], x[3])))                             # <rangechoice-params> := (<atom>, <funcCall>)
+G.add_production(Production(variables, Sentence(variablesTerm, openCurlyB, assignList, closeCurlyB), lambda x: x[2]))                                        # <variables> := variables { <assign-var-list>  }
+G.add_production(Production(executeFunc, Sentence(execute, openBracket, ID, valueSep, ID, closeBracket, instList), lambda x: ExecuteNode(x[2], x[6], x[4]))) # <execute-func> := execute (ID, ID) <instruction-list>

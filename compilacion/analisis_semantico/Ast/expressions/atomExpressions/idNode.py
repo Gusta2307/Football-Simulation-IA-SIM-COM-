@@ -7,7 +7,12 @@ class IdNode(AtomExpression):
         self.identifier = identifier
 
     def checkSemantic(self, scope: Scope) -> bool:
-        return scope.check_var(self.identifier) or scope.check_name_fun(self.identifier)
+        v = scope.check_var(self.identifier)
+        v1 = scope.check_name_fun(self.identifier)
+        print("v:", v)
+        print("v1:", v1)
+        return v or v1
+        # return scope.check_var(self.identifier) or scope.check_name_fun(self.identifier)
     
     def evaluate(self, scope: Scope):
         if scope.check_var(self.identifier):

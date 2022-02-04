@@ -1,6 +1,6 @@
 function void f(int n):
 {
-  print ("Probando");
+   print ("Probando");
 };
 
 strategy st1
@@ -9,6 +9,7 @@ strategy st1
    {
       rangeint BALL_PASS = (li=0, ls=5),
       rangeint SHOT_ON_GOAL = (li=0,ls=2, distribution=f),
+      rangebool INTERCEPT_BALL = (),
       rangebool DO_LACK = (distribution=f),
       rangefloat RECEIVE_BALL = (li=0.1, ls=0.4),
       rangefloat THROW_IN = (li=0.3, ls=0.9),

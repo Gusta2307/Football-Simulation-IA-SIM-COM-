@@ -17,3 +17,13 @@ print(m1);
 print(r1);
 print(g1);
 print(t1);
+
+int a = 4;
+print(a);
+a = 5;
+print(a);
+int b = a + 1;
+print(b);
+b = p1;
+print("Player");
+print(b);

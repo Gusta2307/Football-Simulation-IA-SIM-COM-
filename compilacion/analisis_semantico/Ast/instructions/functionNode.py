@@ -5,7 +5,7 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class FunctionNode(Instruction):
-    def __init__(self, identifier: str, return_type: str, args,  body: List[Instruction]) -> None:
+    def __init__(self, identifier: str, return_type: str, args=[], body: List[Instruction]=None) -> None:
         self.identifier = identifier
         self.return_type = return_type
         self.args = args

@@ -10,11 +10,11 @@ class AttributeNode(AstNode):
         self.value = value
 
     def checkSemantic(self, scope: Scope) -> bool:
-        print("Tipo:", type(self.value))
-        result = self.value.checkSemantic(scope)
-        print(result)
-        return result
-        # return self.value.checkSemantic(scope)
+        # print("Tipo:", type(self.value))
+        # result = self.value.checkSemantic(scope)
+        # print(result)
+        # return result
+        return self.value.checkSemantic(scope)
 
     def __str__(self) -> str:
         return str(self.name) + " = " + str(self.value)
