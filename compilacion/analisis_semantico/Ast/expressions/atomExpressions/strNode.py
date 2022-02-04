@@ -9,7 +9,7 @@ class StrNode(Expression):
         return True
 
     def evaluate(self, scope: Scope):
-        return self.text
+        return self.text[1: len(self.text) - 1]
     
     def __str__(self) -> str:
         return str(self.text)

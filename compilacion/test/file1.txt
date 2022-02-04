@@ -24,7 +24,11 @@ if b > 5:
 { 
    print(b);
 }
+elif b >  6:
+{
+   print(b + 6);
+}
 else
 {
-  print(b + 5);
-};
+   print(b + 5);
+}

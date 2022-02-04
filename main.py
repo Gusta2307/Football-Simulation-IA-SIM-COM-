@@ -1,7 +1,7 @@
 import os
 from compilacion.analisis_semantico import *
 from classes.equipo import Equipo
-from classes.arbitro import arbitro
+from classes.arbitro import Arbitro
 from classes.jugador import Jugador
 from classes.manager import Manager
 from classes.partido import Partido
@@ -40,7 +40,7 @@ def main():
     tokens = [token for token in tokens_temp if token.tokenType != 'space']
     # for t in tokens:
         # print(t.text)
-        
+
     # Analizador Sintactico
     parser = LRParser(G)
     print("Voy para el parse")

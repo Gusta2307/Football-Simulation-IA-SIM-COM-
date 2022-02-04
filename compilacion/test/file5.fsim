@@ -1,0 +1,12 @@
+
+player p1 = (name="Messi,...probando", age=32, pos="DEL", list_prob = [0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3]);
+
+player p2 = (name="PEPE", age=21, pos="DEL", list_prob = [0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3]);
+
+manager m1 = (name="PEPE1", country="CUBA", experence=89, age=56)
+
+referee r1 = (name="ARBITRO1", country="CUBA", experence=89, age=56, list_prob=[0.7, 0.0001, 0.3, 0.005])
+
+goalkeeper g1 = (name="PEPE3", country="USA", age=32, pos="GK", goalkeeper_prob= [0.8, 0.4, 0.1, 0.2, 0.3], list_prob=[0.1, 0.6, 0.8, 0.1, 0.1, 0.01, 0.6, 0.69, 0.2, 0.1, 0.01, 0.5, 0.4, 0.3, 0.3])
+
+team t1 = (name="Barcelona", country="USA", manager=m1, jugadores=[p1,p2])

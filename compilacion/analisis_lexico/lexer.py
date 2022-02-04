@@ -75,6 +75,8 @@ class Lexer:
         state, priority = 0, 0
 
         for r in self.regex:
+            if self.regex[r] == 'print':
+                print("...")
             tree = self.buildAstByRegex(self.regex[r], errors)
             new_state = self.createAfnState(state, tree.ast, r)
             list_state.append(new_state)

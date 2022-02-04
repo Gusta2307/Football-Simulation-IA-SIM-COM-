@@ -9,7 +9,7 @@ class Pase(Accion):
         self.tiempo = 0.1
         self.__descripcion = f"El jugador {self.agente.nombre} le pasa al balon a "
         self.dest_jugador = None #Jugador que va a recibir el pase
-        self.tipo = config.ACT_PASE 
+        self.tipo = config.ACCIONES.JUGADOR.ACT_PASE 
         self.pase_inicial = False
  
     
@@ -17,16 +17,17 @@ class Pase(Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return self.agente == partido.pos_balon and partido.estado != config.DETENIDO if not (partido.pos_balon is None) else False
+        return self.agente == partido.pos_balon and partido.estado != config.PARTIDO.ESTADO.DETENIDO if not (partido.pos_balon is None) else False
 
     def ejecutar(self, partido):
         self.dest_jugador = self.agente.seleccionar_jugador_pase(partido)
-        self.poscondicion(partido)
-        print(f'{partido.obtener_tiempo()} {self.descripcion()} {self.dest_jugador.nombre}')
+        if self.dest_jugador != None:
+            self.poscondicion(partido)
+            partido.reporte.annadir_a_resumen(f'{partido.obtener_tiempo()} {self.descripcion()} {self.dest_jugador.nombre}', partido.pt)
 
     def poscondicion(self, partido):
-        if partido.estado == config.INICIAR_PARTIDO or partido.estado == config.REANUDAR_PARTIDO:
-            partido.estado = config.EN_JUEGO
+        if partido.estado == config.PARTIDO.ESTADO.INICIAR_PARTIDO or partido.estado == config.PARTIDO.ESTADO.REANUDAR_PARTIDO:
+            partido.estado = config.PARTIDO.ESTADO.EN_JUEGO
             partido.pos_balon = self.dest_jugador
             self.pase_inicial = True
         else:

@@ -2,11 +2,12 @@ from typing import List
 from compilacion.analisis_semantico.Ast.expressions.atomExpression import AtomExpression
 from compilacion.analisis_semantico.Ast.expression import Expression
 from compilacion.analisis_semantico.Ast.expressions.atomExpressions.idNode import IdNode
+from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.Ast.instructions.functionNode import FunctionNode
 from compilacion.analisis_semantico.scope import Scope
 
 
-class FuncCall(AtomExpression):
+class FuncCall(AtomExpression, Instruction):
     def __init__(self, identifier: str, args=None) -> None:
         self.identifier = identifier
         self.args = args
@@ -34,3 +35,6 @@ class FuncCall(AtomExpression):
                         values.append(('id', value))
             return function.evaluateFunction(values)
         return None
+
+    def execute(self, scope: Scope):
+        self.evaluate(scope)

@@ -1,22 +1,22 @@
 import random
 import numpy
 from act.accion import Accion
-from classes.partido import Partido
 from config import Config
 from utiles import clasificar_jugadores
+from IA.range import Range
 
-from colorama import Fore
-from colorama import Style
+from colorama import Fore, Style
 
 config = Config()
 
 class Hacer_cambio(Accion):
     def __init__(self, agente) -> None:
         self.agente = agente
-        self.tipo = config.ACT_HACER_CAMBIOS
+        self.tipo = config.ACCIONES.MANAGER.ACT_HACER_CAMBIOS
         self.cambio = [] # Lista de tuplas (Jugador que entra, Jugador que sale)
         self.__descripcion = f"El manager {self.agente.nombre} del equipo "
         self.tiempo = 0
+
     
     def descripcion(self):
         return self.__descripcion
@@ -39,15 +39,21 @@ class Hacer_cambio(Accion):
                 break
 
 
-    def poscondicion(self, partido:Partido):
+    def poscondicion(self, partido, opt):
         banca = self.agente.equipo.jugadores_en_banca
         campo = self.agente.equipo.jugadores_en_campo
-        print(f"El {self.agente.equipo.nombre} va ha realizar cambios")
+        partido.reporte.annadir_a_resumen(f"El {self.agente.equipo.nombre} va ha realizar cambios", partido.pt)
         for j1, j2 in self.cambio:
             banca.remove(j1)
             campo.remove(j2)
             campo.append(j1)
-            print(f"ENTRA: {Fore.GREEN}{j1.nombre}{Style.RESET_ALL} SALE: {Fore.RED}{j2.nombre}{Style.RESET_ALL}")
+            if not opt: 
+                partido.op._optimizar_agente(j1)
+            else:
+                for v in j1.estrategia.variables.keys():
+                    if isinstance(j1.estrategia.variables[v], Range):
+                        j1.estrategia.variables[v] = j1.estrategia.variables[v].get_value()
+            partido.reporte.annadir_a_resumen(f"ENTRA: {Fore.GREEN}{j1.nombre}{Style.RESET_ALL} SALE: {Fore.RED}{j2.nombre}{Style.RESET_ALL}", partido.pt)
 
         self.agente.equipo.jugadores_en_banca = banca
         self.agente.equipo.jugadores_en_campo = campo

@@ -1,5 +1,4 @@
 import abc
-from classes.partido import Partido
 
 class Agente(abc.ABC):
     @abc.abstractclassmethod
@@ -7,8 +6,12 @@ class Agente(abc.ABC):
         raise NotImplementedError
     
     @abc.abstractclassmethod
-    def escoger_accion(self, partido):
+    def escoger_accion_base(self, partido):
         raise NotImplementedError
+
+    @abc.abstractclassmethod
+    def escoger_accion_estrategia(self, partido):
+        raise NotImplementedError 
     
     
 

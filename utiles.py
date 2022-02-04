@@ -1,6 +1,9 @@
 import random
 from config import Config
+from compilacion.comp_config import Config_C
+
 config = Config()
+config_C = Config_C()
 
 def filter(funct, iterable):
     result_f = []
@@ -13,19 +16,19 @@ def filter(funct, iterable):
     return result_f, result
 
 def analisis_acciones_list(acciones_actual, ultima_accion,estado):
-    if ultima_accion.tipo == config.ACT_PASE:
-        acciones_actual = escoge_una(acciones_actual, config.ACT_INTERCEPTAR_BALON)
-        intercepcion, _ = filter(lambda x: x.tipo == config.ACT_INTERCEPTAR_BALON, iterable=acciones_actual)
+    if ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_PASE:
+        acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_INTERCEPTAR_BALON)
+        intercepcion, _ = filter(lambda x: x.tipo == config.ACCIONES.JUGADOR.ACT_INTERCEPTAR_BALON, iterable=acciones_actual)
 
         if len(intercepcion) > 0:
-            acciones_actual = elimina_tipo(acciones_actual, config.ACT_RECIBIR_BALON)         
+            acciones_actual = elimina_tipo(acciones_actual, config.ACCIONES.JUGADOR.ACT_RECIBIR_BALON)         
             
-    if estado == config.REANUDAR_PARTIDO: #cuando se marca un gol
-        acciones_actual = escoge_una(acciones_actual, config.ACT_PASE)
+    if estado == config.PARTIDO.ESTADO.REANUDAR_PARTIDO: #cuando se marca un gol
+        acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_PASE)
 
-    acciones_actual = escoge_una(acciones_actual, config.ACT_HACER_FALTA)
+    acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_HACER_FALTA)
 
-    acciones_actual = escoge_una(acciones_actual, config.ACT_SAQUE_BANDA)
+    acciones_actual = escoge_una(acciones_actual, config.ACCIONES.JUGADOR.ACT_SAQUE_BANDA)
 
     return acciones_actual
     
@@ -66,3 +69,55 @@ def print_alineacion(esquema:list, jugadores):
         result += f'{j.nombre}\n'
     
     print(result)
+
+
+#Devuelve si el reporte r1 es mejor que el reporte r2
+def es_mejor(r1, r2, equipo):
+    return r1._goles[equipo.nombre] > r2._goles[equipo.nombre]
+
+
+def create_dict(args, scope):
+    dic = {}
+    for i in args:
+        dic[i.name] = i.value.evaluate(scope)
+    
+    return dic
+
+def check_type(tipo, argumentos):
+    if tipo == "player":
+        #nombre, pos, edad, list_prob, estrategia = None)
+        if argumentos['name'].type == config_C.Player["name"].type and argumentos['country'].type == config_C.Player["country"].type and argumentos['pos'].type == config_C.Player["pos"] and argumentos['age'].type == config_C.Player['age'] and argumentos['list_prob'].type == config_C.Player['list_prob']:
+            if "estrategy" in argumentos.keys():
+                return argumentos['estrategy'].type == config_C.Player['estrategy'] and len(argumentos.keys()) == 5
+            else:
+                return len(argumentos.keys()) == 4
+
+    elif tipo == "manager":
+        if argumentos['name'].type == config_C.Manager_["name"].type and argumentos['country'].type == config_C.Manager_["country"] and argumentos['age'].type == config_C.Manager_['age'] and argumentos['experience'].type == config_C.Manager_['experience']:
+            if "estrategy" in argumentos.keys():
+                return argumentos['estrategy'].type == config_C.Manager_['estrategy'] and len(argumentos.keys()) == 5
+            else:
+                return len(argumentos.keys()) == 4
+
+    elif tipo == "referee":
+        if argumentos['name'].type == config_C.Referee["name"].type and argumentos['country'].type == config_C.Referee["country"] and argumentos['age'].type == config_C.Referee['age'] and argumentos['experience'].type == config_C.Referee['experience'] and argumentos['list_prob'].type == config_C.Referee['list_prob']:
+            if "estrategy" in argumentos.keys():
+                return argumentos['estrategy'].type == config_C.Referee['estrategy'] and len(argumentos.keys()) == 6
+            else:
+                return len(argumentos.keys()) == 5
+
+    elif tipo == "goalkeeper":
+        if argumentos['name'].type == config_C.Goalkeeper["name"].type and argumentos['country'].type == config_C.Goalkeeper["country"] and argumentos['age'].type == config_C.Goalkeeper['age'] and argumentos['list_prob'].type == config_C.Goalkeeper['list_prob'] and argumentos['goalkeeper_prob'].type == config_C.Goalkeeper['goalkeeper_prob']:
+            if "estrategy" in argumentos.keys():
+                return argumentos['estrategy'].type == config_C.Goalkeeper['estrategy'] and len(argumentos.keys()) == 7
+            else:
+                return len(argumentos.keys()) == 6
+
+    elif tipo == "team":
+        if argumentos['name'].type == config_C.Team["name"].type and argumentos['country'].type == config_C.Team["country"] and argumentos['age'].type == config_C.Team['age'] and argumentos['list_prob'].type == config_C.Team['list_prob'] and argumentos['goalkeeper_prob'].type == config_C.Team['goalkeeper_prob']:
+            if "estrategy" in argumentos.keys():
+                return argumentos['estrategy'].type == config_C.Team['estrategy'] and len(argumentos.keys()) == 7
+            else:
+                return len(argumentos.keys()) == 6
+
+            

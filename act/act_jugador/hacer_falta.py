@@ -7,7 +7,7 @@ config = Config()
 class Hacer_Falta(Accion):
     def __init__(self, agente, **args) -> None:
         self.agente = agente
-        self.tipo = config.ACT_HACER_FALTA
+        self.tipo = config.ACCIONES.JUGADOR.ACT_HACER_FALTA
         self.tiempo = 0.1
         self.args = args
         self.nivel = None
@@ -21,7 +21,7 @@ class Hacer_Falta(Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return partido.ultima_accion.tipo != config.ACT_HACER_FALTA and partido.ultima_accion.tipo != config.ACT_CANTAR_FALTA and partido.ultima_accion.tipo != config.ACT_SACAR_TARJETA and partido.ultima_accion.tipo != config.ACT_SAQUE_FALTA
+        return partido.ultima_accion.tipo != config.ACCIONES.JUGADOR.ACT_HACER_FALTA and partido.ultima_accion.tipo != config.ACCIONES.ARBITRO.ACT_CANTAR_FALTA and partido.ultima_accion.tipo != config.ACCIONES.ARBITRO.ACT_SACAR_TARJETA and partido.ultima_accion.tipo != config.ACCIONES.JUGADOR.ACT_SAQUE_FALTA
 
     def ejecutar(self, partido):
         if self.nivel == None:
@@ -31,7 +31,7 @@ class Hacer_Falta(Accion):
         else:
             partido.pos_balon = self.agente
 
-        print(f'{partido.obtener_tiempo()} {self.descripcion()} {config.SEL_NIVEL[self.nivel]}')
+        partido.reporte.annadir_a_resumen(f'{partido.obtener_tiempo()} {self.descripcion()} {config.ACCIONES.ESTADO.FALTA.SEL_NIVEL[self.nivel]}', partido.pt)
         self.poscondicion(partido)
 
     def poscondicion(self, partido):

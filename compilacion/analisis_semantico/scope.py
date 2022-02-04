@@ -5,6 +5,7 @@ class Scope:
     def __init__(self) -> None:
         self.defineVar = {}
         self.defineFun = {}
+        self.pred_functions = []
 
 
     def check_var(self, identifier: str)-> bool:

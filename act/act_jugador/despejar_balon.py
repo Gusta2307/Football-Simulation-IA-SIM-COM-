@@ -1,8 +1,7 @@
 import numpy
 from act.accion import Accion
 from config import Config
-from colorama import Fore
-from colorama import Style
+from colorama import Fore, Style
 
 config = Config()
 
@@ -10,7 +9,7 @@ class Despejar_balon(Accion):
     def __init__(self, agente, **args) -> None:
         self.agente = agente
         self.tiempo = 0.1
-        self.tipo = config.ACT_DESPEJAR_BALON
+        self.tipo = config.ACCIONES.JUGADOR.ACT_DESPEJAR_BALON
         self.estado = None
         self.__descripcion = f"El jugador {self.agente.nombre} "
 
@@ -18,7 +17,7 @@ class Despejar_balon(Accion):
         return self.__descripcion
         
     def precondicion(self, partido) -> bool:
-        return partido.ultima_accion.tipo == config.ACT_SAQUE_ESQUINA and partido.ultima_accion.agente.equipo != self.agente.equipo
+        return partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_SAQUE_ESQUINA and partido.ultima_accion.agente.equipo != self.agente.equipo
 
     def ejecutar(self, partido):
         # CREO QUE NO SE DEBERIA PONER PROBABILIDADES DE DESPEJE A LOS JUGADORES
@@ -28,19 +27,21 @@ class Despejar_balon(Accion):
         despeje = numpy.random.choice(numpy.arange(0, 3), p=[0.35, 0.3, 0.35])
 
         if despeje:
-            self.estado = config.DESPEJE_LINEA_FINAL
+            self.estado = config.ACCIONES.ESTADO.DESPEJAR_BALON.DESPEJE_LINEA_FINAL
         elif not despeje:
-            self.estado = config.DESPEJE_BANDA
+            self.estado = config.ACCIONES.ESTADO.DESPEJAR_BALON.DESPEJE_BANDA
         else:
-            self.estado = config.DESPEJE_JUGADOR
+            self.estado = config.ACCIONES.ESTADO.DESPEJAR_BALON.DESPEJE_JUGADOR
 
-        print(f'{partido.obtener_tiempo()} {self.descripcion()}{Fore.GREEN}{self.estado}{Style.RESET_ALL}')
+        # print(f'{partido.obtener_tiempo()} {self.descripcion()}{Fore.GREEN}{self.estado}{Style.RESET_ALL}')
+
+        partido.reporte.annadir_a_resumen(f'{partido.obtener_tiempo()} {self.descripcion()}{Fore.GREEN}{self.estado}{Style.RESET_ALL}', partido.pt)
 
         self.poscondicion(partido)
 
     def poscondicion(self, partido):
         partido.ultima_accion = self
         partido.pos_balon = None
-        if self.estado == config.DESPEJE_LINEA_FINAL or self.estado == config.DESPEJE_BANDA:
-            partido.estado = config.DETENIDO 
+        if self.estado == config.ACCIONES.ESTADO.DESPEJAR_BALON.DESPEJE_LINEA_FINAL or self.estado == config.ACCIONES.ESTADO.DESPEJAR_BALON.DESPEJE_BANDA:
+            partido.estado = config.PARTIDO.ESTADO.DETENIDO 
         
