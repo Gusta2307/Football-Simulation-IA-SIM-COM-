@@ -42,6 +42,7 @@ def main():
     for t in tokens:
         print(t.tokenType, t.text)
 
+
     # Analizador Sintactico
     parser = LRParser(G)
     print("Voy para el parse")

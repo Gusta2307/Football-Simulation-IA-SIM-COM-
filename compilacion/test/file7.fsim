@@ -1,0 +1,7 @@
+rangeint a = (li=1,ls=5);
+
+int b[1,2,3,4,5];
+for i in b {
+    print(a.get_value());
+    print(i);
+};

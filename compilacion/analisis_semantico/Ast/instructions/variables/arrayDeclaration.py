@@ -10,7 +10,7 @@ class ArrayDeclaration(VariableNode):
         self.items = items
     
     def checkSemantic(self, scope: Scope) -> bool:
-        for item in self.items:
+        for item in self.items.items:
             if not item.checkSemantic(scope):
                 return False
         return scope.define_variables(self.identifier)

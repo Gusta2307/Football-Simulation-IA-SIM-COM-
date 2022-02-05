@@ -256,10 +256,10 @@ G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lamb
 
 G.add_production(Production(forCycle, Sentence(forTerm, ID, inTerm, atom, instList), lambda x: ForNode(x[1], x[3], x[4]))) # <for-cycle> := for ID in <atom> <instruction-list>
 
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], None, x[4]))) # <conditional> := if <expr> <instruction-list> else <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList), lambda x: Conditional(x[1], x[2])))                                 # <conditional> := if <expr> <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, instList), lambda x: Conditional(x[1], x[3], x[4])))       # <conditional> := if <expr> <instruction-list> elif <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], x[4], x[6]))) # <conditional> := if <expr>  <instruction-list> elif <instruction-list> else <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], None, x[4])))         # <conditional> := if <expr> <instruction-list> else <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList), lambda x: Conditional(x[1], x[2])))                                         # <conditional> := if <expr> <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, expr, instList), lambda x: Conditional(x[1], x[2], (x[4], x[5])))) # <conditional> := if <expr> <instruction-list> elif <expr> <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], (x[4], x[5]), x[7]))) # <conditional> := if <expr> <instruction-list> elif <expr> <instruction-list> else <instruction-list>
 
 G.add_production(Production(functionFunc, Sentence(function, typeId, arguments, instList), lambda x: FunctionNode(x[1].identifier, x[1].type, x[2], x[3]))) # <function-func> := function <type-id> <arguments>  <instruction-list>
 

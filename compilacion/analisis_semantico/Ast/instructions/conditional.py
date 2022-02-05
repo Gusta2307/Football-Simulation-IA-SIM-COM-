@@ -4,6 +4,8 @@ from compilacion.analisis_semantico.Ast.instructions.returnNode import ReturnNod
 from compilacion.analisis_semantico.Ast.instructions.variables.assignNode import AssignNode
 from compilacion.analisis_semantico.scope import Scope
 from compilacion.analisis_semantico.Ast.expression import Expression
+from utiles import actualizar_scope
+import copy
 
 
 class Conditional(Instruction):
@@ -20,45 +22,54 @@ class Conditional(Instruction):
         if not self.condition.checkSemantic(scope):
             return False
         
-        self.ifScope = Scope()
+        self.ifScope = copy.deepcopy(scope)
 
         for inst in self.ifBody:
             if type(inst) == AssignNode:
                 pass
-            if not inst.checkSemantic(scope):
+            if not inst.checkSemantic(self.ifScope):
                 return False
         
         if self.elIf is not None:
-            for t in self.elIf:
-                if not t[0].checkSemantic(scope):
+            self.elifScope = copy.deepcopy(scope)
+            if not self.elIf[0].checkSemantic(self.elifScope):
+                return False
+            for inst in self.elIf[1]:
+                if not inst.checkSemantic(self.elifScope):
                     return False
-                for inst in t[1]:
-                    if not inst.checkSemantic(scope):
-                        return False
 
         if self.elseBody is not None:
+            self.elseScope = copy.deepcopy(scope)
             for inst in self.elseBody:
-                if not inst.checkSemantic(scope):
+                if not inst.checkSemantic(self.elseScope):
                     return False 
         return True
 
     def execute(self, scope: Scope):
         eval_cond = self.condition.evaluate(scope)
         if eval_cond:
-            value = self.execute_instructions(scope, self.ifBody)
+            actualizar_scope(scope, self.ifScope)
+            value = self.execute_instructions(self.ifScope, self.ifBody)
+            actualizar_scope(self.ifScope, scope)
             if value is not None:
                 return value
+            return None
         elif self.elIf is not None:
-            for t in self.elIf:
-                if t[0].evaluate(scope):
-                    self.execute_instructions(scope, t[1])
-                    break                
-        else:
-            if self.elseBody is not None:
-                value = self.execute_instructions(scope, self.elseBody)
+            if self.elIf[0].evaluate(scope):
+                actualizar_scope(scope, self.elifScope)
+                value = self.execute_instructions(self.elifScope, self.elIf[1])
+                actualizar_scope(self.elifScope, scope)
                 if value is not None:
                     return value
-    
+                return None
+        if self.elseBody is not None:
+            actualizar_scope(scope, self.elseScope)
+            value = self.execute_instructions(self.elseScope, self.elseBody)
+            actualizar_scope(self.elseScope, scope)
+            if value is not None:
+                return value
+            return None
+
     def execute_instructions(self, scope, instructions):
         for inst in instructions:
             if type(inst) == ReturnNode:

@@ -1,6 +1,6 @@
 function int f(int n)
 {
-   return (n + 2);
+   return n + 2;
 };
 
 strategy st1
@@ -144,7 +144,7 @@ print(g1);
 print(t1);
 print("HOLA");
 print(g);
-print(g.simula());
+print(g.simular());
 print(f(3));
 int a = 4;
 int b = a;

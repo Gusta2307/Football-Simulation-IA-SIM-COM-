@@ -6,6 +6,15 @@ from config import Config
 config = Config()
 
 
+def actualizar_scope(scope1, scope2):
+    for k in scope1.defineVar.keys():
+        if k in scope2.defineVar.keys():
+            scope2.defineVar[k] = scope1.defineVar[k]
+        
+    for k in scope1.defineFun.keys():
+        if k in scope2.defineFun.keys():
+            scope2.defineFun[k] = scope1.defineFun[k]
+
 def filter(funct, iterable):
     result_f = []
     result = []
