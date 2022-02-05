@@ -3,7 +3,6 @@ from compilacion.analisis_semantico.Ast.expressions.atomExpression import AtomEx
 from compilacion.analisis_semantico.Ast.instructions.variableNode import VariableNode
 from compilacion.analisis_semantico.Ast.attributeNode import AttributeNode
 from compilacion.analisis_semantico.scope import Scope
-from compilacion.analisis_semantico.type import MyType
 from utiles import create_dict
 from utiles import check_type
 from classes.jugador import Jugador

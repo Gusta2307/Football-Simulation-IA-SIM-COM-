@@ -6,6 +6,7 @@ class VariableNode(Instruction):
     def __init__(self, identifier: str, var_type: str) -> None:
         self.identifier = identifier
         self.type = var_type
+        self.computed_type = None
 
     def checkSemantic(self, scope: Scope) -> bool:
         return True

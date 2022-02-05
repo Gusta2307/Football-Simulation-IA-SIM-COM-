@@ -18,7 +18,6 @@ class Scope:
         print(self.defineFun)
         return len(list(filter(lambda x : x[0] == identifier, self.defineFun.keys()))) > 0
 
-
     def define_variables(self, identifier: str) -> bool:
         if not self.check_var(identifier):
             self.defineVar[identifier] = None

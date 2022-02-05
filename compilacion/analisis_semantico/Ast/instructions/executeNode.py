@@ -10,6 +10,7 @@ class ExecuteNode(Instruction):
         self.list_items = list_items
         self.player = player
         self.func_scope = None
+        self.return_type = "str"
     
     def checkSemantic(self, scope: Scope) -> bool:
         # self.func_scope = Scope()
@@ -22,7 +23,6 @@ class ExecuteNode(Instruction):
                 print("INST ERROR:", inst)
                 return False
         return True
-        # return scope.define_function(self.identifier, self.args)
 
     def evaluateStrategy(self):
         for inst in self.list_items:
@@ -36,22 +36,6 @@ class ExecuteNode(Instruction):
             
             if value is not None:
                 return value
-    
-   # def evaluateFunction(self, values):
-#         for i in range(len(values)):            
-#             val_type, value = values[i]
-#             if val_type == 'func':
-#                 self.func_scope.defineFunc[(self.args[i], len(self.args))] = value
-#             else:
-#                 self.func_scope.defineVar[self.args[i].identifier] = value
-        
-#         for inst in self.body:
-#             if type(inst) == ReturnNode:
-#                 value = inst.execute(self.func_scope)
-#                 return value
-#             value = inst.execute(self.func_scope)
-#             if value is not None:
-#                 return value
 
     def execute(self, scope: Scope):
         pass
