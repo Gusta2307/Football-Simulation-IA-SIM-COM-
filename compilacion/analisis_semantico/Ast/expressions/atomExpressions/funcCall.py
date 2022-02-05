@@ -8,9 +8,9 @@ from compilacion.analisis_semantico.scope import Scope
 
 
 class FuncCall(AtomExpression, Instruction):
-    def __init__(self, identifier: str, args=None) -> None:
+    def __init__(self, identifier: str, args=[]) -> None:
         self.identifier = identifier
-        self.args = args
+        self.args = args 
 
     def checkSemantic(self, scope: Scope) -> bool:
         if self.args is not None:

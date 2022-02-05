@@ -7,13 +7,13 @@ from config import Config
 config = Config()
 
 class Arbitro(Agente): #(Agente, Declaration):
-    def __init__(self, name, country, age, experence, list_prob, strategy = None):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
+    def __init__(self, name, country, age, experence, list_prob, st = None):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
         self.nombre = name
         self.experiencia = experence
         self.pais = country
         self.edad = age
         
-        self.estrategia = strategy
+        self.estrategia = st
         
         self.cantar_falta = list_prob[0]
         self.sacar_tarjeta = list_prob[1]
@@ -38,6 +38,6 @@ class Arbitro(Agente): #(Agente, Declaration):
     def escoger_accion_estrategia(self, partido):
         estrategia_accion = None
         if self.estrategia != None: 
-            estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
+            estrategia_accion = self.acciones[config.TRADUCTOR_ACT.ACT[self.estrategia.evaluar(partido, self)]]
         
         return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_base(partido)

@@ -16,6 +16,7 @@ class IdNode(AtomExpression):
     
     def evaluate(self, scope: Scope):
         if scope.check_var(self.identifier):
+            print("ENTREE EXEcUTE ID")
             return scope.defineVar[self.identifier]
         return None
     

@@ -11,6 +11,7 @@ from classes.equipo import Equipo
 from classes.portero import Portero
 from classes.arbitro import Arbitro
 from classes.manager import Manager
+from classes.partido import Partido
 from IA.range import RangeInt
 from IA.range import RangeBool
 from IA.range import RangeFloat
@@ -18,7 +19,7 @@ from IA.range import RangeChoice
 
 
 class Declaration(VariableNode):
-    def __init__(self, identifier: str, var_type: str, args = None) -> None:
+    def __init__(self, identifier: str, var_type: str, args = []) -> None:
         super().__init__(identifier, var_type)
         self.args = args
     
@@ -56,7 +57,10 @@ class Declaration(VariableNode):
                 inst = RangeBool(**argumentos)
             elif self.type == "rangechoice":
                 inst = RangeChoice(**argumentos)
+            elif self.type == "game":
+                inst = Partido(**argumentos)
             scope.defineVar[self.identifier] = inst
+            return inst
             
     
     def __str__(self) -> str:

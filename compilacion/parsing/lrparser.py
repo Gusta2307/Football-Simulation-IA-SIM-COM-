@@ -71,7 +71,11 @@ class LRParser:
         afn.reset()        
         tree_stack = []
         state_stack = [afn.current_state]
-        tokens.append(Token('$', '$'))    
+        tokens.append(Token('$', '$'))   
+
+        print("TOKENS DEL PARSE")
+        for t in tokens:
+            print(t.tokenType, t.text) 
 
         while(i < len(tokens)):
             shift, reduce_prod= False, set()
@@ -89,7 +93,8 @@ class LRParser:
                 if next_symbol is not None and type(next_symbol) == Terminal:
                     if curr_token == next_symbol.name:
                         shift = True
-            print(curr_token)
+            print(curr_token, tokens[i].text)
+
             if len(reduce_prod) > 1:
                 errors.append("Error: conflict reduce-reduce")
                 break

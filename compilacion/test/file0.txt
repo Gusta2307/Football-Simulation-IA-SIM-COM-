@@ -1,4 +1,4 @@
-function float write_console():
+function float write_console()
 {
   print ("Probando");
 };
@@ -16,7 +16,7 @@ if c >= 30:
   float prob1 = 0.2;
 };
 
-function float aumentar(float prob, float value):
+function float aumentar(float prob, float value)
 {
   float new_prob = prob + value;
   if new_prob >= 0 AND new_prob <= 1:

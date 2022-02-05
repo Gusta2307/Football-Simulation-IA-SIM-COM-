@@ -109,3 +109,60 @@ class Config:
                 DESPEJE_LINEA_FINAL = 'DESPEJO EL BALON Y SALE POR LINEA FINAL'
                 DESPEJE_BANDA = 'DESPEJO EL BALON Y SALE POR BANDA'
                 DESPEJE_JUGADOR = 'DESPEJE EL BALON Y EL BALON QUEDA SUELTO JUGADOR'
+    
+    class TRADUCTOR_ACT:
+        ACT = {
+            'BALL_PASS': "PASE",
+            'SHOT_ON_GOAL': "TIRO",
+            'INTERCEPT_BALL': "INTERCEPCION",
+            "RECEIVE_BALL" : "RECIBIR_BALON",
+            "THROW_IN" : "SAQUE_BANDA",
+            "CORNER_KICK" : 'SAQUE_ESQUINA',
+            "CLEAR_BALL": 'DESPEJAR_BALON',
+            "COMMIT_FOUL": 'HACER_FALTA',
+            "ADVANCE_POSITION": "AVANZAR_POSICION",
+            "BACK_POSITION": 'RETROCEDER_POSICION',
+        }
+    class TRADUCTOR_ID:
+        ID = {
+            "name": 'nombre',
+            "experence": "experiencia",
+            "country": "pais", 
+            "age": "edad",
+            'team': "equipo",
+            'st': "estrategia",
+            'location' : 'ubicacion_campo',
+            'actions' : "acciones",
+            'coach' : 'manager',
+            "players" : 'jugadores',
+            'playersCamp': "_jugadores_en_campo",
+            'playersBench' : "_jugadores_en_banca",
+            'pos' : "posicion",
+            'cards_count' : "cantidad_tarjetas",
+            'team1' : 'eq1',
+            'team2' : "eq2",
+            "referees" : "arbitros",
+            "goalscore": "marcador",
+            "pt"
+            "reporte"
+            'time': "__tiempo",
+            "state": "estado",
+            "lastaction" : "ultima_accion",
+            "pos_ball" : "pos_balon",
+            "pos_ball_1_time" : "pos_balon_1er_tiempo",
+            "name_eq2" : "_eq2",
+            "name_eq1" : "_eq1",
+            'goal': "_goles",
+            'shots': "_remates",
+            'corner kick' : "_tiros_de_esquina",
+            'outside': '_fuera_de_juego',
+            "ball_pass": "pases",
+            "lost_ball": "balones_perdidos",
+            'recovered_balls': "balones_recuperados",
+            'saves': "paradas_portero",
+            "foul": "faltas",
+            "cards_yellow" : "tarjetas_amarillas",
+            "cards_red":"tarjetas_rojas",
+            "abstrac":"_resumen"
+
+        }

@@ -19,14 +19,13 @@ config = Config()
 
 
 class Jugador(Agente):
-    def __init__(self, name, pos, age, country, list_prob, strategy = None): #  gol_p, atajar_p, pase_efectivo_p, pase_largo_p, pase_intercep_p, gol_partido, atajar_partido, no_falta, falta_leve, falta_amarilla, falta_roja, pos_array) -> None:
+    def __init__(self, name, pos, age, country, list_prob, st = None): #  gol_p, atajar_p, pase_efectivo_p, pase_largo_p, pase_intercep_p, gol_partido, atajar_partido, no_falta, falta_leve, falta_amarilla, falta_roja, pos_array) -> None:
         self.nombre = name
         self.posicion = pos
         self.edad = age
-        self.country = country
+        self.pais = country
         self.equipo = None
-        self.estrategia = strategy
-        print("POOOOOOOOOOOOSSSSSSSS", self.posicion, type(self.posicion))
+        self.estrategia = st
         self.ubicacion_campo = config.ZONA.REL_ZONA_POS[self.posicion]
         
         #Las prob de que se realicen satisfactoriamente
@@ -96,7 +95,7 @@ class Jugador(Agente):
     def escoger_accion_estrategia(self, partido):
         estrategia_accion = None
         if self.estrategia != None: 
-            estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
+            estrategia_accion = self.acciones[config.TRADUCTOR_ACT.ACT[self.estrategia.evaluar(partido, self)]]
         
         return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_base(partido)
       

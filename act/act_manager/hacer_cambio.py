@@ -30,6 +30,7 @@ class Hacer_cambio(Accion):
         for i in range(cambios_ha_realizar):
             if len(self.agente.equipo.jugadores_en_banca):
                 j1 = self.agente.equipo.jugadores_en_banca[random.randint(0, len(self.agente.equipo.jugadores_en_banca) - 1)]
+                print(j1.posicion)
                 jugadores_posibles = clasificar_jugadores(self.agente.equipo.jugadores_en_campo)[j1.posicion]
                 j2 = jugadores_posibles[random.randint(0, len(jugadores_posibles) - 1)]
                 self.cambio.append((j1,j2))
@@ -49,7 +50,7 @@ class Hacer_cambio(Accion):
             campo.append(j1)
             if not opt: 
                 partido.op._optimizar_agente(j1)
-            else:
+            elif j1.estrategia is not None:
                 for v in j1.estrategia.variables.keys():
                     if isinstance(j1.estrategia.variables[v], Range):
                         j1.estrategia.variables[v] = j1.estrategia.variables[v].get_value()

@@ -7,10 +7,10 @@ config = Config()
 
 
 class Partido:
-    def __init__(self, eq1, eq2, arbitros) -> None:
+    def __init__(self, eq1, eq2, referees) -> None:
         self.eq1 = eq1
         self.eq2 = eq2
-        self.arbitros = arbitros
+        self.arbitros = referees
 
         self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
         self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)

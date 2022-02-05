@@ -39,8 +39,8 @@ def main():
     # Analizador Lexico
     tokens_temp = lexer.tokenize(code, errors)
     tokens = [token for token in tokens_temp if token.tokenType != 'space']
-    # for t in tokens:
-        # print(t.text)
+    for t in tokens:
+        print(t.tokenType, t.text)
 
     # Analizador Sintactico
     parser = LRParser(G)

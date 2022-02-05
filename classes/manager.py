@@ -5,15 +5,15 @@ from act.default import Default
 import numpy
 #from compilacion.analisis_semantico.Ast.instructions.variables.declaration import Declaration
 
-#from config import Config
-#config = Config()
+from config import Config
+config = Config()
 
 class Manager(Agente): #(Agente, Declaration):
-    def __init__(self, name, country, experence, age, strategy=None) -> None:
+    def __init__(self, name, country, experence, age, st=None) -> None:
         self.nombre = name
         self.pais = country
         self.experiencia = experence
-        self.estrategia = strategy
+        self.estrategia = st
         self.edad = age
         self.equipo = None
 
@@ -29,7 +29,7 @@ class Manager(Agente): #(Agente, Declaration):
     def escoger_accion_estrategia(self, partido):
         estrategia_accion = None
         if self.estrategia != None: 
-            estrategia_accion = self.acciones_dict()[self.estrategia.execute(partido, self, self.estrategia.variables)]
+            estrategia_accion = self.acciones[config.TRADUCTOR_ACT.ACT[self.estrategia.evaluar(partido, self)]]
         
         return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_base(partido)
     

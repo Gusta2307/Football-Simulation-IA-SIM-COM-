@@ -14,17 +14,17 @@ int d = 2*(1 + 2);
 int b = 7 - d;
 print(b);
 
-for i in players:
+for i in players
 { 
    print(i);
    break;
 };
 
-if b > 5:
+if b > 5
 { 
    print(b);
 }
-elif b >  6:
+elif b >  6
 {
    print(b + 6);
 }

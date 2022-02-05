@@ -10,9 +10,13 @@ class ReturnNode(Instruction):
     
     def checkSemantic(self, scope: Scope) -> bool:
         if not self.expr.checkSemantic(scope):
+            print("ID ERROR:", self.expr)
             return False
         return True
 
     def execute(self, scope: Scope):
+        print("SCOPE EXE EXE", scope.defineVar)
         self.value = self.expr.evaluate(scope)
+        print("TIPO DE VAL:", self.expr)
+        print("VALUE EN RETURN:", self.value)
         return self.value

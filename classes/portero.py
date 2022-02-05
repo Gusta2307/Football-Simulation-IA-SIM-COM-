@@ -8,8 +8,8 @@ from config import Config
 config = Config()
 
 class Portero(Jugador):
-    def __init__(self, name, age, country, pos, list_prob, goalkeeper_prob, strategy = None):
-        super().__init__(name, pos, age, country, list_prob, strategy)
+    def __init__(self, name, age, country, pos, list_prob, goalkeeper_prob, st = None):
+        super().__init__(name, pos, age, country, list_prob, st)
         
         self.atajar_balon = goalkeeper_prob[0]
         self.sin_rebote = goalkeeper_prob[1]
@@ -23,13 +23,13 @@ class Portero(Jugador):
 
         self.acciones['ATAJAR'] = Atajar(self)
         self.acciones['SAQUE_PORTERIA'] = Saque_porteria(self)
-        self.estrategia = strategy
+        self.estrategia = st
 
 
     def escoger_accion_estrategia(self, partido):
         estrategia_accion = None
         if self.estrategia != None: 
-            estrategia_accion = self.acciones[self.estrategia.execute(partido, self, self.estrategia.variables)]
+            estrategia_accion = self.acciones[config.TRADUCTOR_ACT.ACT[self.estrategia.evaluar(partido, self )]]
         
         return  estrategia_accion if estrategia_accion != None and estrategia_accion.precondicion(partido) else self.escoger_accion_agente(partido)
       

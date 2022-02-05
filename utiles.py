@@ -1,4 +1,5 @@
 import random
+from compilacion.analisis_semantico.Ast.instructions.variableNode import VariableNode
 from config import Config
 
 
@@ -78,8 +79,11 @@ def es_mejor(r1, r2, equipo):
 
 def create_dict(args, scope):
     dic = {}
-    for i in args:
-        dic[i.name] = i.value.evaluate(scope)
+    for i in args:        
+        try:
+            dic[i.name] = i.value.evaluate(scope)
+        except:
+            dic[i.identifier] = i.execute(scope)
     
     return dic
 
