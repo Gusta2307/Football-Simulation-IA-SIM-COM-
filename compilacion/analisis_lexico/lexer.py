@@ -39,12 +39,15 @@ class Lexer:
             if self.afn.broken:
                 if not valid_token is None:
                     tokens.append(valid_token)
-                    last_token_pos, last_token_col, last_token_row = i, col, row
+                    last_token_pos, last_token_col, last_token_row = i, col + 1, row
                     i, col, row = new_token_pos, new_token_col, new_token_row
                 else:
-                    errors.append("ERROR:...")
+                    errors.append(f"Token {valid_token.text} is invalid, line {valid_token.line} and position {valid_token.column} ")
+                    # col += 1
                     last_token_pos, last_token_col, last_token_row = i+1,col+1,row
                     new_token_pos, new_token_col, new_token_row = i+1,col+1,row
+                    # last_token_pos, last_token_row = i+1,row
+                    # new_token_pos, new_token_row = i+1,row
                     i+=1
                 
                 valid_token = None
@@ -61,10 +64,12 @@ class Lexer:
                         last_token_row,
                         last_token_col,
                     )
+                # 
                 new_token_pos, new_token_col, new_token_row = i+1,col+1,row
+                # new_token_pos, new_token_row = i+1,row
             
             i+=1
-            col+=1
+            # col+=1
         
         return tokens
 

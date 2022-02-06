@@ -163,6 +163,6 @@ class Config:
             "foul": "faltas",
             "cards_yellow" : "tarjetas_amarillas",
             "cards_red":"tarjetas_rojas",
-            "abstrac":"_resumen"
-
+            "abstrac":"_resumen",
+            "get_value": "get_value"
         }

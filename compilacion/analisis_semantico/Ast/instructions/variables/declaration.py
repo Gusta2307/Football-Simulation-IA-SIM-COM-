@@ -71,4 +71,10 @@ class Declaration(VariableNode):
         return string
 
     
-
+    def visit(self, scope): # los errores de declaration se ven en ejecucion
+        for attr in self.args:
+            if not attr.visit(scope):
+                return False
+        self.computed_type = self.type
+        scope.save_varType(self.identifier, self.type)
+        return True

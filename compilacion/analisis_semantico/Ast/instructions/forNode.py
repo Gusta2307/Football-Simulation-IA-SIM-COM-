@@ -2,6 +2,7 @@ from typing import List
 from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.Ast.instructions.breakNode import BreakNode
 from compilacion.analisis_semantico.Ast.instructions.continueNode import ContinueNode
+from compilacion.analisis_semantico.Ast.instructions.returnNode import ReturnNode
 from compilacion.analisis_semantico.scope import Scope
 from utiles import actualizar_scope
 import copy
@@ -41,10 +42,23 @@ class ForNode(Instruction):
                     if_break = 1
                     actualizar_scope(self.forScope, scope)
                     break
+                elif type(item_body) == ReturnNode:
+                    actualizar_scope(self.forScope, scope)
+                    return item_body.execute(self.forScope)
                 else:
-                    item_body.execute(self.forScope)
+                    value = item_body.execute(self.forScope)
+                    if value is not None:
+                        actualizar_scope(self.forScope, scope)
+                        return value
             if if_break:
                 actualizar_scope(self.forScope, scope)
                 break
         actualizar_scope(self.forScope, scope)
         # scope.defineVar.pop(self.item)
+    
+    def visit(self, scope):
+        forScope = copy.deepcopy(scope)
+        for inst in self.body:
+            if not inst.visit(forScope):
+                return False
+        return True

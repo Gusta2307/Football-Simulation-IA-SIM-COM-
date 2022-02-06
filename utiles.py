@@ -2,7 +2,6 @@ import random
 from compilacion.analisis_semantico.Ast.instructions.variableNode import VariableNode
 from config import Config
 
-
 config = Config()
 
 
@@ -163,4 +162,3 @@ def check_type(tipo, argumentos, scope):
                 return scope.check_function(argumentos["distribution"].value.identifier, 1) and len(argumentos.keys()) == 1
         else:
             return len(argumentos.keys()) == 0
-

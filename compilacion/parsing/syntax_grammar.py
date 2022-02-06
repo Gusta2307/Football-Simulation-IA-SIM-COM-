@@ -129,8 +129,8 @@ strTerm = G.define_terminal('str')
 boolTerm = G.define_terminal('bool')
 floatTerm = G.define_terminal('float')
 voidTerm = G.define_terminal('void')
-trueTerm = G.define_terminal('true')
-falseTerm = G.define_terminal('false')
+trueTerm = G.define_terminal('True')
+falseTerm = G.define_terminal('False')
 objectTerm = G.define_terminal('object')
 breakTerm = G.define_terminal('break')
 continueTerm = G.define_terminal('continue')
@@ -168,8 +168,7 @@ labelsVar = G.define_noTerminal('<labels-var>')
 expr = G.define_noTerminal('<expr>')
 term = G.define_noTerminal('<term>')
 factor = G.define_noTerminal('<factor>')
-termBool = G.define_noTerminal('<term-boolean>')
-factorBool = G.define_noTerminal('<factor-boolean>')
+factor1 = G.define_noTerminal('<factor1>')
 atom = G.define_noTerminal('<atom>')
 boolType = G.define_noTerminal('<bool-type>')
 numberType = G.define_noTerminal('<number-type>')
@@ -281,23 +280,25 @@ G.add_production(Production(argList, Sentence(typeId), lambda x: [x[0]]))       
 G.add_production(Production(attrList, Sentence(idAtom, valueSep, attrList), lambda x: [x[0]] + x[2])) # <atrr-list> := <id-atom>, <attr-list>
 G.add_production(Production(attrList, Sentence(idAtom), lambda x: [x[0]]))                            # <attr-list> := <id-atom>
 
-G.add_production(Production(expr, Sentence(term, plus, expr), lambda x: AddNode(x[0], x[2])))     # <expr> := <term> + <expr>
-G.add_production(Production(expr, Sentence(term, sub, expr), lambda x: SubNode(x[0], x[2])))      # <expr> := <term> - <expr>
-G.add_production(Production(expr, Sentence(term, andTerm , expr), lambda x: AndNode(x[0], x[2]))) # <expr> := <term> AND <expr>
-G.add_production(Production(expr, Sentence(term, orTerm, expr), lambda x: OrNode(x[0], x[2])))    # <expr> := <term> OR <expr>
-G.add_production(Production(expr, Sentence(notTerm, expr), lambda x: NotNode(x[1])))              # <expr> := NOT <expr> 
-G.add_production(Production(expr, Sentence(term), lambda x: x[0]))                                # <expr> := <term>
+G.add_production(Production(expr, Sentence(term, plus, expr), lambda x: AddNode(x[0], x[2])))                   # <expr> := <term> + <expr>
+G.add_production(Production(expr, Sentence(term, sub, expr), lambda x: SubNode(x[0], x[2])))                    # <expr> := <term> - <expr>
+G.add_production(Production(expr, Sentence(term, andTerm , expr), lambda x: AndNode(x[0], x[2])))               # <expr> := <term> AND <expr>
+G.add_production(Production(expr, Sentence(term, orTerm, expr), lambda x: OrNode(x[0], x[2])))                  # <expr> := <term> OR <expr>
+G.add_production(Production(expr, Sentence(notTerm, expr), lambda x: NotNode(x[1])))                            # <expr> := NOT <expr> 
+G.add_production(Production(expr, Sentence(term), lambda x: x[0]))                                              # <expr> := <term>
 
-G.add_production(Production(term, Sentence(factor, mult, term), lambda x: MultNode(x[0], x[2])))               # <term> := <factor> * <term>
-G.add_production(Production(term, Sentence(factor, div, term), lambda x: DivNode(x[0], x[2])))                 # <term> := <factor> / <term>
-G.add_production(Production(term, Sentence(factor, mod, term), lambda x: ModNode(x[0], x[2])))                 # <term> := <factor> % <term>
-G.add_production(Production(term, Sentence(factor, great, term), lambda x: GreaterNode(x[0], x[2])))           # <term> := <factor> > <term>
-G.add_production(Production(term, Sentence(factor, greatEq, term), lambda x: GreaterOrEqualsNode(x[0], x[2]))) # <term> := <factor> >= <term>
-G.add_production(Production(term, Sentence(factor, less, term), lambda x: LessNode(x[0], x[2])))               # <term> := <factor> < <term>
-G.add_production(Production(term, Sentence(factor, lessEq, term), lambda x: LessOrEqualsNode(x[0], x[2])))     # <term> := <factor> <= <term>
-G.add_production(Production(term, Sentence(factor, equals, term), lambda x: EqualsNode(x[0], x[2])))           # <term> := <factor> == <term>
-G.add_production(Production(term, Sentence(factor, notEquals, term), lambda x: NotEqualsNode(x[0], x[2])))     # <term> := <factor> != <term>
-G.add_production(Production(term, Sentence(factor), lambda x: x[0]))                                           # <term> := <factor>
+G.add_production(Production(term, Sentence(factor1, great, term), lambda x: GreaterNode(x[0], x[2])))           # <term> := <factor1> > <term>
+G.add_production(Production(term, Sentence(factor1, greatEq, term), lambda x: GreaterOrEqualsNode(x[0], x[2]))) # <term> := <factor1> >= <term>
+G.add_production(Production(term, Sentence(factor1, less, term), lambda x: LessNode(x[0], x[2])))               # <term> := <factor1> < <term>
+G.add_production(Production(term, Sentence(factor1, lessEq, term), lambda x: LessOrEqualsNode(x[0], x[2])))     # <term> := <factor1> <= <term>
+G.add_production(Production(term, Sentence(factor1, equals, term), lambda x: EqualsNode(x[0], x[2])))           # <term> := <factor1> == <term>
+G.add_production(Production(term, Sentence(factor1, notEquals, term), lambda x: NotEqualsNode(x[0], x[2])))     # <term> := <factor1> != <term>
+G.add_production(Production(term, Sentence(factor1), lambda x: x[0]))                                           # <term> := <factor1>
+
+G.add_production(Production(factor1, Sentence(factor, mult,factor1), lambda x: MultNode(x[0], x[2])))           # <factor1> := <factor> * <factor1>
+G.add_production(Production(factor1, Sentence(factor, div, factor1), lambda x: DivNode(x[0], x[2])))            # <factor1> := <factor> / <factor1>
+G.add_production(Production(factor1, Sentence(factor, mod, factor1), lambda x: ModNode(x[0], x[2])))            # <factor1> := <factor> % <factor1>
+G.add_production(Production(factor1, Sentence(factor), lambda x: x[0]))                                         # <factor1> := <factor>
 
 G.add_production(Production(factor, Sentence(openBracket, expr, closeBracket), lambda x: x[1])) # <factor> := ( <expr> )
 G.add_production(Production(factor, Sentence(atom), lambda x: x[0]))                            # <factor> := <atom>

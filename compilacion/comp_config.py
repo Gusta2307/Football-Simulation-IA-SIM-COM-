@@ -68,3 +68,5 @@ class Config_C:
         args = {
             "valores": list
         }
+
+    

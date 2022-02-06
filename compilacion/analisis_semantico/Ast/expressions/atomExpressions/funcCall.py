@@ -33,8 +33,18 @@ class FuncCall(AtomExpression, Instruction):
                         values.append(('func', value))
                     else:
                         values.append(('id', value))
+            print("FUNCTION:", function)
             return function.evaluateFunction(values)
         return None
 
     def execute(self, scope: Scope):
         self.evaluate(scope)
+
+    def visit(self, scope):
+        if scope.check_func(self.identifier):
+            self.computed_type = scope.funcsType[self.identifier]
+            return True
+        else:
+            print(f"Function {self.identifier} is not declared")
+            self.computed_type = 0
+        return False

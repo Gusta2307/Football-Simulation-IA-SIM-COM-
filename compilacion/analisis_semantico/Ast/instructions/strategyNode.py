@@ -1,6 +1,7 @@
 from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.scope import Scope
 from IA.estrategia import Estrategia
+from compilacion.analisis_semantico.scopeTypeChecker import ScopeTypeChecker
 from utiles import create_dict
 import copy
 
@@ -32,3 +33,13 @@ class StrategyNode(Instruction):
         variables = create_dict(self.list_item[0], scope)
         estrategia = Estrategia(variables, self.list_item[1])
         scope.defineVar[self.identifier] = estrategia
+    
+    def visit(self, scope):
+        strategyScope = ScopeTypeChecker()
+        strategyScope.funcsType = copy.deepcopy(scope.funcsType)
+
+        for elem in self.list_item[0]:
+            if not elem.visit(strategyScope):
+                return False
+        
+        return self.list_item[1].visit(scope)

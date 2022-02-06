@@ -13,6 +13,8 @@ from compilacion.analisis_lexico.lexer import Lexer
 from compilacion.analisis_lexico.regex.regex import regex
 from compilacion.analisis_lexico.regex.regex_grammar import regex_grammar
 from compilacion.parsing.syntax_grammar import G
+from compilacion.analisis_semantico.typeChecker import TypeChecker
+from compilacion.analisis_semantico.scopeTypeChecker import ScopeTypeChecker
 from config import Config
 
 
@@ -28,7 +30,6 @@ def read_script(name):
     return line
 
 def main():
-    errors = []
     print("Input file:")
     file_name = input()
     code = read_script(file_name)
@@ -37,49 +38,42 @@ def main():
     lexer = Lexer(regex, lexer_parser)
 
     # Analizador Lexico
-    tokens_temp = lexer.tokenize(code, errors)
+    tokenizer_errors = []
+    tokens_temp = lexer.tokenize(code, tokenizer_errors)
     tokens = [token for token in tokens_temp if token.tokenType != 'space']
-    for t in tokens:
-        print(t.tokenType, t.text)
-
+    # for t in tokens:
+    #     print(t.tokenType, t.text, t.line, t.column)
 
     # Analizador Sintactico
-    parser = LRParser(G)
-    print("Voy para el parse")
-    tree = parser.parser(tokens, errors)
-    
-    if len(errors) > 0:
-        print(errors)
+    if len(tokenizer_errors) > 0:
+        print_errors(tokenizer_errors)
         return
-
+        
+    parser = LRParser(G)
+    tree = parser.parser(tokens, tokenizer_errors)
     astTree = tree.evaluate_attributes()
     
     # Analisis Semantico
     scope = Scope()
+    semantics_errors = []
+    scopeType = ScopeTypeChecker()
+    type_checker = TypeChecker()
     check_ok = astTree.checkSemantic(scope)
+
+    if check_ok:
+        type_checker.visit(astTree, semantics_errors, scopeType)
+        if len(semantics_errors) > 0:
+            check_ok = False
+            print_errors(semantics_errors)
+    else:
+        print_errors(semantics_errors) # errores del chequeo semantico
+
     print("chequeo",check_ok)
-    # chequeo de tipos tambien
 
     # Ejecucion
     if check_ok:
         astTree.execute(scope)
 
-    # tokens = lexer.tokenize("p[-1]", errors)
-    # t2 = lexer.tokenize('player p1 = (name="Messi")', errors)
-    # t3 = lexer.tokenize("prob1 = 99.09", errors)
-    # t4 = lexer.tokenize('player p1 = (name="Messi") # compilacion', errors)
-    
-    # tokens = [Token('9', 'Number', 0, 0), Token('=', '=', 0, 1), Token('5', 'Number', 0, 2), Token('+', '+', 0, 2), Token('4', 'Number', 0, 3)]
-    # logger = []
-    # lr_parser.parser(tokens, logger)
-    print("")
-
-    # file_name = 'file0.txt'#input()
-    
-    # compiler = Compiling()
-    # for token in compiler.Lexical.tokenize(code):
-    #     print(token)
-    
     return
 
     manager = [Manager('Xavi', 'Espana', 0.7, 43), Manager('Zidane', 'Francia', 0.8, 46)]
@@ -119,6 +113,10 @@ def main():
     # n = 20
     # while n:
     #     n -= 1
+
+def print_errors(errors):
+    for e in errors:
+        print(e)
 
 if '__main__' == __name__:
     main()

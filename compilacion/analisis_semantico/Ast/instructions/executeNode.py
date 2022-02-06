@@ -2,7 +2,8 @@
 from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.Ast.instructions.returnNode import ReturnNode
 from compilacion.analisis_semantico.scope import Scope
-
+import copy
+from compilacion.analisis_semantico.scopeTypeChecker import ScopeTypeChecker
 
 class ExecuteNode(Instruction):
     def __init__(self, state_game, list_items, player) -> None:
@@ -13,7 +14,6 @@ class ExecuteNode(Instruction):
         self.return_type = "str"
     
     def checkSemantic(self, scope: Scope) -> bool:
-        # self.func_scope = Scope()
         self.func_scope = scope
         self.func_scope.define_variables(self.state_game)
         self.func_scope.define_variables(self.player)
@@ -39,3 +39,16 @@ class ExecuteNode(Instruction):
 
     def execute(self, scope: Scope):
         pass
+    
+    def visit(self, scope):
+        exeScope = ScopeTypeChecker()
+        exeScope.funcsType = copy.deepcopy(scope.funcsType)
+
+        for item in self.list_items:
+            if not item.visit(exeScope):
+                return False
+            if type(item) == ReturnNode:
+                if self.return_type != item.expr.computed_type:
+                    print(f"Return type is {self.return_type} and expression to return has type {item.expr.computed_type}")
+                    return False
+        return True

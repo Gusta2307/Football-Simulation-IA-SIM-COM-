@@ -80,6 +80,28 @@ class Conditional(Instruction):
                 return value
 
                 
+    def visit(self, scope):
+        ifScope = copy.deepcopy(scope)
+        elifScope = copy.deepcopy(scope)
+        elseScope = copy.deepcopy(scope)
 
+        self.condition.visit(scope)
+        
+        for item in self.ifBody:
+            if not item.visit(ifScope):
+                return False
+        
+        if self.elIf is not None:
+            self.visit(self.elIf[0], scope)
+            for item in self.elIf[1]:
+                if not item.visit(elifScope):
+                    return False
+        
+        if self.elseBody is not None:
+            for item in self.elseBody:
+                if not item.visit(elseScope):
+                    return False
+                    
+        return True
         
         

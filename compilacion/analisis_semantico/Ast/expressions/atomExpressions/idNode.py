@@ -19,6 +19,15 @@ class IdNode(AtomExpression):
             print("ENTREE EXEcUTE ID")
             return scope.defineVar[self.identifier]
         return None
+
+    def visit(self, scope):
+        if scope.check_symbol(self.identifier):
+            self.computed_type = scope.varsType[self.identifier]
+            return True
+        else:
+            self.computed_type = 0
+            print(f"This {self.identifier} is not declared")
+        return False
     
     def __str__(self) -> str:
         return str(self.identifier)

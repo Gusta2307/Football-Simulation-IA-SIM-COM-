@@ -1,0 +1,4 @@
+int a = 4;
+str b = "Ronaldo";
+bool check = True;
+int c = a + 1;

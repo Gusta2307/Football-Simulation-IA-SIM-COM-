@@ -19,3 +19,10 @@ class ProgramNode(AstNode):
     def execute(self, scope: Scope):
         for inst in self.statement:
             inst.execute(scope)
+
+
+    def visit(self, scope):
+        for st in self.statement:
+            if not st.visit(scope):
+                return False
+        return True

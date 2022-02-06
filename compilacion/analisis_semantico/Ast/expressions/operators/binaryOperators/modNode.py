@@ -13,4 +13,8 @@ class ModNode(BinaryOperator):
 
         if operand2 == 0:
             return None # div entre 0 no valida
+
+        if type(operand1) != type(operand2):
+            return None
+
         return operand1 % operand2

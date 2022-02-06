@@ -16,3 +16,17 @@ class ArrayAtomNode(AtomExpression):
       
     def evaluate(self, scope: Scope):
         return [i.evaluate(scope) for i in self.items]
+
+    
+    def visit(self, scope):
+        curr_type = None
+        for i in range(len(self.items)):
+            item = self.items[i]
+            item.visit(scope)
+            if i == 0:
+                curr_type = item.computed_type
+            if curr_type != item.computed_type:
+                curr_type = "object"
+                break
+        self.computed_type = curr_type
+        return True

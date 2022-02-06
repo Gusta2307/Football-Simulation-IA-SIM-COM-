@@ -12,5 +12,9 @@ class BoolNode(AtomExpression):
     def evaluate(self, scope: Scope):
         return self.value
 
+    def visit(self, scope):
+        self.computed_type = "bool"
+        return True
+
     def __str__(self) -> str:
         return str(self.value)

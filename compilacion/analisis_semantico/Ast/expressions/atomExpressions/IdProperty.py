@@ -33,3 +33,8 @@ class IdPropertyNone(AtomExpression):
         except:
             print("IDPROPERTYYYYYYYYY")
             return None
+
+
+    def visit(self, scope):
+        self.computed_type = "exec"
+        return True

@@ -18,3 +18,7 @@ class PrintNode(Instruction):
         return print(value)
         # args_evaluated = [item.evaluate(scope) for item in self.expr]
         # return print(*args_evaluated)
+    
+
+    def visit(self, scope):
+        return self.expr.visit(scope)

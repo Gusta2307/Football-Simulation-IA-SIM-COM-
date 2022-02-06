@@ -11,5 +11,8 @@ class VariableNode(Instruction):
     def checkSemantic(self, scope: Scope) -> bool:
         return True
     
+    def visit(self, scope):
+        return True
+
     def execute(self, scope: Scope):
         pass

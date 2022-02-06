@@ -15,3 +15,7 @@ class RangeNode(Expression):
     def evaluate(self, scope: Scope):
         args_evaluated = [item.evaluate(scope) for item in self.args]
         return range(*args_evaluated)
+
+    def visit(self, scope):
+        self.computed_type = "range"
+        return True

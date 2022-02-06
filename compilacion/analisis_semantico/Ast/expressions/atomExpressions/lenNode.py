@@ -25,3 +25,8 @@ class LenNode(AtomExpression):
         #         return len(scope.defineVar[self.array.identifier].jugadores)
         #     # CREO Q AQUI VA UN ERROR
         # return None
+
+
+    def visit(self, scope):
+        self.computed_type = "int"
+        return True

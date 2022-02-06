@@ -17,3 +17,12 @@ class IndexNode(AtomExpression):
             index = num % len(var_value)
             return var_value[index]
         return None
+    
+    def visit(self, scope):
+        if scope.check_var(self.identifier):
+            self.computed_type = scope.varsType[self.identifier]
+            return True
+        else:
+            self.computed_type = 0
+            print(f"List {self.identifier} is not defined")
+        return False

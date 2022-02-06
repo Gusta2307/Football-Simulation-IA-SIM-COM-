@@ -11,3 +11,6 @@ class ContinueNode(Instruction):
 
     def execute(self, scope: Scope):
         pass
+
+    def visit(self, scope):
+        return True

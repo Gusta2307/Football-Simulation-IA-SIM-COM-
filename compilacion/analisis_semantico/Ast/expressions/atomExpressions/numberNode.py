@@ -19,8 +19,16 @@ class NumberNode(AtomExpression):
 class IntNode(NumberNode):
     def __init__(self, value: int) -> None:
         super().__init__(value)
+
+    def visit(self, scope):
+        self.computed_type = "int"
+        return True
     
 
 class FloatNode(NumberNode):
     def __init__(self, value: float) -> None:
         super().__init__(value)
+
+    def visit(self, scope):
+        self.computed_type = "float"
+        return True

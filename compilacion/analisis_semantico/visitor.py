@@ -3,14 +3,15 @@ import inspect
 __all__ = ['on', 'when']
 
 def on(param_name):
-  def f(fn):
+  def f(fn, a):
+    print(fn, a, param_name)
     dispatcher = Dispatcher(param_name, fn)
     return dispatcher
   return f
 
 
 def when(param_type):
-  def f(fn):
+  def f(fn, error, scope):
     frame = inspect.currentframe().f_back
     func_name = fn.func_name if 'func_name' in dir(fn) else fn.__name__
     dispatcher = frame.f_locals[func_name]
