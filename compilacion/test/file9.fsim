@@ -1,0 +1,34 @@
+
+function float potencia(float a, float b)
+{
+   if b == 0
+   {
+      return 1;
+   }
+   else
+   {
+      return a * potencia(a , b - 1);
+   };
+};
+
+function float prueba(float a, float b)
+{
+   return potencia(a, b) * potencia(a, b);
+};
+
+function float prueba1(float a, float b){
+   print("AAAA");
+   if a == 5{
+      return 99;
+   };
+   float p = prueba1(a + 1, b);
+   
+   print(b);
+   print(p);
+   return a;
+};
+
+float a = 2;
+float b = 3;
+float pot = prueba1(a, b);
+print(pot);

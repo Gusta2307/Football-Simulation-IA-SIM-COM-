@@ -1,0 +1,24 @@
+function int f(int n)
+{
+   return n + 2;
+};
+
+strategy st1
+{
+   variables
+   {
+      rangeint BALL_PASS = (li=0, ls=5),
+      rangeint SHOT_ON_GOAL = (li=0,ls=2, distribution=f),
+   };
+   
+   execute(state_game, p)
+   {
+      print("AAAA");
+      print(state_game);
+      print(p);
+      print("BBBBBBBBBB");
+      int a = 1;
+      int c = a + 2;
+      return "BALL_PASS";
+   };
+};

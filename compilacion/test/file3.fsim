@@ -1,0 +1,29 @@
+function void f(int n)
+{
+   print ("Probando");
+};
+
+strategy st1
+{
+   variables
+   {
+      rangeint BALL_PASS = (li=0, ls=5),
+      rangeint SHOT_ON_GOAL = (li=0,ls=2, distribution=f),
+      rangebool INTERCEPT_BALL = (),
+      rangefloat RECEIVE_BALL = (li=0.1, ls=0.4),
+      rangefloat THROW_IN = (li=0.3, ls=0.9),
+      rangefloat CORNER_KICK = (li=1.0, ls=2.2, distribution=f),
+      rangechoice CLEAR_BALL = (values=[1,2,3,4]),
+      rangechoice COMMIT_FOUL = (values=[1,2,3,4], distribution=f),
+   };
+   
+   execute(stat_game, p)
+   {
+      int a = 1;
+      int c = a + 2;
+      return "BALL_PASS";
+   };
+};
+
+print(st1);
+print(s);

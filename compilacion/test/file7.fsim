@@ -1,0 +1,28 @@
+rangeint a = (li=1,ls=5);
+
+function int f(rangeint a){
+    int b[1,2,3,4,5];
+    rangeint x = (li=8, ls=10);
+    int tt = f(x);
+    return;
+    for i in b {
+        int c = a.get_value();
+        print(c);
+        print(i % 2);
+        if  c == 4{
+            return 10;
+            print("PEPE");
+        }
+        elif (c % 2) == 1{
+            return 50;
+            print("POPO");
+        };
+        print(i);
+    };
+    return -1;
+};
+
+
+print("HHHHHHH");
+print(f(a));
+print("JJJJJJJ");

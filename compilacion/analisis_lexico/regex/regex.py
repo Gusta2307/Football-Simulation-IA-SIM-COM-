@@ -1,0 +1,82 @@
+"""
+Lenguaje de los tokens. Estan escritos en orden de prioridad
+"""
+
+regex = {}
+
+regex['space'] = "[ \t\r\f\v\n]*"
+
+regex['AND'] = 'AND'
+regex['OR'] = 'OR'
+regex['NOT'] = 'NOT'
+regex['TEAM'] = 'TEAM'
+regex['player'] = 'player'
+regex['team'] = 'team'
+regex['manager'] = 'manager'
+regex['referee'] = 'referee'
+regex['game'] = 'game'
+regex['for'] = 'for'
+regex['in'] = 'in'
+regex['print'] = 'print'  
+regex['goalkeeper'] = 'goalkeeper'
+regex['len'] = 'len'
+regex['if'] = 'if'
+regex['elif'] = 'elif'
+regex['else'] = 'else'
+regex['function'] = 'function'
+regex['return'] = 'return'
+regex['strategy'] = 'strategy'
+regex['variables'] = 'variables'
+regex['execute'] = 'execute'
+regex['range'] = 'range'
+regex['rangeint'] = 'rangeint'
+regex['rangefloat'] = 'rangefloat'
+regex['rangebool'] = 'rangebool'
+regex['rangechoice'] = 'rangechoice'
+regex['int'] = 'int'
+regex['float'] = 'float'
+regex['str'] = 'str'
+regex['bool'] = 'bool'
+regex['void'] = 'void'
+regex['object'] = 'object'
+regex['True'] = 'True'
+regex['False'] = 'False'
+regex['break'] = 'break'
+regex['continue'] = 'continue'
+regex['report'] = 'report'
+
+regex[','] = '[,]'
+regex[';'] = '[;]'
+regex['.'] = '[.]'
+regex[':'] = '[:]'
+
+regex['('] = '[(]'
+regex[')'] = '[)]'
+regex['{'] = '[{]'
+regex['}'] = '[}]'
+regex['['] = '[[]'
+regex[']'] = '[]]'
+
+regex['/#'] = '[/][#]'
+regex['#/'] = '[#][/]'
+regex['<='] = '[<][=]'
+regex['>='] = '[>][=]'
+regex['=='] = '[=][=]'
+regex['!='] = '[!][=]'
+
+regex['='] = '[=]'
+
+regex['+'] = '[+]'
+regex['-'] = '[-]'
+regex['*'] = '[*]'
+regex['/'] = '[/]'
+regex['%'] = '[%]'
+regex['<'] = '[<]'
+regex['>'] = '[>]'
+
+regex['_'] = '[_]'
+regex['#'] = '[#]'
+
+regex['id'] = '([_]|[a-zA-Z])([_]|[a-zA-Z0-9])*'
+regex['num'] = '[0-9]+(.[0-9]+)?'
+regex['string'] = '"[ !#-~]*"'
