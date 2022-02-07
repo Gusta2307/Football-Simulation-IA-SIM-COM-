@@ -51,8 +51,8 @@ class Atajar(Accion):
     def poscondicion(self, partido, atajar, rebote):
         if atajar:
             # self.agente.equipo.estadisticas['PARADAS PORTERO'] += 1
-            print("PQPQ")
             partido.reporte.annadir_parada_portero(self.agente.equipo.nombre, partido.pt)
+            self.agente.reporte.annadir_parada_portero()
             if rebote == 0:
                 partido.pos_balon = self.agente
             elif rebote == 1 or rebote == 2:
@@ -64,4 +64,5 @@ class Atajar(Accion):
             partido.pos_balon = None
             partido.estado = config.PARTIDO.ESTADO.REANUDAR_PARTIDO
             partido.reporte.annadir_gol(partido.ultima_accion.agente.equipo.nombre, partido.pt)
+            partido.ultima_accion.agente.reporte.annadir_gol()
         

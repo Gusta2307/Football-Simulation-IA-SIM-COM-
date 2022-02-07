@@ -92,7 +92,7 @@ class Conditional(Instruction):
                 return False
         
         if self.elIf is not None:
-            self.visit(self.elIf[0], scope)
+            self.elIf[0].visit(scope)
             for item in self.elIf[1]:
                 if not item.visit(elifScope):
                     return False

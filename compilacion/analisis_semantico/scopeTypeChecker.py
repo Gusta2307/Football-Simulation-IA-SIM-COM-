@@ -15,6 +15,9 @@ class ScopeTypeChecker:
         
       def check_func(self, symbol: str)-> bool:
           return self.funcsType.__contains__(symbol)
+
+      def check_name_fun(self, identifier: str) -> bool:
+        return len(list(filter(lambda x : x[0] == identifier, self.funcsType.keys()))) > 0
       
       def save_funcType(self, symbol: str, sym_type) -> bool:
           if not self.check_var(symbol):

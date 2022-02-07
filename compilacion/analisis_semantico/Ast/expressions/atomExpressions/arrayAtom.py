@@ -9,7 +9,6 @@ class ArrayAtomNode(AtomExpression):
 
     def checkSemantic(self, scope: Scope) -> bool:
         for item in self.items:
-            # print(item)
             if not item.checkSemantic(scope):
                 return False
         return True
@@ -22,7 +21,8 @@ class ArrayAtomNode(AtomExpression):
         curr_type = None
         for i in range(len(self.items)):
             item = self.items[i]
-            item.visit(scope)
+            if not item.visit(scope):
+                return False
             if i == 0:
                 curr_type = item.computed_type
             if curr_type != item.computed_type:

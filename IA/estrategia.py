@@ -10,7 +10,6 @@ class Estrategia:
         
         for v in self.variables.keys():
             self.execute.func_scope.defineVar[v]= self.variables[v]
-        print("func_scope", self.execute.func_scope.defineVar, "AABB")
         return self.execute.evaluateStrategy()
 
 

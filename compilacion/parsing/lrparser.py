@@ -73,10 +73,6 @@ class LRParser:
         state_stack = [afn.current_state]
         tokens.append(Token('$', '$'))   
 
-        print("TOKENS DEL PARSE")
-        for t in tokens:
-            print(t.tokenType, t.text) 
-
         while(i < len(tokens)):
             shift, reduce_prod= False, set()
             curr_token = tokens[i].tokenType 
@@ -93,10 +89,12 @@ class LRParser:
                 if next_symbol is not None and type(next_symbol) == Terminal:
                     if curr_token == next_symbol.name:
                         shift = True
-            print(curr_token, tokens[i].text)
 
             if len(reduce_prod) > 1:
-                errors.append("Error: conflict reduce-reduce")
+                print("Error: reduce-reduce conflict")
+                print("Productions")
+                for r in reduce_prod:
+                    print(r)
                 break
             
             if shift:
@@ -106,7 +104,9 @@ class LRParser:
                     tree_stack.append(SyntaxTree(tokens[i])) # tree_stack.append(SyntaxTree(t))
                     i += 1
                 else:
-                    errors.append("Error: conflict shift-reduce")
+                    print("Error: shift-reduce conflict")
+                    for r in reduce_prod:
+                        print(r)
                     break
             else:
                 if len(reduce_prod) == 1:
@@ -140,9 +140,9 @@ class LRParser:
                         if len(tree_stack) == 1 and tree_stack[0].value.name == grammar.startNoTerminal.name:
                             return tree_stack[0]
                         else:
-                            errors.append("Error: ")
+                            print("Error: Unexpected final token!!!")
                             break
                     else:
-                        errors.append(f"Error: unexpected token")
+                        print(f"Error: Unexpected token {tokens[i].text} in line {tokens[i].line} and column {tokens[i].column}")
                         break
         return None

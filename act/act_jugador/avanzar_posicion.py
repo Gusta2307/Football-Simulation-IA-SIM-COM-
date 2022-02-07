@@ -21,6 +21,7 @@ class Avanzar_Posicion:
         if avanzar:
             self.poscondicion(partido)
             partido.reporte.annadir_a_resumen(f'{partido.obtener_tiempo()} {self.descripcion()}', partido.pt)
+    
 
 
     def poscondicion(self, partido):

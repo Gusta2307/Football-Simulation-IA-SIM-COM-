@@ -6,7 +6,6 @@ class Reporte:
         self._goles = {self._eq1: 0, self._eq2: 0}
         self._remates = {self._eq1: 0, self._eq2: 0}
         self._tiros_de_esquina = {self._eq1: 0, self._eq2: 0}
-        self._fuera_de_juego = {self._eq1: 0, self._eq2: 0}
         self._pases = {self._eq1: 0, self._eq2: 0}
         self._balones_perdidos = {self._eq1: 0, self._eq2: 0}
         self._balones_recuperados = {self._eq1: 0, self._eq2: 0}
@@ -16,10 +15,6 @@ class Reporte:
         self._tarjetas_rojas = {self._eq1: 0, self._eq2: 0}
         self._resumen = []
 
-    # @property
-    # def goles(self):
-    #     return {self._eqi1 : a.goles[self._eq1] + b.goles[self._eq1], ........}
-
     def annadir_gol(self, eq):
         self._goles[eq] += 1
 
@@ -28,9 +23,6 @@ class Reporte:
 
     def annadir_tiro_esquina(self, eq):
         self._tiros_de_esquina[eq] += 1
-
-    def annadir_fuera_juego(self, eq):
-        self._fuera_de_juego[eq] += 1
 
     def annadir_pase(self, eq):
         self._pases[eq] += 1
@@ -84,107 +76,11 @@ class Reporte:
         return str_result
  
 
-
-
 class Reporte_General(Reporte):
     def __init__(self, nombre_eq1, nombre_eq2):
         super().__init__(nombre_eq1,nombre_eq2)
         self.reporte1 = Reporte(nombre_eq1, nombre_eq2)
         self.reporte2 = Reporte(nombre_eq1, nombre_eq2)
-
-
-    @property
-    def goles(self):
-        return {
-            self._eq1: self.reporte1._goles[self.eq1] + self.reporte2._goles[self.eq1], 
-            self._eq2: self.reporte1._goles[self.eq2] + self.reporte2._goles[self.eq2]
-        }
-
-
-
-    @property
-    def remates(self):
-        return {
-            self._eq1: self.reporte1._remates[self._eq1] + self.reporte2._remates[self._eq1],
-            self._eq2: self.reporte1._remates[self._eq2] + self.reporte2._remates[self._eq2],
-        }
-
-
-    @property
-    def tiros_de_esquina(self):
-        return {
-            self._eq1: self.reporte1._tiros_de_esquina[self._eq1] + self.reporte2._tiros_de_esquina[self._eq1],
-            self._eq2: self.reporte1._tiros_de_esquina[self._eq2] + self.reporte2._tiros_de_esquina[self._eq2],
-        } 
-
-
-    @property
-    def fuera_de_juego(self):
-        return {
-            self._eq1: self.reporte1._fuera_de_juego[self._eq1] + self.reporte2._fuera_de_juego[self._eq1],
-            self._eq2: self.reporte1._fuera_de_juego[self._eq2] + self.reporte2._fuera_de_juego[self._eq2],
-        }
-    
-    @property
-    def pase(self):
-        return {
-            self._eq1: self.reporte1._pases[self._eq1] + self.reporte2._pases[self._eq1],
-            self._eq2: self.reporte1._pases[self._eq2] + self.reporte2._pases[self._eq2],
-        }
-        
-
-    
-    @property
-    def balones_perdidos(self):
-        return {
-            self._eq1: self.reporte1._balones_perdidos[self._eq1] + self.reporte2._balones_perdidos[self._eq1],
-            self._eq2: self.reporte1._balones_perdidos[self._eq2] + self.reporte2._balones_perdidos[self._eq2],
-        }
-
-    
-    @property
-    def balones_perdidos(self):
-        return {
-            self._eq1: self.reporte1._balones_recuperados[self._eq1] + self.reporte2._balones_recuperados[self._eq1],
-            self._eq2: self.reporte1._balones_recuperados[self._eq2] + self.reporte2._balones_recuperados[self._eq2],
-        }
-
-
-    @property
-    def paradas_portero(self):
-        return {
-            self._eq1: self.reporte1._paradas_portero[self._eq1] + self.reporte2._paradas_portero[self._eq1],
-            self._eq2: self.reporte1._paradas_portero[self._eq2] + self.reporte2._paradas_portero[self._eq2],
-        }
-
-    
-    @property
-    def faltas(self):
-        return {
-            self._eq1: self.reporte1._faltas[self._eq1] + self.reporte2._faltas[self._eq1],
-            self._eq2: self.reporte1._faltas[self._eq2] + self.reporte2._faltas[self._eq2],
-        }
-
-
-    @property
-    def tarjetas_amarillas(self):
-        return {
-            self._eq1: self.reporte1._tarjetas_amarillas[self._eq1] + self.reporte2._tarjetas_amarillas[self._eq1],
-            self._eq2: self.reporte1._tarjetas_amarillas[self._eq2] + self.reporte2._tarjetas_amarillas[self._eq2],
-        }
-
-    @property
-    def tarjetas_rojas(self):
-        return {
-            self._eq1: self.reporte1._tarjetas_rojas[self._eq1] + self.reporte2._tarjetas_rojas[self._eq1],
-            self._eq2: self.reporte1._tarjetas_rojas[self._eq2] + self.reporte2._tarjetas_rojas[self._eq2],
-        }
-
-    @property
-    def resumen(self):
-        return self.reporte1._resumen + self.reporte2._resumen
-
-
 
     def annadir_gol(self, eq, t):
         if t == 1:
@@ -209,14 +105,6 @@ class Reporte_General(Reporte):
             self.reporte2._tiros_de_esquina[eq] += 1
 
         self._tiros_de_esquina[eq] += 1
-
-    def annadir_fuera_juego(self, eq, t):
-        if t == 1:
-            self.reporte1._fuera_de_juego[eq] += 1
-        else:
-            self.reporte2._fuera_de_juego[eq] += 1
-
-        self._fuera_de_juego[eq] += 1
 
     def annadir_pase(self, eq, t):
         if t == 1:
@@ -284,3 +172,70 @@ class Reporte_General(Reporte):
         self._resumen.append(string)
 
 
+
+class Reporte_Jugador:
+    def __init__(self, jugador) -> None:
+        self._jugador = jugador
+        self._goles = 0
+        self._remates = 0
+        self._pases = 0
+        self._balones_perdidos = 0
+        self._balones_recuperados = 0
+        self._paradas_portero = 0
+        self._faltas = 0
+        self._tarjetas_amarillas = 0
+        self._tarjetas_rojas = 0
+
+
+    def annadir_gol(self):
+        self._goles += 1
+
+    def annadir_remate(self):
+        self._remates += 1
+
+    def annadir_pase(self):
+        self._pases += 1
+
+    def annadir_balon_perdido(self):
+        self._balones_perdidos += 1
+
+    def annadir_balon_recuperado(self):
+        self._balones_recuperados += 1
+
+    def annadir_parada_portero(self):
+        self._paradas_portero += 1
+
+    def annadir_falta(self):
+        self._faltas += 1
+
+    def annadir_tarjeta_amarilla(self):
+        self._tarjetas_amarillas += 1
+
+    def annadir_tarjeta_roja(self):
+        self._tarjetas_rojas += 1
+        
+
+    def __str__(self) -> str:
+        prop = vars(self)
+        underscores = 40
+        str_result = '_'*underscores + '\n'+ f'Datos del Jugador'.center(underscores) + '\n' +'_'*underscores 
+        nombre=self._jugador.nombre
+        pos=self._jugador.posicion  
+        edad=self._jugador.edad
+        pais=self._jugador.pais
+        equipo=self._jugador.equipo
+        str_result += '\n' + str("".join(" Nombre") + "".join(nombre).rjust(underscores - len("nombre") - 2)).center(underscores)
+        str_result += '\n' + str("".join(" Posicion") + "".join(pos).rjust(underscores - len('Posicion') - 2)).center(underscores)
+        str_result += '\n' + str("".join(" Edad") + "".join(str(edad)).rjust(underscores - len('Edad') - 2)).center(underscores)
+        str_result += '\n' + str("".join(" Pais") + "".join(str(pais)).rjust(underscores - len('pais') - 2)).center(underscores)
+        str_result += '\n' + str("".join(" Equipo") + "".join(str(equipo)).rjust(underscores - len('Equipo') - 2)).center(underscores)
+        str_result += '\n' +'_'*underscores + '\n'+ f'Estadisticas del Jugador'.center(underscores) + '\n' +'_'*underscores 
+
+        for i in range(1, len(prop)):
+            prop_name = str(list(prop.keys())[i]).replace('_', '', 1).replace('_', ' ').upper()
+            prop_value = str(list(prop.values())[i])
+            str_result += '\n' + str("".join(f"{prop_name}") + "".join(prop_value).rjust(underscores - len(prop_name) - 2)).center(underscores)
+
+        str_result += '\n' +'_'*underscores
+
+        return str_result

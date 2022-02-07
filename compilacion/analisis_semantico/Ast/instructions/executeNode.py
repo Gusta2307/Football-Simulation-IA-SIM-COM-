@@ -20,16 +20,13 @@ class ExecuteNode(Instruction):
         
         for inst in self.list_items:
             if not inst.checkSemantic(self.func_scope): #Scope
-                print("INST ERROR:", inst)
                 return False
         return True
 
     def evaluateStrategy(self):
         for inst in self.list_items:
-            print("INSTRUCTION DE EXECUTE", inst)
             if type(inst) == ReturnNode:
                 value = inst.execute(self.func_scope)
-                print("VALUEEEEEEEE", value)
                 if value in self.func_scope.defineVar[self.player].acciones.keys(): #En caso contrario retornar error
                     return value
             value = inst.execute(self.func_scope)
@@ -44,6 +41,18 @@ class ExecuteNode(Instruction):
         exeScope = ScopeTypeChecker()
         exeScope.funcsType = copy.deepcopy(scope.funcsType)
 
+        if not exeScope.check_var(self.state_game):
+            exeScope.varsType[self.state_game] = "game"
+        else:
+            print(f"{self.state_game} is declared")
+            return False
+        
+        if not exeScope.check_var(self.player):
+            exeScope.varsType[self.player] = "player"
+        else:
+            print(f"{self.player} is declared")
+            return False
+
         for item in self.list_items:
             if not item.visit(exeScope):
                 return False
@@ -51,4 +60,5 @@ class ExecuteNode(Instruction):
                 if self.return_type != item.expr.computed_type:
                     print(f"Return type is {self.return_type} and expression to return has type {item.expr.computed_type}")
                     return False
-        return True
+                return item.expr.computed_type == "str"
+        return False

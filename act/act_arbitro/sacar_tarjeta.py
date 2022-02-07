@@ -43,11 +43,13 @@ class Sacar_tarjeta(Accion):
             eq.jugadores_en_campo.remove(partido.ultima_accion.agente)
             # partido.ultima_accion.agente.equipo.estadisticas['TARJETAS ROJAS'] += 1
             partido.reporte.annadir_tarjeta_roja(partido.ultima_accion.agente.equipo.nombre, partido.pt)
+            self.falta_jugador.reporte.annadir_tarjeta_amarilla()
             partido.reporte.annadir_a_resumen(f"El jugador {partido.ultima_accion.agente.nombre} es expulsado del partido", partido.pt)
         elif self.sub_estado ==  config.ACCIONES.ESTADO.SACAR_TARJETA.MUESTRA_AMARILLA:
             partido.ultima_accion.agente.cantidad_tarjetas = 1
             # partido.ultima_accion.agente.equipo.estadisticas['TARJETAS AMARILLAS'] += 1
             partido.reporte.annadir_tarjeta_amarilla(partido.ultima_accion.agente.equipo.nombre, partido.pt)
+            self.falta_jugador.reporte.annadir_tarjeta_amarilla()
 
         partido.pos_balon = None
         partido.estado = config.PARTIDO.ESTADO.DETENIDO

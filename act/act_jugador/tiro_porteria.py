@@ -31,6 +31,7 @@ class Tiro_Porteria (Accion):
     def poscondicion(self, partido):
         # self.agente.equipo.estadisticas['REMATES'] += 1
         partido.reporte.annadir_remate(self.agente.equipo.nombre, partido.pt)
+        self.agente.reporte.annadir_remate()
         partido.pos_balon = None
         partido.ultima_accion = self
         if self.estado == config.ACCIONES.ESTADO.TIRO_PORTERIA.POR_FUERA:

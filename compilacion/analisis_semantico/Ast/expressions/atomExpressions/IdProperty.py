@@ -19,20 +19,12 @@ class IdPropertyNone(AtomExpression):
 
     def evaluate(self, scope: Scope):
         var = scope.defineVar[self.identifier]
-        try:
-            print("QAZQQAZQAZQAZAQWERTYUIOLKJHGFDSDRTYUJN")
-            if type(self._property) == FuncCall:
-                print("PROPERTYYYYY FUNCCALL", self._property.identifier)
-                self.property_value = getattr(var, _config.TRADUCTOR_ID.ID[self._property.identifier])
-                return self.property_value()
-            else:
-                print("PROPERTYYYYY VARIABLE", self._property)
-                self.property_value = getattr(var, _config.TRADUCTOR_ID.ID[self._property])
-                return self.property_value
-            # print(var)
-        except:
-            print("IDPROPERTYYYYYYYYY")
-            return None
+        if type(self._property) == FuncCall:
+            self.property_value = getattr(var, _config.TRADUCTOR_ID.ID[self._property.identifier])
+            return self.property_value()
+        else:
+            self.property_value = getattr(var, _config.TRADUCTOR_ID.ID[self._property])
+            return self.property_value
 
 
     def visit(self, scope):

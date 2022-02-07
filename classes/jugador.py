@@ -27,6 +27,8 @@ class Jugador(Agente):
         self.equipo = None
         self.estrategia = st
         self.ubicacion_campo = config.ZONA.REL_ZONA_POS[self.posicion]
+
+        self.reporte = None
         
         #Las prob de que se realicen satisfactoriamente
         self.tiro_porteria = list_prob[0]

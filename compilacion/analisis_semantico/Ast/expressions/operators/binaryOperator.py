@@ -17,13 +17,18 @@ class BinaryOperator(Expression):
         if self.left.computed_type != self.right.computed_type:
             if (self.left.computed_type == "int" or self.left.computed_type == "float") and (self.right.computed_type == "float" or self.right.computed_type == "int"):
                 self.computed_type = "float"
+                return True
             elif self.left.computed_type == "exec" or self.right.computed_type == "exec":
                 self.computed_type = "exec"
+                return True
             else:
                 self.computed_type = 0
                 print(f"Left expression has type {self.left.computed_type} and right expression has type {self.right.computed_type}")
                 return False
         else:
-            self.computed_type = self.left.computed_type
-
-        return True
+            if self.left.computed_type == "int" or self.left.computed_type == "float":            
+                self.computed_type = self.left.computed_type
+                return True
+            else:
+                print(f"Type can only be numeric")
+        return False

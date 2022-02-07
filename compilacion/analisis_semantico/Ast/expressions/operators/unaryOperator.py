@@ -8,7 +8,3 @@ class UnaryOperator(Expression):
     
     def checkSemantic(self, scope: Scope) -> bool:
         return self.expr.checkSemantic(scope)
-
-    def visit(self, scope):
-        self.visit(node.expr, scope)
-        node.computed_type = node.expr.computed_type

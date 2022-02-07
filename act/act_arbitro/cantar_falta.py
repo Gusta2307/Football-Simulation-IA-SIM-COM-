@@ -41,8 +41,8 @@ class Cantar_falta(Accion):
         if self.estado == config.ACCIONES.ESTADO.ARBITRO.NO_CANTA_FALTA:
            partido.estado = config.PARTIDO.ESTADO.EN_JUEGO
         elif self.estado == config.ACCIONES.ESTADO.ARBITRO.CANTA_FALTA:
-            # partido.ultima_accion.agente.equipo.estadisticas['FALTAS'] += 1
             partido.reporte.annadir_falta(partido.ultima_accion.agente.equipo.nombre, partido.pt)
+            partido.ultima_accion.agente.reporte.annadir_falta()
             partido.estado = config.PARTIDO.ESTADO.DETENIDO
             partido.pos_balon = None
             partido.ultima_accion = self

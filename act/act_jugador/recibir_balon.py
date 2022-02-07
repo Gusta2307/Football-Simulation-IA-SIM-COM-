@@ -28,6 +28,7 @@ class Recibir_balon(Accion):
         recibir_balon = numpy.random.choice(numpy.arange(0, 2), p=[self.agente.recibir_balon, 1 - self.agente.recibir_balon])
         if recibir_balon:
             self.estado = config.ACCIONES.ESTADO.RECIBIR_BALON.RECIBIR_BALON
+            partido.reporte.annadir_a_resumen(f'{partido.obtener_tiempo()} {self.descripcion()} {self.estado}', partido.pt)
             # print(f'{partido.obtener_tiempo()} {self.descripcion()}  {self.estado}')
         else:
             self.estado = config.ACCIONES.ESTADO.RECIBIR_BALON.NO_RECIBE_BALON
@@ -43,13 +44,16 @@ class Recibir_balon(Accion):
     def poscondicion(self, partido):
         if self.estado == config.ACCIONES.ESTADO.RECIBIR_BALON.RECIBIR_BALON:
             # self.agente.equipo.estadisticas['PASES'] += 1
-            partido.reporte.annadir_pase(self.agente.equipo.nombre, partido.pt)
+            if partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_PASE:
+                partido.ultima_accion.agente.reporte.annadir_pase()
+                partido.reporte.annadir_pase(self.agente.equipo.nombre, partido.pt)
             partido.pos_balon = self.agente
             partido.ultima_accion = self
         else:
             if partido.ultima_accion.tipo == config.ACCIONES.JUGADOR.ACT_PASE:
                 # self.agente.equipo.estadisticas['BALONES PERDIDOS'] += 1
                 partido.reporte.annadir_balon_perdido(self.agente.equipo.nombre, partido.pt)
+                partido.ultima_accion.agente.reporte.annadir_balon_perdido()
                 partido.estado = config.PARTIDO.ESTADO.DETENIDO
                 partido.pos_balon = None
                 partido.ultima_accion = self

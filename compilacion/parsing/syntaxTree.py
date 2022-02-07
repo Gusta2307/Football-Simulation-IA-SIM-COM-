@@ -10,7 +10,6 @@ class SyntaxTree:
         self.production = production
 
     def evaluate_attributes(self):
-        print("VALUE:", self.value)
         if len(self.childs) > 0:
             result = self.production.attribute([child.evaluate_attributes() for child in self.childs])
         else:

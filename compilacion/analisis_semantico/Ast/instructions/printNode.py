@@ -6,18 +6,11 @@ class PrintNode(Instruction):
         self.expr = expr
     
     def checkSemantic(self, scope: Scope) -> bool:
-        print("PRINT EXPR", self.expr)
         return self.expr.checkSemantic(scope)
-        # for inst in self.expr:
-        #     if not inst.checkSemantic(scope):
-        #         return False
-        # return True
 
     def execute(self, scope: Scope):
         value = self.expr.evaluate(scope)
         return print(value)
-        # args_evaluated = [item.evaluate(scope) for item in self.expr]
-        # return print(*args_evaluated)
     
 
     def visit(self, scope):

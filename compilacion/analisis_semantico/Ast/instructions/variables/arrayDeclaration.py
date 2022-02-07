@@ -14,11 +14,14 @@ class ArrayDeclaration(VariableNode):
         for item in self.items.items:
             if not item.checkSemantic(scope):
                 return False
-        return scope.define_variables(self.identifier)
+        if scope.define_variables(self.identifier):
+            scope.originType[self.identifier] = self.type
+            return True
+        return False
 
     def execute(self, scope: Scope):
         if scope.check_var(self.identifier):
-            scope.defineVar[self.identifier] = self.items
+            scope.defineVar[self.identifier] = self.items.evaluate(scope)
     
     def visit(self, scope):
         if not self.items.visit(scope):
@@ -29,4 +32,5 @@ class ArrayDeclaration(VariableNode):
             return False
         else:
             self.computed_type = self.type
+            scope.varsType[self.identifier] = self.type
             return True

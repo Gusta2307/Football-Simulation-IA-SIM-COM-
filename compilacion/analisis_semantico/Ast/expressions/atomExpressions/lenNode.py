@@ -16,15 +16,7 @@ class LenNode(AtomExpression):
         if type(self.array) == IdNode:
             self.array = scope.defineVar[self.array.identifier]
         value = self.array.evaluate(scope)
-        print("VALUE DE LEN:", value)
         return len(value)
-        # if scope.check_var(self.array.identifier):
-        #     if type(scope.defineVar[self.array.identifier]) == ArrayAtomNode:
-        #         return len(scope.defineVar[self.array.identifier].items)
-        #     else:
-        #         return len(scope.defineVar[self.array.identifier].jugadores)
-        #     # CREO Q AQUI VA UN ERROR
-        # return None
 
 
     def visit(self, scope):

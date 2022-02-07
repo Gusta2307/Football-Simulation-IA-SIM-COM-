@@ -1,0 +1,9 @@
+object a = 4;
+object b = "True";
+str z = "lljl";
+object c = False;
+print(a);
+object d = 5 + 3;
+print(d);
+a = "name";
+print(a);

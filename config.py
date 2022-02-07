@@ -1,4 +1,3 @@
-
 class Config:
     class ZONA:
         ATAQUE = 'ATAQUE'
@@ -22,6 +21,18 @@ class Config:
             CENTRO: DEFENSA
         }
 
+    class RENDIMIENTO:
+        ASPECTOS = {
+            "goles": 8,
+            "remates": 5,
+            'pases': 4,
+            "balones_perdidos": -5,
+            "balones_recuperados": 2.5,
+            "paradas_portero" : 3,
+            "faltas" : -5,
+            "tarjetas_amarillas" : -3,
+            "tarjetas_rojas" : -10
+        }
 
     class POSICIONES:
         POS = ['DEL', 'MC', 'DEF', 'GK']
@@ -164,5 +175,6 @@ class Config:
             "cards_yellow" : "tarjetas_amarillas",
             "cards_red":"tarjetas_rojas",
             "abstrac":"_resumen",
-            "get_value": "get_value"
+            "get_value": "get_value",
+            'simulate':'simular'
         }

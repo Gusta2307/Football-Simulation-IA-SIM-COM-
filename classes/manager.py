@@ -9,10 +9,10 @@ from config import Config
 config = Config()
 
 class Manager(Agente): #(Agente, Declaration):
-    def __init__(self, name, country, experence, age, st=None) -> None:
+    def __init__(self, name, country, experience, age, st=None) -> None:
         self.nombre = name
         self.pais = country
-        self.experiencia = experence
+        self.experiencia = experience
         self.estrategia = st
         self.edad = age
         self.equipo = None

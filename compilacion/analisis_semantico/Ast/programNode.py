@@ -12,7 +12,6 @@ class ProgramNode(AstNode):
     def checkSemantic(self, scope: Scope) -> bool:
         for inst in self.statement:
             if not inst.checkSemantic(scope):
-                print("instruction", inst)
                 return False
         return True
 

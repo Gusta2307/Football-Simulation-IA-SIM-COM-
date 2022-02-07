@@ -1,4 +1,25 @@
+int list[1,2,3,4];
+
 int a = 4;
-str b = "Ronaldo";
-bool check = True;
-int c = a + 1;
+str b = "True";
+bool check = False;
+str c = b+"A";
+print(c);
+
+function float write(int a)
+{
+   float b = 4;
+   return b;
+};
+
+print(write(a));
+
+function float write_1()
+{
+   print("WRITE1");
+   return 0.4;
+};
+
+print(write_1());
+a = a + 5;
+print(a);

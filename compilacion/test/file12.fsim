@@ -1,0 +1,5 @@
+str name = "Messi,,....P";
+str nam2 = "Real Madrid";
+print("Messi,...Probando");
+print("Messi, ... Probando");
+print("Casa grande");

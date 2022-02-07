@@ -12,9 +12,9 @@ class DivNode(BinaryOperator):
         operand2 = self.right.evaluate(scope)
 
         if operand2 == 0: #div entre 0 no valida
-            return None
+            raise Exception("Division by zero")
 
-        if type(operand1) != type(operand2):
-            return None
+        if type(operand1) != type(operand2) and ((type(operand1) != int and type(operand1) != float) or (type(operand2) != int and type(operand2) != float)):
+            raise Exception("Operation not support")
             
         return operand1 / operand2

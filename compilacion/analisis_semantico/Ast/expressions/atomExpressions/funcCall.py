@@ -10,21 +10,21 @@ from compilacion.analisis_semantico.scope import Scope
 class FuncCall(AtomExpression, Instruction):
     def __init__(self, identifier: str, args=[]) -> None:
         self.identifier = identifier
-        self.args = args 
+        self.args = args
 
     def checkSemantic(self, scope: Scope) -> bool:
-        if self.args is not None:
+        if self.args != []:
             for expr in self.args:
                 if not expr.checkSemantic(scope):
                     return False
             return scope.check_fun(self.identifier, len(self.args))
         return True
-    
+
     def evaluate(self, scope: Scope):
         if scope.check_fun(self.identifier, len(self.args)):
             function = scope.defineFun[(self.identifier, len(self.args))]
             values = []
-            for expr in self.args: # los argumentos se buscan en el scope de afuera
+            for expr in self.args:  # los argumentos se buscan en el scope de afuera
                 value = expr.evaluate(scope)
                 if value is None:
                     return None
@@ -33,7 +33,6 @@ class FuncCall(AtomExpression, Instruction):
                         values.append(('func', value))
                     else:
                         values.append(('id', value))
-            print("FUNCTION:", function)
             return function.evaluateFunction(values)
         return None
 

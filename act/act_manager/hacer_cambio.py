@@ -4,7 +4,7 @@ from act.accion import Accion
 from config import Config
 from utiles import clasificar_jugadores
 from IA.range import Range
-
+from classes.reporte import Reporte_Jugador
 from colorama import Fore, Style
 
 config = Config()
@@ -30,9 +30,12 @@ class Hacer_cambio(Accion):
         for i in range(cambios_ha_realizar):
             if len(self.agente.equipo.jugadores_en_banca):
                 j1 = self.agente.equipo.jugadores_en_banca[random.randint(0, len(self.agente.equipo.jugadores_en_banca) - 1)]
-                print(j1.posicion)
+                # print(j1.posicion)
                 jugadores_posibles = clasificar_jugadores(self.agente.equipo.jugadores_en_campo)[j1.posicion]
-                j2 = jugadores_posibles[random.randint(0, len(jugadores_posibles) - 1)]
+                if jugadores_posibles:
+                    j2 = jugadores_posibles[random.randint(0, len(jugadores_posibles) - 1)]
+                if len(list(filter(lambda x: j1 in x or j2 in x, self.cambio))) or len(list(filter(lambda x: j1 in x or j2 in x,partido.cambios_pendiente[self.agente.equipo.nombre]))):
+                    continue
                 self.cambio.append((j1,j2))
                 partido.cambios_pendiente[self.agente.equipo.nombre].append(self)
                 self.tiempo += 0.8
@@ -45,15 +48,19 @@ class Hacer_cambio(Accion):
         campo = self.agente.equipo.jugadores_en_campo
         partido.reporte.annadir_a_resumen(f"El {self.agente.equipo.nombre} va ha realizar cambios", partido.pt)
         for j1, j2 in self.cambio:
-            banca.remove(j1)
-            campo.remove(j2)
-            campo.append(j1)
-            if not opt: 
-                partido.op._optimizar_agente(j1)
-            elif j1.estrategia is not None:
-                for v in j1.estrategia.variables.keys():
-                    if isinstance(j1.estrategia.variables[v], Range):
-                        j1.estrategia.variables[v] = j1.estrategia.variables[v].get_value()
+            try:
+                banca.remove(j1)
+                campo.remove(j2)
+                campo.append(j1)
+            except:
+                continue
+
+            # if not opt: 
+            #     partido.op._optimizar_agente(j1)
+            # elif j1.estrategia is not None:
+            #     for v in j1.estrategia.variables.keys():
+            #         if isinstance(j1.estrategia.variables[v], Range):
+            #             j1.estrategia.variables[v] = j1.estrategia.variables[v].get_value()
             partido.reporte.annadir_a_resumen(f"ENTRA: {Fore.GREEN}{j1.nombre}{Style.RESET_ALL} SALE: {Fore.RED}{j2.nombre}{Style.RESET_ALL}", partido.pt)
 
         self.agente.equipo.jugadores_en_banca = banca

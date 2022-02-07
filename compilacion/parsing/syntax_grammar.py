@@ -34,7 +34,6 @@ from compilacion.analisis_semantico.Ast.expressions.operators.unaryOperators.neg
 from compilacion.analisis_semantico.Ast.expressions.operators.unaryOperators.notNode import NotNode
 from compilacion.analisis_semantico.Ast.instruction import Instruction
 from compilacion.analisis_semantico.Ast.instructions.executeNode import ExecuteNode
-from compilacion.analisis_semantico.Ast.instructions.filterNode import FilterNode
 from compilacion.analisis_semantico.Ast.instructions.forNode import ForNode
 from compilacion.analisis_semantico.Ast.instructions.functionNode import FunctionNode
 from compilacion.analisis_semantico.Ast.instructions.returnNode import ReturnNode
@@ -248,7 +247,7 @@ G.add_production(Production(typeNoTerm, Sentence(voidTerm), lambda x: x[0]))    
 G.add_production(Production(typeNoTerm, Sentence(reportTerm), lambda x: x[0]))      # <type> := report
 
 G.add_production(Production(typeId, Sentence(typeNoTerm, ID), lambda x: VariableNode(x[1], x[0])))    # <type-id> := <type> id
-G.add_production(Production(idAtom, Sentence(ID, assign, atom), lambda x: AttributeNode(x[0], x[2]))) # <id-atom> := ID = <atom>
+G.add_production(Production(idAtom, Sentence(ID, assign, expr), lambda x: AttributeNode(x[0], x[2]))) # <id-atom> := ID = <expr>
 G.add_production(Production(instList, Sentence(openCurlyB, statList, closeCurlyB), lambda x: x[1]))   # <instruction-list> := { <stat-list> }
 G.add_production(Production(arguments, Sentence(openBracket, argList, closeBracket), lambda x: x[1])) # <arguments> := ( <arg-list> )
 G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lambda x: []))            # <arguments> := ()
@@ -267,9 +266,6 @@ G.add_production(Production(defArray, Sentence(typeId, atom), lambda x: ArrayDec
 G.add_production(Production(printVar, Sentence(printTerm, openBracket, expr, closeBracket), lambda x: PrintNode(x[2]))) # <print-var> := print ( <expr> )
 
 G.add_production(Production(lenList, Sentence(lenTerm, openBracket, atom, closeBracket), lambda x: LenNode(x[2]))) # <len-list> := len ( <atom> )
-
-G.add_production(Production(filterVal, Sentence(filterTerm, atom, by, expr), lambda x: FilterNode(x[1], x[3]))) # <filter-val> := filter <atom> by <expr>
-
 
 G.add_production(Production(returnVal, Sentence(returnTerm, expr), lambda x: ReturnNode(x[1]))) # <return-val> := return <expr>
 G.add_production(Production(returnVal, Sentence(returnTerm), lambda x: ReturnNode()))           # <return-val> := return
@@ -315,7 +311,7 @@ G.add_production(Production(atom, Sentence(ID, point, funcCall), lambda x: IdPro
 G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))                    # <atom> := TEAM . ID
 G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2]))))              # <atom> := _ . ID
 G.add_production(Production(atom, Sentence(openSquareB, atomList, closeSquareB), lambda x: ArrayAtomNode(x[1]))) # <atom> := [<atom-list>]
-G.add_production(Production(atom, Sentence(atomIndex), lambda x: x[0]))                                          # <atom> := <atom-index>
+G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                         # <atom> := <array-index>
 G.add_production(Production(atom, Sentence(lenList), lambda x: x[0]))                                            # <atom> := <len-list>
 
 G.add_production(Production(atomList, Sentence(atom, valueSep, atomList), lambda x: [x[0]] + x[2])) # <atom-list> := <atom>, <atom-list>
@@ -333,8 +329,8 @@ G.add_production(Production(floatNum, Sentence(intNum, point, intNum), lambda x:
 G.add_production(Production(funcCall, Sentence(ID, openBracket, closeBracket), lambda x: FuncCall(x[0])))  # <func-call> := ID ()
 G.add_production(Production(funcCall, Sentence(ID, openBracket, exprList,closeBracket), lambda x: FuncCall(x[0], x[2]))) # <func-call> := ID (<expr-list>)
 
-G.add_production(Production(arrayIndex, Sentence(ID, atomIndex), lambda x: IndexNode(x[0], x[1]))) # <array-index> := ID <atomIndex>
-G.add_production(Production(atomIndex, Sentence(openSquareB, atom, closeSquareB), lambda x: x[1])) # <atom-index> := [ <atom> ]
+G.add_production(Production(arrayIndex, Sentence(ID, openSquareB, intNum, closeSquareB), lambda x: IndexNode(x[0], x[2]))) # <array-index> := ID [<int-num>]
+# G.add_production(Production(atomIndex, Sentence(openSquareB, atom, closeSquareB), lambda x: x[1])) # <atom-index> := [ <atom> ]
 
 G.add_production(Production(exprList, Sentence(expr, valueSep, exprList), lambda x: [x[0]] + x[2])) # <expr-list> := <expr> , <expr-list>
 G.add_production(Production(exprList, Sentence(expr), lambda x: [x[0]]))                            # <expr-list> := <expr>

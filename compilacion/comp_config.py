@@ -1,5 +1,7 @@
 from IA.estrategia import Estrategia
+from classes.equipo import Equipo
 from classes.manager import Manager
+from classes.jugador import Jugador
 
 # import classes
 
@@ -11,7 +13,7 @@ class Config_C:
             "country": str,
             "age": int,
             "list_prob": list,
-            "strategy": Estrategia
+            "st": Estrategia
         }
 
     class Manager_:
@@ -20,7 +22,7 @@ class Config_C:
             "country": str,
             "age": int,
             "experience": int,
-            "strategy": Estrategia
+            "st": Estrategia
         }
 
     class Goalkeeper:
@@ -31,7 +33,7 @@ class Config_C:
             "pos": str,
             "list_prob": list,
             "goalkeeper_prob": list,
-            "strategy": Estrategia
+            "st": Estrategia
         }
 
     class Referee:
@@ -41,15 +43,22 @@ class Config_C:
             "age": int,
             "experience": int,
             "list_prob": list,
-            "strategy": Estrategia
+            "st": Estrategia
         }
     
+    class Game:
+        args = {
+            'eq1': Equipo,
+            'eq2': Equipo,
+            'referees': list
+        }
+
     class Team:
         args = {
             "name": str,
             "country": str,
             "manager": Manager,
-            "jugadores": list
+            "players": list
         }
 
     class RangeInt:

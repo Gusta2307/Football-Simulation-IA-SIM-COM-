@@ -42,7 +42,7 @@ class Lexer:
                     last_token_pos, last_token_col, last_token_row = i, col + 1, row
                     i, col, row = new_token_pos, new_token_col, new_token_row
                 else:
-                    errors.append(f"Token {valid_token.text} is invalid, line {valid_token.line} and position {valid_token.column} ")
+                    errors.append(f"Token {line_input[last_token_pos:i+1]} is invalid, line {row} and position {col} ")
                     # col += 1
                     last_token_pos, last_token_col, last_token_row = i+1,col+1,row
                     new_token_pos, new_token_col, new_token_row = i+1,col+1,row
@@ -80,15 +80,12 @@ class Lexer:
         state, priority = 0, 0
 
         for r in self.regex:
-            if self.regex[r] == 'print':
-                print("...")
             tree = self.buildAstByRegex(self.regex[r], errors)
             new_state = self.createAfnState(state, tree.ast, r)
             list_state.append(new_state)
             self.precedent[r] = priority
             state += 1
             priority += 1
-            print(r)
 
         init_state = State(AnyItem())
         for state in list_state:

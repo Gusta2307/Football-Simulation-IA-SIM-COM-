@@ -54,10 +54,13 @@ class ForNode(Instruction):
                 actualizar_scope(self.forScope, scope)
                 break
         actualizar_scope(self.forScope, scope)
-        # scope.defineVar.pop(self.item)
     
     def visit(self, scope):
         forScope = copy.deepcopy(scope)
+        if not forScope.check_var(self.item):
+            forScope.varsType[self.item] = forScope.varsType[self.iter.identifier]
+        else:
+            return False
         for inst in self.body:
             if not inst.visit(forScope):
                 return False

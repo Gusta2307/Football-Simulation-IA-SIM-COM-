@@ -7,9 +7,9 @@ from config import Config
 config = Config()
 
 class Arbitro(Agente): #(Agente, Declaration):
-    def __init__(self, name, country, age, experence, list_prob, st = None):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
+    def __init__(self, name, country, age, experience, list_prob, st = None):# no_canta_falta, declare_falta_leve, tarjeta_amarilla, tarjeta_roja) -> None:
         self.nombre = name
-        self.experiencia = experence
+        self.experiencia = experience
         self.pais = country
         self.edad = age
         

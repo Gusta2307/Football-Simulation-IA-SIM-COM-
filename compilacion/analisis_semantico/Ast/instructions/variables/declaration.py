@@ -18,46 +18,75 @@ from IA.range import RangeChoice
 
 
 class Declaration(VariableNode):
-    def __init__(self, identifier: str, var_type: str, args = []) -> None:
+    def __init__(self, identifier: str, var_type: str, args: List[AttributeNode]=[]) -> None:
         super().__init__(identifier, var_type)
         self.args = args
     
     def checkSemantic(self, scope: Scope) -> bool:
-        if self.args is not None:
+        if self.args != []: 
             for arg in self.args:
-                print(arg)
                 if not arg.checkSemantic(scope):
                     return False    
         return scope.define_variables(self.identifier)
 
     def execute(self, scope: Scope):
-        if scope.check_var(self.identifier):  # prop = value, ej: name, Messi, tipo
+        if scope.check_var(self.identifier):  
             inst = None
             argumentos = create_dict(self.args, scope)
             if self.type == "player":
-                #nombre, pos, list_prob, estrategia = None # player p1 = ([AttributeNode(name, Messi, string), AttribuNode(age, 20, int)])
-                inst = Jugador(**argumentos)
-                # if check_type("player", argumentos, scope):
-                    # inst = jugador(**argumentos)
-                    # print("BIEN")
-            elif self.type == "team": 
-                inst = Equipo(**argumentos) 
+                if check_type("player", argumentos, scope):
+                    inst = Jugador(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
+            elif self.type == "team":
+                if check_type("team", argumentos, scope):
+                    inst = Equipo(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
+                 
             elif self.type == "goalkeeper":
-                inst = Portero(**argumentos)
+                if check_type("goalkeeper", argumentos, scope):
+                    inst = Portero(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
+                
             elif self.type == "referee":
-                inst = Arbitro(**argumentos)
+                if check_type("referee", argumentos, scope):
+                    inst = Arbitro(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
             elif self.type == "manager":
-                inst = Manager(**argumentos)
+                if check_type("manager", argumentos, scope):
+                    inst = Manager(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
+                
             elif self.type == "rangeint":
-                inst = RangeInt(**argumentos)
+                if check_type("rangeint", argumentos, scope):
+                    inst = RangeInt(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
             elif self.type == "rangefloat":
-                inst = RangeFloat(**argumentos)
+                if check_type("rangefloat", argumentos, scope):
+                    inst = RangeFloat(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
+                
             elif self.type == "rangebool":
-                inst = RangeBool(**argumentos)
+                if check_type("rangebool", argumentos, scope):
+                    inst = RangeBool(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
             elif self.type == "rangechoice":
-                inst = RangeChoice(**argumentos)
+                if check_type("rangechoice", argumentos, scope):
+                    inst = RangeChoice(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
             elif self.type == "game":
-                inst = Partido(**argumentos)
+                if check_type("game", argumentos, scope):
+                    inst = Partido(**argumentos)
+                else:
+                    raise Exception(f"Invalid arguments in {self.identifier}")
             scope.defineVar[self.identifier] = inst
             return inst
             

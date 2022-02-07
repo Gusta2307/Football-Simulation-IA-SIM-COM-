@@ -4,6 +4,7 @@ from act.accion import Accion
 from utiles import clasificar_jugadores, print_alineacion
 from config import Config
 
+
 config = Config()
 
 class Escoger_alineacion(Accion):
@@ -56,8 +57,8 @@ class Escoger_alineacion(Accion):
         # self.poscondicion(partido)
 
     def poscondicion(self, partido):
-        # CUAL SERIA LA POSCONDICION DE ESTA ACCION?? :/
         pass
+        
 
 
     def __str__(self) -> str:

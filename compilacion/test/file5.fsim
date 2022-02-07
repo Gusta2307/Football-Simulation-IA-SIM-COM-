@@ -10,30 +10,24 @@ strategy st1
       rangeint BALL_PASS = (li=0, ls=5),
       rangeint SHOT_ON_GOAL = (li=0,ls=2, distribution=f),
       rangebool INTERCEPT_BALL = (),
-      rangebool DO_LACK = (distribution=f),
       rangefloat RECEIVE_BALL = (li=0.1, ls=0.4),
       rangefloat THROW_IN = (li=0.3, ls=0.9),
-      rangefloat CORNER_KICK = (li=1.0, ls=2.2, distribution=f),
+      rangefloat CORNER_KICK = (li=1.0, ls=2.2),
       rangechoice CLEAR_BALL = (values=[1,2,3,4]),
-      rangechoice COMMIT_FOUL = (values=[1,2,3,4], distribution=f),
+      rangechoice COMMIT_FOUL = (values=[1,2,3,4]),
    };
    
    execute(state_game, p)
    {
-      print("AAAA");
-      print(state_game);
-      print(p);
-      print("BBBBBBBBBB");
       int a = 1;
       int c = a + 2;
       return "BALL_PASS";
    };
 };
 
-print(st1);
 
 
-player p1 = (name="Messi,...probando", age=32, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Espanna", st = st1);
+player p1 = (name="Messi", age=32, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Espanna", st = st1);
 
 player p2 = (name="PEPE", age=21, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Argentina", st=st1);
 
@@ -75,7 +69,7 @@ player p22 = (name="swdefrg", age=21, pos="DEF", list_prob=[0.8, 0.1, 0.85, 0.1,
 
 goalkeeper g3 = (name="oyfjgn", country="USA", age=32, pos="GK", goalkeeper_prob=[0.8, 0.4, 0.1, 0.2, 0.3], list_prob=[0.1, 0.6, 0.8, 0.1, 0.1, 0.01, 0.6, 0.69, 0.2, 0.1, 0.01, 0.5, 0.4, 0.3, 0.3], st=st1);
 
-player p23 = (name="Federico,...probando", age=32, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Espanna", st=st1);
+player p23 = (name="Federico", age=32, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Espanna", st=st1);
 
 player p24 = (name="Sandra", age=21, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Argentina", st=st1);
 
@@ -87,7 +81,7 @@ player p27 = (name="Oliver", age=32, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 
 
 player p28 = (name="Ares", age=21, pos="DEL", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Argentina");
 
-player p29 = (name="Messi,...probando", age=32, pos="MC", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Espanna", st=st1);
+player p29 = (name="Messi", age=32, pos="MC", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Espanna", st=st1);
 
 player p30 = (name="PEPE", age=21, pos="MC", list_prob=[0.8, 0.1, 0.85, 0.1, 0.05, 0.1, 0.6, 0.69, 0.2, 0.1, 0.01, 0.3], country="Argentina", st=st1);
 
@@ -118,13 +112,13 @@ player p42 = (name="swdefrg", age=21, pos="DEF", list_prob=[0.8, 0.1, 0.85, 0.1,
 goalkeeper g4 = (name="asdasd", country="USA", age=32, pos="GK", goalkeeper_prob=[0.8, 0.4, 0.1, 0.2, 0.3], list_prob=[0.1, 0.6, 0.8, 0.1, 0.1, 0.01, 0.6, 0.69, 0.2, 0.1, 0.01, 0.5, 0.4, 0.3, 0.3], st=st1);
 
 
-manager m1 = (name="PEPE1", country="CUBA", experence=89, age=56);
+manager m1 = (name="PEPE1", country="CUBA", experience=89, age=56);
 
-manager m2 = (name="PEPE1", country="CUBA", experence=89, age=56);
+manager m2 = (name="PEPE1", country="CUBA", experience=89, age=56);
 
-referee r1 = (name="ARBITRO1", country="CUBA", experence=89, age=56, list_prob=[0.7, 0.0001, 0.3, 0.005]);
+referee r1 = (name="ARBITRO1", country="CUBA", experience=89, age=56, list_prob=[0.7, 0.0001, 0.3, 0.005]);
 
-referee r2 = (name="ARBITRO1", country="CUBA", experence=89, age=56, list_prob=[0.7, 0.0001, 0.3, 0.005]);
+referee r2 = (name="ARBITRO1", country="CUBA", experience=89, age=56, list_prob=[0.7, 0.0001, 0.3, 0.005]);
 
 goalkeeper g1 = (name="asdasfuu", country="USA", age=32, pos="GK", goalkeeper_prob=[0.8, 0.4, 0.1, 0.2, 0.3], list_prob=[0.1, 0.6, 0.8, 0.1, 0.1, 0.01, 0.6, 0.69, 0.2, 0.1, 0.01, 0.5, 0.4, 0.3, 0.3], st=st1);
 
@@ -132,19 +126,19 @@ goalkeeper g2 = (name="PEPE3", country="USA", age=32, pos="GK", goalkeeper_prob=
 
 team t1 = (name="Barcelona", country="USA", coach=m1, players=[p1, p2, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, g3, g1]);
 
-team t2 = (name="RealMadrid", country="USA", coach=m2, players=[p23,p24, p25, p26, p27, p28, p29, p30, p31, p32, p33, p34, p35, p36, p37, p38, p39, p40, p41, p42, g4, g2]);
+team t2 = (name="Real Madrid", country="USA", coach=m2, players=[p23,p24, p25, p26, p27, p28, p29, p30, p31, p32, p33, p34, p35, p36, p37, p38, p39, p40, p41, p42, g4, g2]);
 
 game g = (eq1= t1, eq2= t2, referees = [r1, r2]);
 
-print(p1.edad);
-print(p2.nombre);
+print(p1.age);
+print(p2.name);
 print(m1);
 print(r1);
 print(g1);
 print(t1);
 print("HOLA");
 print(g);
-print(g.simular());
+print(g.simulate());
 print(f(3));
 int a = 4;
 int b = a;

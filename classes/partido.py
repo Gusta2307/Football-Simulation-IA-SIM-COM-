@@ -1,25 +1,28 @@
 import random
 from IA.optimizador import Optimizador
-from classes.reporte import Reporte_General
+from classes.reporte import Reporte_General, Reporte_Jugador
 from utiles import analisis_acciones_list, elimina_tipo
 from config import Config
 config = Config()
 
 
 class Partido:
-    def __init__(self, eq1, eq2, referees) -> None:
+    def __init__(self, eq1, eq2, referees, not_op=True) -> None:
         self.eq1 = eq1
         self.eq2 = eq2
-        self.arbitros = referees
 
-        self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
-        self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+        self.arbitros = referees
 
         self.__inicializar()
 
-        self.op = Optimizador(self)
-        self.op.optimizar()
+        if not_op:
+            self.op = Optimizador(self)
+            self.eq1 = self.op.torneo(self.eq1,referees)
+            self.eq2 = self.op.torneo(self.eq2,referees)
 
+        self.eq1.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+        self.eq2.manager.acciones['ESCOGER_ALINEACION'][0].ejecutar(self)
+            
 
     def __inicializar(self):
         self.marcador = [0,0]
@@ -87,18 +90,13 @@ class Partido:
         self.pos_balon = temp_jugador_list[random.randint(0, len(temp_jugador_list) - 1)]
         self.reporte.annadir_a_resumen("Se reanuda el partido", self.pt)
 
+    def inicializar_reporte_agente(self):
+        for j in self.eq1.jugadores + self.eq2.jugadores:
+            j.reporte = Reporte_Jugador(j)
 
-    # def __reanudar_partido(self):
-    #     eq = self.eq1 if self.pos_balon_1er_tiempo == self.eq2 else self.eq2
-    #     temp_jugador_list = []
-    #     for jugador in eq.jugadores_en_campo:
-    #         if jugador.posicion == 'DEL':
-    #             temp_jugador_list.append(jugador)
-
-    #     self.pos_balon = temp_jugador_list[random.randint(0, len(temp_jugador_list) - 1)]
-    #     self.reporte.annadir_a_resumen("Se reanuda el partido", self.pt)
-
+    
     def simular(self, opt = False, tiempo = 90):
+        self.inicializar_reporte_agente()
         act = self.__iniciar_partido()
         act.ejecutar(self)
         while int(self.__tiempo) < tiempo:
@@ -135,11 +133,9 @@ class Partido:
                 self.estado = config.PARTIDO.ESTADO.REANUDAR_PARTIDO
                 self.__reanudar_partido()
 
-            #if len(acciones_actual) != 0:
-            #    iter -= 1
-
         result = self.reporte
         self.__inicializar() #retorna un reporte y antes restablecer todas las variables
+        
         return result
 
 
