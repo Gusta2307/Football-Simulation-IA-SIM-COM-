@@ -154,9 +154,9 @@ class Config:
             'team2' : "eq2",
             "referees" : "arbitros",
             "goalscore": "marcador",
-            "pt"
-            "reporte"
-            'time': "__tiempo",
+            "pt" : "pt",
+            "report" : "reporte",
+            'time': "_tiempo",
             "state": "estado",
             "lastaction" : "ultima_accion",
             "pos_ball" : "pos_balon",

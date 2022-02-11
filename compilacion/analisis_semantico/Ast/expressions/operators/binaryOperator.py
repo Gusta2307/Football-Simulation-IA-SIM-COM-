@@ -18,6 +18,15 @@ class BinaryOperator(Expression):
             if (self.left.computed_type == "int" or self.left.computed_type == "float") and (self.right.computed_type == "float" or self.right.computed_type == "int"):
                 self.computed_type = "float"
                 return True
+            elif (self.left.computed_type == "int" or self.left.computed_type == "rangeint") and (self.right.computed_type == "rangeint" or self.right.computed_type == "int"):
+                self.computed_type = "int"
+                return True
+            elif (self.left.computed_type == "float" or self.left.computed_type == "rangefloat") and (self.right.computed_type == "rangefloat" or self.right.computed_type == "float"):
+                self.computed_type = "float"
+                return True
+            elif (self.left.computed_type == "bool" or self.left.computed_type == "rangebool") and (self.right.computed_type == "rangebool" or self.right.computed_type == "bool"):
+                self.computed_type = "bool"
+                return True
             elif self.left.computed_type == "exec" or self.right.computed_type == "exec":
                 self.computed_type = "exec"
                 return True

@@ -64,6 +64,7 @@ def main():
 
     # Ejecucion
     if check_ok:
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         astTree.execute(scope)
 
 

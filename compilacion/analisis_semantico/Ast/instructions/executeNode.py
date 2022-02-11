@@ -40,6 +40,7 @@ class ExecuteNode(Instruction):
     def visit(self, scope):
         exeScope = ScopeTypeChecker()
         exeScope.funcsType = copy.deepcopy(scope.funcsType)
+        exeScope.varsType = copy.deepcopy(scope.varsType)
 
         if not exeScope.check_var(self.state_game):
             exeScope.varsType[self.state_game] = "game"

@@ -41,7 +41,7 @@ class Partido:
             self.eq2.nombre: []
         }
 
-        self.__tiempo = None #Tiempo en minutos
+        self._tiempo = None #Tiempo en minutos
 
         self.estado = config.PARTIDO.ESTADO.INICIAR_PARTIDO
 
@@ -53,11 +53,11 @@ class Partido:
 
 
     def __empezar_tiempo(self):
-        self.__tiempo = float(0)
+        self._tiempo = float(0)
         
 
     def obtener_tiempo(self):
-        return f'{int(self.__tiempo)}\''
+        return f'{int(self._tiempo)}\''
 
     def __iniciar_partido(self):
         self.reporte.annadir_a_resumen('Inicia el partido...', self.pt)
@@ -99,7 +99,7 @@ class Partido:
         self.inicializar_reporte_agente()
         act = self.__iniciar_partido()
         act.ejecutar(self)
-        while int(self.__tiempo) < tiempo:
+        while int(self._tiempo) < tiempo:
             acciones_actual = []
             for j in self.arbitros + self.eq1.jugadores_en_campo + self.eq2.jugadores_en_campo + [self.eq1.manager, self.eq2.manager]:
                 accion = j.escoger_accion_estrategia(self)
@@ -116,7 +116,7 @@ class Partido:
                     if mayor_tiempo < item.tiempo:
                         mayor_tiempo = item.tiempo
 
-            self.__tiempo += mayor_tiempo
+            self._tiempo += mayor_tiempo
 
 
             if self.estado == config.PARTIDO.ESTADO.REANUDAR_PARTIDO:
@@ -128,7 +128,7 @@ class Partido:
                     while self.cambios_pendiente[e]:
                         self.cambios_pendiente[e].pop().poscondicion(self, opt)
 
-            if self.pt == 1 and self.__tiempo > 45:
+            if self.pt == 1 and self._tiempo > 45:
                 self.pt = 2
                 self.estado = config.PARTIDO.ESTADO.REANUDAR_PARTIDO
                 self.__reanudar_partido()

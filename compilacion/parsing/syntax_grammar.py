@@ -307,6 +307,7 @@ G.add_production(Production(atom, Sentence(sub, numberType), lambda x: NegationN
 G.add_production(Production(atom, Sentence(funcCall), lambda x: x[0]))                                           # <atom> := <funcCall>
 G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                         # <atom> := <array-index>
 G.add_production(Production(atom, Sentence(ID, point, ID), lambda x: IdPropertyNone(x[0], x[2])))                # <atom> := ID . ID
+# G.add_production(Production(atom, Sentence(ID, point, atom), lambda x: IdPropertyNone(x[0], x[2])))                # <atom> := ID . <atom>
 G.add_production(Production(atom, Sentence(ID, point, funcCall), lambda x: IdPropertyNone(x[0], x[2])))          # <atom> := ID . <funcCall>
 G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))                    # <atom> := TEAM . ID
 G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2]))))              # <atom> := _ . ID

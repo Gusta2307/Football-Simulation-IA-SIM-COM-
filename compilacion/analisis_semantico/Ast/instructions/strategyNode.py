@@ -38,7 +38,7 @@ class StrategyNode(Instruction):
             if not elem.visit(strategyScope):
                 return False
         
-        if not self.list_item[1].visit(scope):
+        if not self.list_item[1].visit(strategyScope):
             return False
 
         if not scope.check_var(self.identifier):
