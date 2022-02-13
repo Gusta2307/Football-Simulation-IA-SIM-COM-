@@ -32,11 +32,14 @@ class Conditional(Instruction):
         
         if self.elIf is not None:
             self.elifScope = copy.deepcopy(scope)
-            if not self.elIf[0].checkSemantic(self.elifScope):
-                return False
-            for inst in self.elIf[1]:
-                if not inst.checkSemantic(self.elifScope):
+            
+            for elifClas in self.elIf:
+                if not elifClas[0].checkSemantic(self.elifScope):
                     return False
+
+                for inst in elifClas[1]:
+                    if not inst.checkSemantic(self.elifScope):
+                        return False
 
         if self.elseBody is not None:
             self.elseScope = copy.deepcopy(scope)
@@ -55,13 +58,14 @@ class Conditional(Instruction):
                 return value
             return None
         elif self.elIf is not None:
-            if self.elIf[0].evaluate(scope):
-                actualizar_scope(scope, self.elifScope)
-                value = self.execute_instructions(self.elifScope, self.elIf[1])
-                actualizar_scope(self.elifScope, scope)
-                if value is not None:
-                    return value
-                return None
+            for elifClas in self.elIf:
+                if elifClas[0].evaluate(scope):
+                    actualizar_scope(scope, self.elifScope)
+                    value = self.execute_instructions(self.elifScope, elifClas[1])
+                    actualizar_scope(self.elifScope, scope)
+                    if value is not None:
+                        return value
+                    return None
         if self.elseBody is not None:
             actualizar_scope(scope, self.elseScope)
             value = self.execute_instructions(self.elseScope, self.elseBody)
@@ -92,10 +96,12 @@ class Conditional(Instruction):
                 return False
         
         if self.elIf is not None:
-            self.elIf[0].visit(scope)
-            for item in self.elIf[1]:
-                if not item.visit(elifScope):
+            for elifClas in self.elIf:
+                if not elifClas[0].visit(scope):
                     return False
+                for item in elifClas[1]:
+                    if not item.visit(elifScope):
+                        return False
         
         if self.elseBody is not None:
             for item in self.elseBody:

@@ -30,7 +30,6 @@ class ExecuteNode(Instruction):
                 if value in self.func_scope.defineVar[self.player].acciones.keys(): #En caso contrario retornar error
                     return value
             value = inst.execute(self.func_scope)
-            
             if value is not None:
                 return value
 

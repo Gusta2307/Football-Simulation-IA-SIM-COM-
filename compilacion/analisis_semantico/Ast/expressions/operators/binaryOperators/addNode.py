@@ -41,7 +41,7 @@ class AddNode(BinaryOperator):
                 print(f"Left expression has type {self.left.computed_type} and right expression has type {self.right.computed_type}")
                 return False
         else:
-            if self.left.computed_type == "str" or self.left.computed_type == "int" or self.left.computed_type == "float":            
+            if self.left.computed_type == "str" or self.left.computed_type == "int" or self.left.computed_type == "float" or self.left.computed_type == "exec":            
                 self.computed_type = self.left.computed_type
                 return True
             else:

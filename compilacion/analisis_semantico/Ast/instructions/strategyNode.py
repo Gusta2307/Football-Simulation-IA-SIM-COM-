@@ -16,9 +16,8 @@ class StrategyNode(Instruction):
         self.strategyScope.defineFun = copy.deepcopy(scope.defineFun)
 
         for elem in self.list_item[0]:
-            if not elem.checkSemantic(scope):
+            if not elem.checkSemantic(self.strategyScope):
                 return False
-            v = self.strategyScope.define_variables(elem.identifier)
         
         if not self.list_item[1].checkSemantic(self.strategyScope):
             return False
@@ -37,7 +36,7 @@ class StrategyNode(Instruction):
         for elem in self.list_item[0]:
             if not elem.visit(strategyScope):
                 return False
-        
+                
         if not self.list_item[1].visit(strategyScope):
             return False
 

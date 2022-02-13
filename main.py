@@ -50,12 +50,11 @@ def main():
     tree = parser.parser(tokens, parse_errors)
     if tree is None:
         return
-
+    
     astTree = tree.evaluate_attributes()
 
     # Analisis Semantico
     scope = Scope()
-    semantics_errors = []
     scopeType = ScopeTypeChecker()
     check_ok = astTree.checkSemantic(scope)
 
@@ -64,7 +63,6 @@ def main():
 
     # Ejecucion
     if check_ok:
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         astTree.execute(scope)
 
 

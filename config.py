@@ -133,6 +133,7 @@ class Config:
             "COMMIT_FOUL": 'HACER_FALTA',
             "ADVANCE_POSITION": "AVANZAR_POSICION",
             "BACK_POSITION": 'RETROCEDER_POSICION',
+            "HOLD_POSITION": 'DEFAULT',
         }
     class TRADUCTOR_ID:
         ID = {
@@ -140,7 +141,7 @@ class Config:
             "experence": "experiencia",
             "country": "pais", 
             "age": "edad",
-            'team': "equipo",
+            'my_team': "equipo",
             'st': "estrategia",
             'location' : 'ubicacion_campo',
             'actions' : "acciones",

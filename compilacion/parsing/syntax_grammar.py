@@ -194,6 +194,7 @@ rangeboolparam = G.define_noTerminal('<rangebool-param>')
 rangechoiceparam = G.define_noTerminal('<rangechoice-param>')
 breakNoTerm = G.define_noTerminal('<break>')
 continueNoTerm = G.define_noTerminal('<continue>')
+elifList = G.define_noTerminal('<elif-list>')
 
 G.startNoTerminal = program
 
@@ -254,10 +255,16 @@ G.add_production(Production(arguments, Sentence(openBracket, closeBracket), lamb
 
 G.add_production(Production(forCycle, Sentence(forTerm, ID, inTerm, atom, instList), lambda x: ForNode(x[1], x[3], x[4]))) # <for-cycle> := for ID in <atom> <instruction-list>
 
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], None, x[4])))         # <conditional> := if <expr> <instruction-list> else <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList), lambda x: Conditional(x[1], x[2])))                                         # <conditional> := if <expr> <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, expr, instList), lambda x: Conditional(x[1], x[2], (x[4], x[5])))) # <conditional> := if <expr> <instruction-list> elif <expr> <instruction-list>
-G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], (x[4], x[5]), x[7]))) # <conditional> := if <expr> <instruction-list> elif <expr> <instruction-list> else <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], None, x[4])))           # <conditional> := if <expr> <instruction-list> else <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList), lambda x: Conditional(x[1], x[2])))                                           # <conditional> := if <expr> <instruction-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifList), lambda x: Conditional(x[1], x[2], x[3])))                           # <conditional> := if <expr> <instruction-list> <elif-list>
+G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifList, elseTerm, instList), lambda x: Conditional(x[1], x[2], x[3], x[5]))) # <conditional> := if <expr> <instruction-list> <elif-list> else <instruction-list>
+
+# G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, expr, instList), lambda x: Conditional(x[1], x[2], (x[4], x[5])))) # <conditional> := if <expr> <instruction-list> elif <expr> <instruction-list>
+# G.add_production(Production(conditional, Sentence(ifTerm, expr, instList, elifTerm, expr, instList, elseTerm, instList), lambda x: Conditional(x[1], x[2], (x[4], x[5]), x[7]))) # <conditional> := if <expr> <instruction-list> elif <expr> <instruction-list> else <instruction-list>
+
+G.add_production(Production(elifList, Sentence(elifTerm, expr, instList, elifList), lambda x: [(x[1], x[2])] + x[3])) # <elif-list> := elif <expr> <instruction-list> <elif-list>
+G.add_production(Production(elifList, Sentence(elifTerm, expr, instList), lambda x: [(x[1], x[2])]))                  # <elif-list> := elif <expr> <instruction-list>
 
 G.add_production(Production(functionFunc, Sentence(function, typeId, arguments, instList), lambda x: FunctionNode(x[1].identifier, x[1].type, x[2], x[3]))) # <function-func> := function <type-id> <arguments>  <instruction-list>
 
@@ -307,12 +314,8 @@ G.add_production(Production(atom, Sentence(sub, numberType), lambda x: NegationN
 G.add_production(Production(atom, Sentence(funcCall), lambda x: x[0]))                                           # <atom> := <funcCall>
 G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                         # <atom> := <array-index>
 G.add_production(Production(atom, Sentence(ID, point, ID), lambda x: IdPropertyNone(x[0], x[2])))                # <atom> := ID . ID
-# G.add_production(Production(atom, Sentence(ID, point, atom), lambda x: IdPropertyNone(x[0], x[2])))                # <atom> := ID . <atom>
 G.add_production(Production(atom, Sentence(ID, point, funcCall), lambda x: IdPropertyNone(x[0], x[2])))          # <atom> := ID . <funcCall>
-G.add_production(Production(atom, Sentence(TEAM, point, ID), lambda x: (x[0], IdNode(x[2]))))                    # <atom> := TEAM . ID
-G.add_production(Production(atom, Sentence(underscore, point, ID), lambda x: (None, IdNode(x[2]))))              # <atom> := _ . ID
 G.add_production(Production(atom, Sentence(openSquareB, atomList, closeSquareB), lambda x: ArrayAtomNode(x[1]))) # <atom> := [<atom-list>]
-G.add_production(Production(atom, Sentence(arrayIndex), lambda x: x[0]))                                         # <atom> := <array-index>
 G.add_production(Production(atom, Sentence(lenList), lambda x: x[0]))                                            # <atom> := <len-list>
 
 G.add_production(Production(atomList, Sentence(atom, valueSep, atomList), lambda x: [x[0]] + x[2])) # <atom-list> := <atom>, <atom-list>

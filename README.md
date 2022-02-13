@@ -13,7 +13,6 @@
 Se tiene como objetivo principal del proyecto brindar una herramienta para la simulación de un partido de fútbol donde el usuario pueda definir los agentes que se relacionan en un partido: jugadores, managers y árbitros. Es importante destacar que los jugadores durante la simulación siempre tomarán la decisión de que hacer dado un estado del partido de acuerdo a las características que el usuario le definió.
 
 La corrida de una simulación de un partido devuelve un reporte con las estadísticas del mismo por cada equipo.
-
 ## Pasos para poder programar en el lenguaje que se propone
 
 Para tener una mejor experiencia al programar en el lenguaje que se propone se debe instalar la extensión FSIM, para ello es necesario que se sigan los siguientes pasos:
@@ -183,7 +182,9 @@ Inicialización de un team
 
 Inicializacion de un game
     game g1 = (eq1= t1, eq2= t2, referees = [r1, r2]);
+
 ```
+
 #### Declaración de listas
 
 ```
@@ -199,6 +200,7 @@ Inicializacion de un game
 ```
 
 **Nota**: La indexación en las listas es muy parecida a la de los lenguajes más utilizados, la única diferencia es que se trata como una lista "circular" por lo que no existen excepciones por índices fuera de rango.  
+
 #### Asignación
 
 ```
@@ -263,9 +265,31 @@ strategy name{
 	};
 };
 ```
+
 **Nota**: `execute` de una estrategia debe devolver un *str* que corresponda al nombre de una de las variables que se definieron en el apartado de las variables.
 
 ---
+
+# Algoritmos e ideas escenciales para la simulación de un partido
+
+Un partido es el ambiente donde los agentes se desarrollan e interactúan entre sí. Este ambiente se cataloga como:
+
+- *Accesible*, pues los agentes, para tomar la decisión de que acción realizar, tienen acceso a un estado del partido y a toda su información. 
+
+- *No determinista*, pues no se puede saber con exactitud que consecuencias tendrán las acciones de los agentes sobre él. Un ejemplo de esto es si un jugador *X* realiza un pase al jugador *Y*, entonces el balón puede ser que llegue a su destino o sea interceptado por otro jugador.  
+
+- *Episódico*, pues los agentes para decidir que acción tomar solo tienen en cuenta el estado actual del partido sin tener en cuenta las consecuencias que puede traer la misma.
+
+- *Estático*, pues un partido solo se modifica si uno de los agentes realiza una acción en él.
+
+- *Discreto*, pues en un partido exiten un número fijo y finito de acciones que lo pueden modificar que son exactamente el conjuto de las acciones que puede realizar un agente.
+
+En la simulación de un partido lo primero que se realiza es que los managers de los equipos que se enfrentan elijen la alineación  y esquema de juego que utilizán para el mismo. Como en un partido de fútbol los agentes actúan simultáneamente, entonces, para un estado específico del partido todos los agentes deciden que acción van a tomar de acuerdo con este, para luego ejecutarse. Es válido aclarar que en caso de que si la acción que eligió un agente interfiere en la ejecución de la acción que escogió otro agente entonces se elige de manera aleatoria entre ambas, por ejemplo, si dos jugadores deciden realizar un intercepto de balón, se escogería de forma aleatoria cual de estos dos jugadores realizaría la acción. Además, se tiene en cuenta que existen circunstancias en las que por reglas propias del fútbol, en un determinado estado del partido un jugador solo puede ejecutar una cierta acción, dígase el caso del portero al sacar de portería o un jugador de campo al hacer el saque inicial del partido. En estos casos dichas acciones se asignan directamente al agente.
+
+Cada agente se le puede asociar una estrategia, la cual va a utilizar para decidir que acción tomar en todo momento, esta estrategia es la que se desea optimizar acorde a las características propias del jugador, o sea, que tan efectivo es al realizar cada acción.
+
+Para optimizar las estrategias de los jugadores de los equipos que se enfrentan se realiza una metaheurística genérica, donde se crea una población con diferentes instancias del mismo con variaciones en los valores de la estrategia de cada agente del equipo. Con estas instancias se realiza un torneo de eliminación directa, donde en cada uno de los enfrentamientos los equipos se mezclan teniendo en cuenta el rendimiento de cada agente, luego con el resultado de cada mezcla se crean nuevos enfrentamientos, o sea, es el equipo que pasa a la siguiente fase y se repite el proceso, hasta llegar a la final, donde el equipo final es con el que se realiza la simulación. 
+
 # Detalles de la implementación
 
 ## Implementación de la compilación del lenguaje
@@ -297,20 +321,6 @@ Cada uno de los nodos del AST contienen un método `checkSemantic` que recibe un
 Después de obtener el AST, se realiza el chequeo semántico y el chequeo de tipos por cada nodo. Por último, si el chequeo semántico y de tipos es satisfactorio se pasa a la ejecución de cada instrucción.
 
 ## Implementación de la simulación de un partido
-
-Un partido es el ambiente donde los agentes se desarrollan e interactúan entre sí. Este ambiente se cataloga como:
-
-- *Accesible*, pues los agentes, para tomar la decisión de que acción realizar, tienen acceso a un estado del partido y a toda su información. 
-
-- *No determinista*, pues no se puede saber con exactitud que consecuencias tendrán las acciones de los agentes sobre él. Un ejemplo de esto es si un jugador *X* realiza un pase al jugador *Y*, entonces el balón puede ser que llegue a su destino o sea interceptado por otro jugador.  
-
-- *Episódico*, pues los agentes para decidir que acción tomar solo tienen en cuenta el estado actual del partido sin tener en cuenta las consecuencias que puede traer la misma.
-
-- *Estático*, pues un partido solo se modifica si uno de los agentes realiza una acción en él.
-
-- *Discreto*, pues en un partido exiten un número fijo y finito de acciones que lo pueden modificar que son exactamente el conjuto de las acciones que puede realizar un agente.
-
-
 ### Definición de `Accion`
 
 Para definir las acciones se tiene la clase abstracta `Accion`. Se tomó como plantilla la representación de acciones en STRIPS que se vió en las clases de IA, por tanto los métodos que tiene esta clase son:
@@ -417,5 +427,91 @@ La clase `Estrategia` consta de un diccionario de variables y un execute. El dic
 
 ### Definición de `Optimizador`
 
-La clase `Optimizador` es la que se va a encargar de al inicializar un partido asignarle valores exactos a las variables de tipo `Range` que tenga la estrategia de cada uno de los agentes que se relacionan en el partido. Para ello se realiza una metaheurística genérica, donde por cada equipo se crea varias instancias del mismo con variaciones en los valores de la estrategia de cada agente del equipo. Con estas instancias se realiza un torneo de eliminación directa. En cada uno de los enfrentamientos los equipos se mezclan teniendo en cuenta el rendimiento de cada agente, luego con el resultado de cada mezcla se crean nuevos enfrentamientos, o sea, es el equipo que pasa a la siguiente fase y se repite el proceso, hasta llegar a la final, donde el equipo final es con el que se realiza la simulación.
+La clase `Optimizador` es la que se va a encargar de al inicializar un partido asignarle valores exactos a las variables de tipo `Range` que tenga la estrategia de cada uno de los agentes que se relacionan en el partido con el uso de la metaherística que se explicó antes. 
+
+## Casos estudios
+
+El lenguaje que se propone es lo suficientemente expresivo para utilizarlo en diferentes casos de estudios. A continuación se analiza un ejemplo:
+
+### ¿ Qué estrategia es mejor ?
+
+Se realizará un enfrentamiento **Barcelona** vs **Real Madrid** y se quiere decidir que estrategia seguirán los jugadores del **Real Madrid**, si una estrategia defensiva o una estrategia de ataque. Para ello definen ambas estrategias, además de los jugadores de cada equipo teniendo las características reales de los jugadores.
+
+
+#### Estrategia `Ataque`
+
+Si el jugador tiene el balón y no está en la zona de ataque entonces tiene dos posibilidades: avanzar de posición  y realizar un pase, en cambio, si tiene el balón y está, efectivamente, en la zona de ataque entonces, realiza un tiro a portería. Por otro lado, si el jugador no tiene el balón avanza de posición. 
+
+```
+    strategy Ataque
+    {
+        variables{
+            rangefloat BALL_PASS = (li=2, ls=5),
+            rangeint SHOT_ON_GOAL = (li=0, ls= 10),
+        };
+        execute(state_game, p){
+            player p1 = state_game.pos_ball;
+            if state_game.pos_ball == p{
+                if  p.location != "ATAQUE"{
+                    if BALL_PASS > 3.6{
+                        return "BALL_PASS";
+                    }
+                    else{
+                        return "ADVANCE_POSITION";
+                    };
+                }
+                else{
+                    if SHOT_ON_GOAL >= 5 {
+                        return "SHOT_ON_GOAL";
+                    };
+                };
+            }
+            elif p1.my_team == p.my_team{
+                return "ADVANCE_POSITION";
+            };
+            return "HOLD_POSITION";
+        };
+    };
+```
+
+#### Estrategia `Defensiva`
+
+Con esta estrategia el equipo será muy conservador pues se mantendrá entre la zona central y la defensa. De tener el balón se realiza un pase.
+
+```
+    strategy Defensa
+    {
+        variables{
+            rangefloat BALL_PASS = (li=5, ls=10),
+            rangefloat BACK_POSITION = (li=0, ls=3),
+            rangeint ADVANCE_POSITION = (li=0, ls= 10),
+        };
+        execute(state_game, p){
+            if state_game.pos_ball == p AND BALL_PASS > 5.3 {
+                return "BALL_PASS";
+            };
+    
+            if p.location == "ATAQUE" AND BACK_POSITION < 1.4 {
+                return "BACK_POSITION";
+            }
+            elif p.location == "DEFENSA" AND ADVANCE_POSITION > 7{
+                    return "ADVANCE_POSITION";
+            }
+            elif p.location == "CENTRO" {
+                if BACK_POSITION > 1.2 {
+                    return "BACK_POSITION";
+                }
+                elif ADVANCE_POSITION > 8 {
+                    return "ADVANCE_POSITION";
+                };  
+            };
+            return "HOLD_POSITION";
+        };
+    };
+```
+
+
+### Resultados
+
+Luego de obtener los resultados del partido para las dos variantes de estrategias propuestas para el **Real Madrid**, se puede concluir que como los jugadores que pertenecen a la zona de ataque se desempeñan mejor que los del **Barcelona**, a lo que se le suma que el rendimiento de los jugadores en defensa del **Barcelona** no compiten con los niveles de ataque del **Real Madrid**, por lo que la estrategia más adecuada a utilizar en este enfrentamiento es la de Ataque. 
 

@@ -16,10 +16,11 @@ class Lexer:
         tokens = []
         self.afn.reset()
 
-        i, col, row = 0, 0, 0
-        new_token_col, new_token_row, new_token_pos = 0, 0, 0
-        last_token_col, last_token_row, last_token_pos = 0, 0, 0
+        i, col, row = 0, 1, 1
+        new_token_col, new_token_row, new_token_pos = 1, 1, 0
+        last_token_col, last_token_row, last_token_pos = 1, 1, 0
         c, valid_token = None, None
+
 
         while i <= len(line_input):
             if i == len(line_input):
@@ -31,7 +32,7 @@ class Lexer:
 
             if c == '\n':
                 row += 1
-                col = 0
+                col = 1
 
             c = line_input[i]
 

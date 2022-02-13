@@ -1,0 +1,60 @@
+strategy Ataque
+{
+    variables{
+        rangefloat BALL_PASS = (li=2, ls=5),
+        rangeint SHOT_ON_GOAL = (li=0, ls= 10),
+    };
+    execute(state_game, p){
+        player p1 = state_game.pos_ball;
+        if state_game.pos_ball == p{
+            if  p.location != "ATAQUE"{
+                if BALL_PASS > 3.6{
+                    return "BALL_PASS";
+                }
+                else{
+                    return "ADVANCE_POSITION";
+                };
+            }
+            else{
+                if SHOT_ON_GOAL >= 5 {
+                    return "SHOT_ON_GOAL";
+                };
+            };
+        }
+        elif p1.my_team == p.my_team{
+            return "ADVANCE_POSITION";
+        };
+        return "HOLD_POSITION";
+    };
+};
+
+
+strategy Defensa
+{
+    variables{
+        rangefloat BALL_PASS = (li=5, ls=10),
+        rangefloat BACK_POSITION = (li=0, ls=3),
+        rangeint ADVANCE_POSITION = (li=0, ls= 10),
+    };
+    execute(state_game, p){
+        if state_game.pos_ball == p AND BALL_PASS > 5.3 {
+            return "BALL_PASS";
+        };
+
+        if p.location == "ATAQUE" AND BACK_POSITION < 1.4 {
+            return "BACK_POSITION";
+        }
+        elif p.location == "DEFENSA" AND ADVANCE_POSITION > 7{
+                return "ADVANCE_POSITION";
+        }
+        elif p.location == "CENTRO" {
+            if BACK_POSITION > 1.2 {
+                return "BACK_POSITION";
+            }
+            elif ADVANCE_POSITION > 8 {
+                return "ADVANCE_POSITION";
+            };  
+        };
+        return "HOLD_POSITION";
+    };
+};

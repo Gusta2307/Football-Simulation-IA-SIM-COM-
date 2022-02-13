@@ -18,7 +18,7 @@ class NegationNode(UnaryOperator):
         if not self.expr.visit(scope):
             return False
 
-        if self.expr.computed_type == "int" or self.expr.computed_type == "float":
+        if self.expr.computed_type == "int" or self.expr.computed_type == "float" or self.expr.computed_type == "exec":
           self.computed_type = self.expr.computed_type
           return True
         print("Type can only be numeric")
